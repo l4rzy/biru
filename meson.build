@@ -4,8 +4,10 @@ project('biru', ['vala', 'c'],
 )
 
 sources = files(
-    'constants.vala',
-    'service.vala',
+    'service/constants.vala',
+    'service/service.vala',
+    'service/models.vala',
+    'service/serde.vala',
     'main.vala'
 )
 
