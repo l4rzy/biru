@@ -3,21 +3,17 @@ project('biru', ['vala', 'c'],
     license: 'GPL-3.0'
 )
 
+c_args = [
+    '-fuse-ld=lld'
+]
+
 sources = files(
-    'service/configs.vala',
-    'service/service.vala',
-    'service/models.vala',
-    'service/serde.vala',
-    'ui/configs.vala',
-    'ui/widgets/headerbar.vala',
-    'ui/window.vala',
-    'ui/controller.vala',
-    'ui/application.vala',
-    'ui/widgets/loading.vala',
-    'utils/configs.vala',
-    'utils/utils.vala',
     'main.vala'
 )
+
+subdir('service')
+subdir('ui')
+subdir('utils')
 
 dependencies = [
     dependency('gobject-2.0'),
@@ -31,6 +27,7 @@ dependencies = [
 
 e = executable('biru',
     sources: sources,
+    c_args: c_args,
     dependencies: dependencies,
     install : false
 )

@@ -10,6 +10,5 @@ namespace Biru.UI.Windows {
 
             set_default_size (Constants.WINDOW_X, Constants.WINDOW_Y);
         }
-       
     }
 }

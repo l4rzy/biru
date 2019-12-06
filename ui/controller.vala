@@ -3,41 +3,53 @@ using Biru.UI;
 using Biru.Utils;
 using Biru.Service;
 
-/*
- * this is the UI entry point
- */
-namespace Biru.UI.Controllers {
+namespace Biru.UI {
     public class AppController {
         private Gtk.Application app;
         private Windows.Window win { get; private set; default = null; }
         private Widgets.HeaderBar headerbar;
         private Widgets.Loading loading;
+
+        private int api_page;
+        
         private API api;
 
         public AppController(Gtk.Application app) {
-            // service setup
-            this.api = new API();
+            // service setup, this will also initialize the service api
+            this.api = API.get();
+
+            // local variables
+            this.api_page = 1;
             
             // window setup
             this.app = app;
             this.win = new Windows.Window(this.app);
             this.headerbar = new Widgets.HeaderBar();
             this.loading = new Widgets.Loading();
+            
             this.win.set_titlebar(this.headerbar);
             this.win.add(loading);
 
             // signals setup
             this.api.sig_search_ok.connect((lst) => {
-                stdout.printf(" api search ok!\n");
+                message("api search ok!");
                 this.loading.stop();
+                this.loading.hide();
+                foreach (var b in lst) {
+                    stdout.printf("%s\n", b.title.english);
+                }
             });
 
             this.api.sig_error.connect((err) => {
-                stdout.printf(" api request error\n");
+                message("api request error");
+                this.loading.stop();
+                this.loading.hide();
             });
 
             this.headerbar.sig_search_activated.connect((query) => {
-                this.api.search(query, 2, SORT_DATE);
+                this.api.search(query, this.api_page, SORT_DATE);
+                this.loading.start();
+                this.loading.show();
             });
 
             // application setup

@@ -1,8 +1,11 @@
 using Biru.UI.Configs;
 
+/*
+ * UI entry point
+ */
 namespace Biru.UI {
     class App : Gtk.Application {
-        private Controllers.AppController ctl;
+        private AppController ctl;
         
         public App() {
             Object(application_id: Constants.APP_ID,
@@ -16,14 +19,14 @@ namespace Biru.UI {
 
             quit_action.activate.connect (() => {
                 if (this.ctl != null) {
-                    this.ctl.quit ();
+                    this.ctl.quit();
                 }
             });
         }
 
         protected override void activate() {
             if (this.ctl == null) {
-                this.ctl = new Controllers.AppController(this);
+                this.ctl = new AppController(this);
             }
             this.ctl.activate();
         }

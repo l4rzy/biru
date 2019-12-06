@@ -1,4 +1,6 @@
 
+using Biru.Service;
+
 namespace Biru.UI.Widgets {
     public class Loading : Gtk.Box {
         private Gtk.Spinner spinner;
@@ -10,13 +12,17 @@ namespace Biru.UI.Widgets {
             );
 
             spinner = new Gtk.Spinner();
-            spinner.active = true;
+            spinner.active = false;
 
             this.add(spinner);
         }
 
         public void stop() {
             this.spinner.active = false;
+        }
+
+        public void start() {
+            this.spinner.active = true;
         }
     }
 }

@@ -1,5 +1,6 @@
 
 using Biru.UI.Configs;
+using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class HeaderBar : Gtk.HeaderBar {
@@ -11,6 +12,9 @@ namespace Biru.UI.Widgets {
             this.set_subtitle(Constants.APP_LONGNAME);
             this.show_close_button = true;
 
+            get_style_context().add_class(Gtk.STYLE_CLASS_FLAT);
+
+
             search_entry = new Gtk.SearchEntry();
             this.pack_start(this.search_entry);
 
@@ -18,7 +22,7 @@ namespace Biru.UI.Widgets {
                 unowned string query = search_entry.get_text();
                 if (query.length > 0) {
                     sig_search_activated(query);
-                    stdout.printf("Search activated\n");
+                    message("search activated");
                 }
             });
         }
