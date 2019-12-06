@@ -1,15 +1,32 @@
 using Biru.Service.Configs;
 using Biru.Service.Serde;
+using Biru.Service.Models;
 
 namespace Biru.Service {
+    errordomain ErrorAPI {
+        UNAVAIL,
+        UNKNOWN
+    }
+
+    public enum SortType {
+        SORT_POPULAR,
+        SORT_DATE
+    }
+    
     public class URLBuilder {
         // books and galleries are exchangable terms
-        public static string getSearchUrl(string query, int page_num) {
+        public static string getSearchUrl(string query, int page_num, SortType sort) {
             // preprocessing query by replacing all whitespaces with '+'
             string formal_query = query.replace(" ","+");
-            
-            return Constants.NH_HOME + "/api/galleries/search?query=" + formal_query
-                + "&page=" + page_num.to_string();
+            string sort_type;
+            if (sort == SORT_DATE) {
+                sort_type = "date";
+            }
+            else {
+                sort_type = "popular";
+            }
+
+            return @"$(Constants.NH_HOME)/api/galleries/search?query=$(formal_query)&page=$(page_num.to_string())&sort=$(sort_type)";
         }
         
         public static string getBookUrl(int book_id) {
@@ -32,30 +49,44 @@ namespace Biru.Service {
     
     public class API {
         private Soup.Session session;
+        public signal void sig_search_ok(List<Book?> lst);
+        public signal void sig_getBook_ok(Book book);
+        public signal void sig_error(Error err);
         
         public API() {
             this.session = new Soup.Session();
             this.session.ssl_strict = false;
+            this.session.user_agent = Constants.NH_UA;
         }
         
-        public void search(string query, int page_num) {
-            var uri = URLBuilder.getSearchUrl(query, page_num);
+        public void search(string query, int page_num, SortType sort) {
+            var uri = URLBuilder.getSearchUrl(query, page_num, sort);
             var message = new Soup.Message("GET", uri);
-            this.session.send_message(message);
-            
-            if (message.status_code == 200) {
-                stdout.printf("%s\n", (string)message.response_body.flatten().data);
-            }
-            else {
-                stdout.printf("Error happened!\n");
-            }
+
+            // makes api query in background and raises signals when
+            // request is done
+            this.session.queue_message(message, (sess, mess) => {
+                if (mess.status_code == 200) {
+                    try {
+                        var ret = Parser.parseSearchResult((string)mess.response_body.flatten().data);
+                        sig_search_ok(ret);
+                    } catch (Error e) {
+                        sig_error(e);
+                    }
+                }
+                else {
+                    sig_error(new ErrorAPI.UNKNOWN(@"error loading code: $(mess.status_code)"));
+                }
+            });
         }
         
-        public void getBook(int book_id) {
+        public Book getBook(int book_id) {
+            var ret = new Book();
             var uri = URLBuilder.getBookUrl(book_id);
             
             var message = new Soup.Message("GET", uri);
             this.session.send_message(message);
+
             
             if (message.status_code == 200) {
                 stdout.printf("%s\n", (string)message.response_body.flatten().data);
@@ -63,11 +94,23 @@ namespace Biru.Service {
             else {
                 stdout.printf("Error happened!\n");
             }
+            return ret;
         }
 
-        public void getRelatedBooks(int book_id) {
+        public List<Book?> getRelatedBooks(int book_id) {
+            var ret = new List<Book>();
             var uri = URLBuilder.getRelatedBooksUrl(book_id);
-            stdout.printf("%s\n", uri);
+
+            var message = new Soup.Message("GET", uri);
+            this.session.send_message(message);
+            
+            if (message.status_code == 200) {
+                stdout.printf("%s\n", (string)message.response_body.flatten().data);
+            }
+            else {
+                stdout.printf("Error happened!\n");
+            }
+            return ret;
         }
     }
 }

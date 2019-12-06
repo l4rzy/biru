@@ -4,10 +4,18 @@ project('biru', ['vala', 'c'],
 )
 
 sources = files(
-    'service/constants.vala',
+    'service/configs.vala',
     'service/service.vala',
     'service/models.vala',
     'service/serde.vala',
+    'ui/configs.vala',
+    'ui/widgets/headerbar.vala',
+    'ui/window.vala',
+    'ui/controller.vala',
+    'ui/application.vala',
+    'ui/widgets/loading.vala',
+    'utils/configs.vala',
+    'utils/utils.vala',
     'main.vala'
 )
 
