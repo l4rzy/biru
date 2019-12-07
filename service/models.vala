@@ -6,6 +6,15 @@ namespace Biru.Service.Models {
         public string t {get; set;}
         public int64 h {get; set;}
         public int64 w {get; set;}
+
+        public string kind() {
+            switch (this.t) {
+                case "j": return "jpg";
+                case "p": return "png";
+                case "g": return "gif";
+                default: return "";
+            }
+        }
     }
     
     public class Tag : Object {
@@ -56,7 +65,7 @@ namespace Biru.Service.Models {
     }
     
     public class Book : Object {
-        public int64 id {get; set; default=-1;} // TODO: solve this with dynamic typing or generic typing
+        public int64 id {get; set; default=-1;}
         public string media_id {get;set;} 
         public Title title {get; set;}
         public Images images {get; set;}
@@ -66,23 +75,25 @@ namespace Biru.Service.Models {
         public int64 num_pages {get;set;}
         public int64 num_favourites {get;set;}
 
-        public string getThumbnailUrl() {
-            return URLBuilder.getGalleryUrl((int)this.id);
-        }
-
         // update fields that could not be deserialized
         public void update_from_json(Json.Node jbook) {
-            // the id
             if (id == -1) {
-                this.id = jbook.get_object().get_string_member("id").to_int64();
+                this.id = int64.parse(jbook.get_object().get_string_member("id"));
             }
             
-            // images
-            var jimages = jbook.get_object().get_object_member("images");
-            //this.images.update_from_json();
-
+            // pages
+            var jpages = jbook.get_object().get_object_member("images").get_array_member("pages");
+            foreach (var p in jpages.get_elements()) {
+                var _page = Json.gobject_deserialize(typeof(Page), p) as Page;
+                this.images.pages.append(_page);
+            }
 
             // tags
+            var jtags = jbook.get_object().get_array_member("tags");
+            foreach (var t in jtags.get_elements()) {
+                var _tag = Tag.from_json(t);
+                this.tags.append(_tag);
+            }
         }
     }
 }

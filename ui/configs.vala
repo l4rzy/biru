@@ -7,7 +7,7 @@ namespace Biru.UI.Configs {
 
         // window
         public const int WINDOW_X = 1024;
-        public const int WINDOW_Y = 694;
+        public const int WINDOW_Y = 654;
 
         // bookcards from home
         public const int BOOKCARD_MAX_W = 300;

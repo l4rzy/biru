@@ -27,7 +27,7 @@ namespace Biru.UI.Widgets {
             this.w = (int)book.images.thumbnail.w;
             this.h = (int)book.images.thumbnail.h;
 
-            this.file = File.new_for_uri(book.getThumbnailUrl());
+            this.file = File.new_for_uri("");
 
             this.image.set_from_file_async.begin(this.file, this.w, this.h, false, null,
                 (res) => {

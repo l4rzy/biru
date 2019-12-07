@@ -1,7 +1,8 @@
+using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class BookGrid : Gtk.FlowBox {
-        private unowned List<Book?> books;
+        private unowned List<Models.Book?> books;
 
         public BookGrid() {
             this.margin_end = 10;
@@ -12,7 +13,7 @@ namespace Biru.UI.Widgets {
             this.orientation = Gtk.Orientation.HORIZONTAL;
         }
 
-        public void insert_cards(List<Book?> books) {
+        public void insert_cards(List<Models.Book?> books) {
             this.books = books;
 
             foreach (var b in this.books) {

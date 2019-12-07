@@ -36,7 +36,7 @@ namespace Biru.UI {
                 this.loading.stop();
                 this.loading.hide();
                 foreach (var b in lst) {
-                    stdout.printf("%s\n", b.title.english);
+                    stdout.printf("%s\n", b.images.cover.kind());
                 }
             });
 
