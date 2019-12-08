@@ -13,6 +13,7 @@ namespace Biru.UI.Widgets {
             this.orientation = Gtk.Orientation.HORIZONTAL;
         }
 
+        // TODO: async load image in perceptive field first
         public void insert_books (List<Models.Book ? > books) {
             this.books = books;
 

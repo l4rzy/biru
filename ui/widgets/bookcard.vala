@@ -22,7 +22,7 @@ namespace Biru.UI.Widgets {
             this.margin_top = 12;
             this.margin_bottom = 2;
 
-            // json are all about int64
+            // jsons are all about int64
             this.w = (int) book.images.thumbnail.w;
             this.h = (int) book.images.thumbnail.h;
 

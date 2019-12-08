@@ -6,6 +6,10 @@ An online manga reading utility
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
+### Wait, what does `biru` mean?
+
+Originally, I came up with `kuchibiru` (唇), which means "lips" in Japanese, but I intentionally dropped the kuchi (口) part, because this is hentai 🤫
+
 ### Dependencies
 
 In order to run, you must have these software installed, depends on your GNU/Linux distro, it may vary
