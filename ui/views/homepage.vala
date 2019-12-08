@@ -7,92 +7,89 @@ namespace Biru.UI.Views {
         HOME_HOME,
         HOME_SEARCH
     }
-    
+
     public class Home : Gtk.ScrolledWindow {
         // common fields
-        private bool continous {get; set; default = false;}
+        private bool continous { get; set; default = false; }
         private API api;
-        public int api_page {get; set; default = 1;}
-        private HomeType home_type {get; set; default = HOME_HOME;}
-        private SortType home_sort {get; set; default = SORT_POPULAR;}
-        
+        public int api_page { get; set; default = 1; }
+        private HomeType home_type { get; set; default = HOME_HOME; }
+        private SortType home_sort { get; set; default = SORT_POPULAR; }
+
         // widgets
         private LabelTop label;
         private BookGrid grid;
         private Gtk.Box content;
 
         // signals
-        public signal void sig_scroll_bottom();
-        public signal void sig_loading();
-        public signal void sig_loading_done();
-        
-        public Home() {
-            this.api = API.get();
+        public signal void sig_scroll_bottom ();
+        public signal void sig_loading ();
+        public signal void sig_loading_done ();
 
-            this.label = new LabelTop("Homepage");
-            this.content = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
-            this.grid = new BookGrid();
-            
-            this.content.add(label);
-            this.content.add(grid);
-            
-            this.add(this.content);
+        public Home () {
+            this.api = API.get ();
+
+            this.label = new LabelTop ("Homepage");
+            this.content = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
+            this.grid = new BookGrid ();
+
+            this.content.add (label);
+            this.content.add (grid);
+
+            this.add (this.content);
 
             // connect signals
-            this.api.sig_search_ok.connect((lst) => {
-                message("home search ok!");
-                if (this.continous == true) {
-                    this.continous = false;
-                    this.insert_books(lst);
-                    return;
-                }
+            this.api.sig_search_ok.connect ((lst) => {
+                message ("home search ok!");
                 this.home_type = HOME_SEARCH;
-                this.clean();
-                this.insert_books(lst);
-            });
-
-            this.api.sig_homepage_ok.connect((lst) => {
-                message("home loading ok!");
-                this.home_type = HOME_HOME;
                 if (!this.continous) {
-                    this.clean();
+                    this.clean ();
                 }
                 this.continous = false;
-                this.insert_books(lst);
+                this.insert_books (lst);
             });
 
-            this.edge_reached.connect( (pos) => {
+            this.api.sig_homepage_ok.connect ((lst) => {
+                message ("home loading ok!");
+                this.home_type = HOME_HOME;
+                if (!this.continous) {
+                    this.clean ();
+                }
+                this.continous = false;
+                this.insert_books (lst);
+            });
+
+            this.edge_reached.connect ((pos) => {
                 if (pos == Gtk.PositionType.BOTTOM) {
-                    message("scrolling reached bottom");
-                    sig_scroll_bottom();
+                    message ("scrolling reached bottom");
+                    sig_scroll_bottom ();
                     this.continous = true;
                     this.api_page++;
                     if (this.home_type == HOME_HOME) {
-                        this.api.homepage(this.api_page, home_sort);
+                        this.api.homepage (this.api_page, home_sort);
+                    } else {
+                        this.api.search (this.api.last_query, this.api_page, home_sort);
                     }
-                    else {
-                        this.api.search(this.api.last_query, this.api_page, home_sort);
-                    }
-                    this.sig_loading();
+                    this.sig_loading ();
                 }
             });
         }
 
-        // to request a 
-        public void init() {
-            this.api.homepage(this.api_page, home_sort);
-            this.sig_loading();
+        // to request a
+        public void init () {
+            this.api.homepage (this.api_page, home_sort);
+            this.sig_loading ();
         }
 
-        public void insert_books(List<Models.Book?> lst) {
-            this.grid.insert_books(lst);
-            this.sig_loading_done();
+        public void insert_books (List<Models.Book ? > lst) {
+            this.grid.insert_books (lst);
+            this.sig_loading_done ();
         }
 
-        public void clean() {
+        public void clean () {
             this.api_page = 1;
-            this.grid.clean();
-            //this.set_placement(Gtk.CornerType.TOP_RIGHT);
+            this.grid.clean ();
+            // this.set_placement(Gtk.CornerType.TOP_RIGHT);
         }
     }
 }
