@@ -4,7 +4,7 @@ namespace Biru.UI.Widgets {
     public class BookCard : Gtk.Box {
         private File file;
         private Models.Book book;
-        private Granite.AsyncImage image;
+        private Image image;
         private int w;
         private int h;
 
@@ -26,7 +26,7 @@ namespace Biru.UI.Widgets {
             this.w = (int) book.images.thumbnail.w;
             this.h = (int) book.images.thumbnail.h;
 
-            this.image = new Granite.AsyncImage (true, true);
+            this.image = new Image ();
             this.file = File.new_for_uri (book.thumb_url ());
 
             assert (this.file != null);

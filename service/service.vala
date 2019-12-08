@@ -65,8 +65,7 @@ namespace Biru.Service {
         }
     }
 
-    // API is not safe to call asynchronously, to call it async,
-    // create a new instance with new API() instead of API.get()
+    // to create new API instance, create with `new API()`
     public class API {
         private Soup.Session session;
         public string last_query { get; set; default = ""; }

@@ -12,7 +12,7 @@ In order to run, you must have these software installed, depends on your GNU/Lin
 
 ```sh
 # on Archlinux
-sudo pacman -S --needed gtk3 gvfs granite libsoup valac meson
+sudo pacman -S --needed gtk3 gvfs libsoup vala meson
 ```
 
 ### Building

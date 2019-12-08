@@ -5,9 +5,9 @@ namespace Biru.UI.Widgets {
             Object (
                 label: header,
                 wrap: false,
-                margin_start: 40
+                margin_start: 40,
                 // justify: Gtk.Justification.CENTER
-                // margin_end: 25
+                margin_end: 40
             );
         }
 

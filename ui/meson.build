@@ -4,6 +4,7 @@ sources += files (
     'widgets/bookgrid.vala',
     'widgets/loading.vala',
     'widgets/labeltop.vala',
+    'widgets/image.vala',
     
     'views/homepage.vala',
     
