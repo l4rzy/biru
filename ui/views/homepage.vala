@@ -41,6 +41,7 @@ namespace Biru.UI.Views {
             // connect signals
             this.api.sig_search_ok.connect ((lst) => {
                 message ("home search ok!");
+                this.label.search_result(this.api.last_query);
                 this.home_type = HOME_SEARCH;
                 if (!this.continous) {
                     this.clean ();
@@ -68,7 +69,8 @@ namespace Biru.UI.Views {
                     if (this.home_type == HOME_HOME) {
                         this.api.homepage (this.api_page, home_sort);
                     } else {
-                        this.api.search (this.api.last_query, this.api_page, home_sort);
+                        var query = this.api.last_query;
+                        this.api.search (query, this.api_page, home_sort);
                     }
                     this.sig_loading ();
                 }
@@ -88,6 +90,7 @@ namespace Biru.UI.Views {
 
         public void clean () {
             this.api_page = 1;
+            this.get_vadjustment ().set_value (0);
             this.grid.clean ();
             // this.set_placement(Gtk.CornerType.TOP_RIGHT);
         }

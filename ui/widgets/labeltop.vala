@@ -11,8 +11,8 @@ namespace Biru.UI.Widgets {
             );
         }
 
-        public void search_result (string query, int page, int total_pages) {
-            this.label = @"page $(page)/$(total_pages) for `$(query)`";
+        public void search_result (string query) {
+            this.label = @"Results for \"$(query)\"";
         }
     }
 }

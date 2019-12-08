@@ -8,10 +8,7 @@ namespace Biru.UI.Widgets {
         private int w;
         private int h;
 
-        private API api;
-
         public BookCard (Models.Book book) {
-            this.api = API.get ();
             this.book = book;
             this.can_focus = false;
             this.orientation = Gtk.Orientation.VERTICAL;

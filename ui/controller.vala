@@ -41,6 +41,7 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_search_activated.connect ((query) => {
+                this.home.api_page = 1;
                 this.api.search (query, home.api_page, SORT_DATE);
                 this.headerbar.start_loading ();
             });
