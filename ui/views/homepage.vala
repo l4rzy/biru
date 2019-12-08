@@ -41,7 +41,7 @@ namespace Biru.UI.Views {
             // connect signals
             this.api.sig_search_ok.connect ((lst) => {
                 message ("home search ok!");
-                this.label.search_result(this.api.last_query);
+                this.label.search_result (this.api.last_query);
                 this.home_type = HOME_SEARCH;
                 if (!this.continous) {
                     this.clean ();
@@ -77,8 +77,10 @@ namespace Biru.UI.Views {
             });
         }
 
-        // to request a
-        public void init () {
+        // to request homepage again
+        public void reset () {
+            this.api_page = 1;
+            this.label.home ();
             this.api.homepage (this.api_page, home_sort);
             this.sig_loading ();
         }

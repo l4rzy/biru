@@ -17,7 +17,7 @@ namespace Biru.UI.Widgets {
             this.margin_start = 8;
             this.margin_end = 8;
             this.margin_top = 12;
-            this.margin_bottom = 2;
+            this.margin_bottom = 6;
 
             // jsons are all about int64
             this.w = (int) book.images.thumbnail.w;

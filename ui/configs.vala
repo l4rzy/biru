@@ -19,4 +19,8 @@ namespace Biru.UI.Configs {
         STACK_DETAILS,
         STACK_VIEW
     }
+
+    public class S {
+        public const string HEADER_PLACEHOLDER = "Type to search";
+    }
 }

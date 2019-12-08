@@ -46,6 +46,10 @@ namespace Biru.UI {
                 this.headerbar.start_loading ();
             });
 
+            this.headerbar.sig_btn_home.connect (() => {
+                this.home.reset ();
+            });
+
             this.home.sig_loading.connect (() => {
                 message ("home searching");
                 this.headerbar.start_loading ();
@@ -62,7 +66,7 @@ namespace Biru.UI {
 
         public void activate () {
             this.win.show_all ();
-            this.home.init ();
+            this.home.reset ();
         }
 
         public void quit () {

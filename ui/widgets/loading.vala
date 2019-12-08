@@ -13,7 +13,7 @@ namespace Biru.UI.Widgets {
             );
 
             spinner = new Gtk.Spinner ();
-            icon = new Gtk.Image.from_icon_name ("network-idle-symbolic", Gtk.IconSize.BUTTON);
+            icon = new Gtk.Image.from_icon_name ("object-select-symbolic", Gtk.IconSize.BUTTON);
 
             spinner.active = false;
 

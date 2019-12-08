@@ -5,6 +5,7 @@ sources += files (
     'widgets/loading.vala',
     'widgets/labeltop.vala',
     'widgets/image.vala',
+    'widgets/navigation.vala',
     
     'views/homepage.vala',
     

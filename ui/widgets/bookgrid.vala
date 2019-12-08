@@ -3,6 +3,7 @@ using Biru.Service;
 namespace Biru.UI.Widgets {
     public class BookGrid : Gtk.FlowBox {
         private unowned List<Models.Book ? > books;
+        private unowned List<GLib.File ? > files;
 
         public BookGrid () {
             this.margin_end = 10;
