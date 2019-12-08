@@ -13,4 +13,10 @@ namespace Biru.UI.Configs {
         public const int BOOKCARD_MAX_W = 300;
         public const int BOOKCARD_MAX_H = 200;
     }
+
+    public enum StackView {
+        STACK_HOME,
+        STACK_DETAILS,
+        STACK_VIEW
+    }
 }

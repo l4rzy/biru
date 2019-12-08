@@ -1,4 +1,4 @@
-using Biru.Service;
+using Biru.Service.Configs;
 
 namespace Biru.Service.Models {
 
@@ -62,6 +62,10 @@ namespace Biru.Service.Models {
                 this.pages.append(_page);
             }            
         }
+
+        public List<string?> get_thumbnails() {
+            return new List<string?>();
+        }
     }
     
     public class Book : Object {
@@ -94,6 +98,20 @@ namespace Biru.Service.Models {
                 var _tag = Tag.from_json(t);
                 this.tags.append(_tag);
             }
+        }
+
+        public string web_url() {
+            return URLBuilder.get_book_web_url(this.id);
+        }
+
+        // for details page
+        public string cover_url() {
+            return @"$(Constants.NH_THUMB)/galleries/$(media_id)/cover.$(images.cover.kind())";
+        }
+
+        // for search & home pages
+        public string thumb_url() {
+            return @"$(Constants.NH_THUMB)/galleries/$(media_id)/thumb.$(images.thumbnail.kind())";
         }
     }
 }

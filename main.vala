@@ -1,6 +1,4 @@
-using Biru.Service;
 using Biru.UI;
-using Biru.Utils;
 
 public class Text {
     static int main(string []args) {

@@ -1,4 +1,3 @@
-
 using Biru.Service;
 
 namespace Biru.UI.Widgets {
@@ -21,19 +20,20 @@ namespace Biru.UI.Widgets {
             this.margin_start = 8;
             this.margin_end = 8;
             this.margin_top = 12;
-            this.margin_bottom = 12;
-
+            this.margin_bottom = 2;
+            
             // json are all about int64
             this.w = (int)book.images.thumbnail.w;
             this.h = (int)book.images.thumbnail.h;
+                        
+            this.image = new Granite.AsyncImage(true, true);
+            this.file = File.new_for_uri(book.thumb_url());
+            
+            assert(this.file != null);
 
-            this.file = File.new_for_uri("");
-
-            this.image.set_from_file_async.begin(this.file, this.w, this.h, false, null,
-                (res) => {
-                    stdout.printf(":: loading done\n");
-                }
-            );
+            this.image.set_from_file_async.begin(this.file, this.w, this.h, true, null);
+            this.add(this.image);
+            this.show_all();
         }
     }
 }

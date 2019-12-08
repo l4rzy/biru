@@ -13,7 +13,7 @@ namespace Biru.UI.Widgets {
             this.orientation = Gtk.Orientation.HORIZONTAL;
         }
 
-        public void insert_cards(List<Models.Book?> books) {
+        public void insert_books(List<Models.Book?> books) {
             this.books = books;
 
             foreach (var b in this.books) {

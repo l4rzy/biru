@@ -1,55 +1,58 @@
-
 using Biru.UI;
 using Biru.Utils;
 using Biru.Service;
 
+/*
+ * the main UI flow controller of App
+ */
 namespace Biru.UI {
     public class AppController {
         private Gtk.Application app;
-        private Windows.Window win { get; private set; default = null; }
-        private Widgets.HeaderBar headerbar;
-        private Widgets.Loading loading;
+        private Windows.MainWin win { get; private set; default = null; }
 
-        private int api_page;
+        // stack to put all views in that
+        private Gtk.Stack stack;
+
+        // widgets
+        private Widgets.HeaderBar headerbar;
+        private Views.Home home;
         
         private API api;
 
         public AppController(Gtk.Application app) {
             // service setup, this will also initialize the service api
             this.api = API.get();
-
-            // local variables
-            this.api_page = 1;
             
             // window setup
             this.app = app;
-            this.win = new Windows.Window(this.app);
+            this.win = new Windows.MainWin(this.app);
             this.headerbar = new Widgets.HeaderBar();
-            this.loading = new Widgets.Loading();
+            this.home = new Views.Home();
+            //this.loading = new Widgets.Loading();
             
             this.win.set_titlebar(this.headerbar);
-            this.win.add(loading);
+            // this.win.add(loading);
+            this.win.add(home);
 
-            // signals setup
-            this.api.sig_search_ok.connect((lst) => {
-                message("api search ok!");
-                this.loading.stop();
-                this.loading.hide();
-                foreach (var b in lst) {
-                    stdout.printf("%s\n", b.images.cover.kind());
-                }
-            });
-
+            // global signals setup
             this.api.sig_error.connect((err) => {
                 message("api request error");
-                this.loading.stop();
-                this.loading.hide();
+                this.headerbar.stop_loading();
             });
 
             this.headerbar.sig_search_activated.connect((query) => {
-                this.api.search(query, this.api_page, SORT_DATE);
-                this.loading.start();
-                this.loading.show();
+                this.api.search(query, home.api_page, SORT_DATE);
+                this.headerbar.start_loading();
+            });
+
+            this.home.sig_loading.connect( () => {
+                message("home searching");
+                this.headerbar.start_loading();
+            });
+
+            this.home.sig_loading_done.connect( () => {
+                message("home loading done");
+                this.headerbar.stop_loading();
             });
 
             // application setup
@@ -58,6 +61,7 @@ namespace Biru.UI {
 
         public void activate() {
             this.win.show_all();
+            this.home.init();
         }
 
         public void quit() {

@@ -1,8 +1,8 @@
 using Biru.UI.Configs;
 
 namespace Biru.UI.Windows {
-    class Window : Gtk.ApplicationWindow {
-        public Window(Gtk.Application app) {
+    class MainWin : Gtk.ApplicationWindow {
+        public MainWin(Gtk.Application app) {
             Object(
                 application: app,
                 resizable: true
