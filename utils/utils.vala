@@ -1,3 +1,21 @@
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ *
+ */
+
 using Biru.Utils.Configs;
 
 namespace Biru.Utils {
@@ -18,22 +36,20 @@ namespace Biru.Utils {
             return true;
         }
 
-        /*
-           public static async bool checkInternetAsync() throws ThreadError {
-            SourceFunc callback = checkInternetAsync.callback;
-            bool ret;
-
+        public static async bool check_async () throws ThreadError {
+            SourceFunc cb = check_async.callback;
+            bool[] ret = new bool[1];
             ThreadFunc<bool> run = () => {
-                ret = checkInternet();
-                Idle.add((owned) callback);
+                ret[0] = Internet.check ();
+                Idle.add ((owned) cb);
                 return true;
             };
 
             new Thread<bool>("check internet", run);
 
+            // return cpu to mainthread
             yield;
-            return ret;
-           }
-         */
+            return ret[0];
+        }
     }
 }

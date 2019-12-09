@@ -56,4 +56,4 @@ WIP
 
 ## License
 
-Haven't decided yet
+GPLv3

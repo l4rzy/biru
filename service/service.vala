@@ -1,3 +1,21 @@
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ *
+ */
+
 using Biru.Service.Configs;
 using Biru.Service.Serde;
 using Biru.Service.Models;
@@ -48,20 +66,20 @@ namespace Biru.Service {
             return @"$(Constants.NH_IMG)/galleries/$(media_id)";
         }
 
-        public static string get_book_cover_url (string media_id, Page p) {
-            return @"$(__get_t_url(media_id))/cover.$(p.kind())";
+        public static string get_book_cover_url (string media_id, string ext) {
+            return @"$(__get_t_url(media_id))/cover.$(ext)";
         }
 
-        public static string get_book_thumbnail_url (string media_id, Page p) {
-            return @"$(__get_t_url(media_id))/thumb.$(p.kind())";
+        public static string get_book_thumbnail_url (string media_id, string ext) {
+            return @"$(__get_t_url(media_id))/thumb.$(ext)";
         }
 
         public static string get_book_web_url (int64 book_id) {
             return @"$(Constants.NH_HOME)/g/$(book_id.to_string())";
         }
 
-        public static string get_related_books_url (int book_id) {
-            return @"";
+        public static string get_related_books_url (int64 book_id) {
+            return @"$(Constants.NH_HOME)/api/gallery/$(book_id.to_string())/related";
         }
     }
 
@@ -76,8 +94,7 @@ namespace Biru.Service {
         // by emitting signals
         public signal void sig_search_ok (List<Book ? > lst);
         public signal void sig_homepage_ok (List<Book ? > lst);
-        public signal void sig_getRelatedBooks_ok (List<Book ? > lst);
-        public signal void sig_getBook_ok (Book book);
+        public signal void sig_get_related_books_ok (List<Book ? > lst);
         public signal void sig_error (Error err);
 
         // this makes API sharable amongst objects via API.get()
@@ -137,6 +154,21 @@ namespace Biru.Service {
         }
 
         public void related (int64 book_id) {
+            var uri = URLBuilder.get_related_books_url (book_id);
+            var mess = new Soup.Message ("GET", uri);
+
+            this.session.queue_message (mess, (sess, mess) => {
+                if (mess.status_code == 200) {
+                    try {
+                        var ret = Parser.parse_search_result ((string) mess.response_body.flatten ().data);
+                        sig_get_related_books_ok (ret);
+                    } catch (Error e) {
+                        sig_error (e);
+                    }
+                } else {
+                    sig_error (new ErrorAPI.UNKNOWN (@"error loading code: $(mess.status_code)"));
+                }
+            });
         }
 
         public static unowned API get () {
