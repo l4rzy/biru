@@ -6,7 +6,11 @@ An online manga reading utility
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Wait, what does `biru` mean?
+### NSFW warning
+
+A part of this project promotes some NSFW contents, you've been warned
+
+### But wait, what does `biru` mean?
 
 Originally, I came up with `kuchibiru` (唇), which means `lips` in Japanese, but I intentionally dropped the kuchi (口) part, because this is hentai 🤫
 
@@ -27,14 +31,14 @@ Clone this project
 git clone https://github.com/l4rzy/biru.git
 ```
 
-Go to project folder, and type
+Go to project folder, and call meson to generate build files in a new directory (`b` in this case)
 
 ```sh
 cd biru
 meson b
 ```
 
-Finally call ninja to build
+Go to build folder and call ninja to build
 
 ```sh
 cd b
@@ -49,7 +53,7 @@ Run with
 
 ## Contributing
 
-Check out [CONTRIBUTING.md](CONTRIBUTING.md)
+Please read [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Authors
 
