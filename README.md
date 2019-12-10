@@ -8,11 +8,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Wait, what does `biru` mean?
 
-Originally, I came up with `kuchibiru` (唇), which means "lips" in Japanese, but I intentionally dropped the kuchi (口) part, because this is hentai 🤫
+Originally, I came up with `kuchibiru` (唇), which means `lips` in Japanese, but I intentionally dropped the kuchi (口) part, because this is hentai 🤫
 
 ### Dependencies
 
-In order to run, you must have these software installed, depends on your GNU/Linux distro, it may vary
+In order to run, you must have these software installed, depends on your GNU/Linux distro, package names may vary
 
 ```sh
 # on Archlinux
@@ -30,10 +30,11 @@ git clone https://github.com/l4rzy/biru.git
 Go to project folder, and type
 
 ```sh
+cd biru
 meson b
 ```
 
-Finally use ninja to build
+Finally call ninja to build
 
 ```sh
 cd b
@@ -48,7 +49,7 @@ Run with
 
 ## Contributing
 
-WIP
+Check out [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## Authors
 
