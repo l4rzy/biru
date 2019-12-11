@@ -15,16 +15,24 @@
  * MA 02110-1301, USA.
  *
  */
- 
-.bookcard {
-    background-color: #333;
-    padding: 6px;
-    border-radius: 4px;
-    box-shadow: 0 0 6px #222;
+
+@keyframes pulse {
+  from {background-color: #77a;}
+  to {background-color: #335;}
 }
 
-.bookcard:hover {
-    background-color: #222222;
+.bookcard {
+    border-color: #113;
+    background-color: #335;
+    padding: 4px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px #222;
+    animation-name: pulse;
+    animation-duration: 3s;
+}
+
+.bookcard:active {
+    background-color: red;
     padding: 6px;
     border-radius: 4px;
     box-shadow: 0 0 8px #333;
@@ -38,4 +46,8 @@
 entry {
     border-radius: 18px;
     padding: 6px;
+}
+
+.favbtn {
+    color: yellow;
 }

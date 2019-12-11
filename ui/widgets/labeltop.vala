@@ -27,7 +27,7 @@ namespace Biru.UI.Widgets {
                 margin_start: 40,
                 // justify: Gtk.Justification.CENTER
                 margin_end: 40,
-                margin_top: 6
+                margin_top: 8
             );
 
             this.header = header;
