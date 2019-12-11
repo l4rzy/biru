@@ -17,6 +17,7 @@ sources += files (
     'windows/reader.vala',
 
     'menus/bookcard.vala',
+    'menus/headermenu.vala',
 
     'configs.vala',
     'internal.vala',

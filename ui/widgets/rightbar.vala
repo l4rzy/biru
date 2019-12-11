@@ -17,6 +17,7 @@
  */
 
 using Biru.UI.Configs;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public enum RightBarBtn {
@@ -45,6 +46,11 @@ namespace Biru.UI.Widgets {
             this.pack_start (this.share);
             this.pack_start (this.options);
             this.pack_end (this.protect);
+
+            var menu = new HeaderMenu (this.options);
+            this.options.clicked.connect (() => {
+                menu.popup ();
+            });
 
             // signals
             this.options.clicked.connect (() => {

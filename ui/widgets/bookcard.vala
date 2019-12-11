@@ -28,9 +28,8 @@ namespace Biru.UI.Widgets {
     public class BookCard : Gtk.Box {
         private File file;
         private Models.Book book;
-        private Gtk.EventBox cardcon; // this will receive the event
+        private Gtk.Button cardcon; // this will receive the event and do the hover effect
         private Gtk.Overlay overlay;
-        // private Gtk.Image fav;
         private Gtk.Image lang;
         private Image image;
 
@@ -53,7 +52,6 @@ namespace Biru.UI.Widgets {
             this.margin_end = 8;
             this.margin_top = 12;
             this.margin_bottom = 6;
-            this.get_style_context ().add_class ("bookcard");
 
             // jsons are all about int64
             this.w = (int) book.images.thumbnail.w;
@@ -80,6 +78,7 @@ namespace Biru.UI.Widgets {
             // TODO: get language from book
             this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_JPN_FLG);
             this.lang.margin_start = 4;
+            this.title.set_tooltip_text (book.title.pretty);
 
             // image
             this.image = new Image ();
@@ -92,7 +91,6 @@ namespace Biru.UI.Widgets {
             this.titlecon.halign = Gtk.Align.START;
             this.titlecon.valign = Gtk.Align.END;
             this.titlecon.margin_bottom = 8;
-            this.titlecon.set_tooltip_text (book.title.pretty);
 
             this.titlecon.pack_start (this.lang);
             this.titlecon.pack_end (this.title);
@@ -102,15 +100,17 @@ namespace Biru.UI.Widgets {
             this.overlay.add_overlay (this.titlecon);
 
             // add widgets to the button
-            this.cardcon = new Gtk.EventBox ();
+            this.cardcon = new Gtk.Button ();
+            this.cardcon.can_focus = false;
             this.cardcon.add (this.overlay);
+            this.cardcon.get_style_context ().add_class ("bookcard");
+
             this.add (this.cardcon);
             this.show_all ();
 
             // signals
-            this.cardcon.button_press_event.connect (() => {
-                message ("image clicked %s", book.title.pretty);
-                return true;
+            this.cardcon.clicked.connect ((event) => {
+                message ("clicked %s", book.title.pretty);
             });
         }
     }

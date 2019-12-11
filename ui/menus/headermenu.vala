@@ -19,13 +19,17 @@
 using Biru.UI.Configs;
 
 namespace Biru.UI.Menus {
-    public class BookCardMenu : Gtk.Popover {
-        public BookCardMenu (Gtk.Widget widget) {
+    public class HeaderMenu : Gtk.Popover {
+        private Gtk.Image logo;
+        public HeaderMenu (Gtk.Widget widget) {
             Object (
                 relative_to: widget,
                 position: Gtk.PositionType.TOP,
                 modal: true
             );
+            this.logo = new Gtk.Image.from_resource (Constants.RESOURCE_NH_LOGO);
+            this.add (this.logo);
+            this.logo.show_all ();
         }
     }
 }

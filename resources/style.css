@@ -31,11 +31,9 @@
     animation-duration: 3s;
 }
 
-.bookcard:active {
-    background-color: red;
-    padding: 6px;
-    border-radius: 4px;
-    box-shadow: 0 0 8px #333;
+.bookcard:hover {
+    background-color: #446;
+    box-shadow: 0 0 10px #111;
 }
 
 .labeltop {
