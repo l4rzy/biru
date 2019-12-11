@@ -25,13 +25,13 @@ namespace Biru.UI.Widgets {
         BOOKCARD_DOWNLOAD
     }
 
-    public class BookCard : Gtk.Box {
+    public class BookCard : Gtk.Button {
         private File file;
         private Models.Book book;
-        private Gtk.Button cardcon; // this will receive the event and do the hover effect
+        //private Gtk.Button cardcon; // this will receive the event and do the hover effect
         private Gtk.Overlay overlay;
         private Gtk.Image lang;
-        private Image image;
+        private Image cimage;
 
         private Gtk.Box titlecon;
         private Gtk.Label title;
@@ -45,17 +45,17 @@ namespace Biru.UI.Widgets {
         public BookCard (Models.Book book) {
             this.book = book;
             this.can_focus = true;
-            this.orientation = Gtk.Orientation.VERTICAL;
+            // this.orientation = Gtk.Orientation.VERTICAL;
             this.halign = Gtk.Align.CENTER;
             this.valign = Gtk.Align.START;
             this.margin_start = 8;
             this.margin_end = 8;
             this.margin_top = 12;
             this.margin_bottom = 6;
-
             // jsons are all about int64
             this.w = (int) book.images.thumbnail.w;
             this.h = (int) book.images.thumbnail.h;
+            this.get_style_context ().add_class ("bookcard");
 
             // container for book card
             this.overlay = new Gtk.Overlay ();
@@ -63,13 +63,6 @@ namespace Biru.UI.Widgets {
             this.overlay.halign = Gtk.Align.CENTER;
             this.overlay.width_request = this.w;
             this.overlay.height_request = this.h + 42; // TODO: handle this better
-
-// this.fav = new Gtk.Image.from_icon_name ("emblem-favorite-symbolic", Gtk.IconSize.DND);
-// this.fav.halign = Gtk.Align.END;
-// this.fav.valign = Gtk.Align.START;
-// this.fav.margin_top = 6;
-// this.fav.margin_end = 8;
-// this.fav.get_style_context ().add_class ("favbtn");
 
             // language flag + info
             this.title = new Gtk.Label (book.title.pretty);
@@ -81,11 +74,11 @@ namespace Biru.UI.Widgets {
             this.title.set_tooltip_text (book.title.pretty);
 
             // image
-            this.image = new Image ();
-            this.image.halign = Gtk.Align.CENTER;
-            this.image.valign = Gtk.Align.START;
+            this.cimage = new Image ();
+            this.cimage.halign = Gtk.Align.CENTER;
+            this.cimage.valign = Gtk.Align.START;
             this.file = File.new_for_uri (book.thumb_url ());
-            this.image.set_from_file_async.begin (this.file, this.w, this.h, true, null);
+            this.cimage.set_from_file_async.begin (this.file, this.w, this.h, true, null);
 
             this.titlecon = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             this.titlecon.halign = Gtk.Align.START;
@@ -95,21 +88,16 @@ namespace Biru.UI.Widgets {
             this.titlecon.pack_start (this.lang);
             this.titlecon.pack_end (this.title);
 
-            this.overlay.add (this.image);
-            // this.overlay.add_overlay (this.fav);
+            this.overlay.add (this.cimage);
             this.overlay.add_overlay (this.titlecon);
 
             // add widgets to the button
-            this.cardcon = new Gtk.Button ();
-            this.cardcon.can_focus = false;
-            this.cardcon.add (this.overlay);
-            this.cardcon.get_style_context ().add_class ("bookcard");
 
-            this.add (this.cardcon);
+            this.add (this.overlay);
             this.show_all ();
 
             // signals
-            this.cardcon.clicked.connect ((event) => {
+            this.clicked.connect ((event) => {
                 message ("clicked %s", book.title.pretty);
             });
         }
