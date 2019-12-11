@@ -97,7 +97,4 @@ namespace Biru.UI.Widgets {
             this.show_all ();
         }
     }
-
-    public class BookCardMenu : Gtk.Popover {
-    }
 }

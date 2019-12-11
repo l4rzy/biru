@@ -31,10 +31,11 @@ namespace Biru.UI.Configs {
         public const int BOOKCARD_MAX_H = 200;
 
         // resources
-        public const string RESOURCE_PREFIX = "/com/l4rzy/biru/";
+        public const string RESOURCE_PREFIX = "/io/l4rzy/biru/";
         public const string RESOURCE_CSS = RESOURCE_PREFIX + "style.css";
         public const string RESOURCE_JPN_FLG = RESOURCE_PREFIX + "japan32.png";
         public const string RESOURCE_UK_FLG = RESOURCE_PREFIX + "uk32.png";
+        public const string RESOURCE_NH_LOGO = RESOURCE_PREFIX + "logo.svg";
     }
 
     public enum StackView {

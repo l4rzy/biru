@@ -17,11 +17,17 @@
  */
  
 .bookcard {
-    /*background-color: #222233;*/
-    border-color: #222233;
-    padding: 4px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.54);
+    background-color: #333;
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 0 6px #222;
+}
+
+.bookcard:hover {
+    background-color: #222222;
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px #333;
 }
 
 .labeltop {

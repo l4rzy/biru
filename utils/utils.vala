@@ -35,21 +35,5 @@ namespace Biru.Utils {
             }
             return true;
         }
-
-        public static async bool check_async () throws ThreadError {
-            SourceFunc cb = check_async.callback;
-            bool[] ret = new bool[1];
-            ThreadFunc<bool> run = () => {
-                ret[0] = Internet.check ();
-                Idle.add ((owned) cb);
-                return true;
-            };
-
-            new Thread<bool>("check internet", run);
-
-            // return cpu to mainthread
-            yield;
-            return ret[0];
-        }
     }
 }

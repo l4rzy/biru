@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/com/l4rzy/biru">
+  <gresource prefix="/io/l4rzy/biru">
     <file>style.css</file>
     <file>japan32.png</file>
     <file>uk32.png</file>
+    <file>logo.svg</file>
   </gresource>
 </gresources>

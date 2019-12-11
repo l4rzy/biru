@@ -16,6 +16,8 @@
  *
  */
 
+using Biru.UI.Configs;
+
 namespace Biru.UI.Widgets {
     public class WarningLabel : Gtk.Box {
         private Gtk.Image icon;
@@ -26,9 +28,11 @@ namespace Biru.UI.Widgets {
 
         public WarningLabel (string s) {
             Object ();
+            this.icon = new Gtk.Image.from_resource (Constants.RESOURCE_NH_LOGO);
             this.mess = new Gtk.Label (s);
             this.button = new Gtk.Button.from_icon_name ("view-refresh-symbolic");
 
+            this.pack_start (icon);
             this.pack_start (mess);
             this.pack_end (button);
 

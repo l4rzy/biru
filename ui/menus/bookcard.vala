@@ -16,9 +16,14 @@
  *
  */
 
-// TODO: implement priority queue for async tasks
-
-namespace Biru.UI.Internal {
-    public class AsyncQueue {
+namespace Biru.UI.Menus {
+    public class BookCardMenu : Gtk.Popover {
+        public BookCardMenu (Gtk.Widget widget) {
+            Object (
+                relative_to: relative_to,
+                position: Gtk.PositionType.TOP,
+                modal: true
+            );
+        }
     }
 }

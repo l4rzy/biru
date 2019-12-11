@@ -26,11 +26,12 @@ namespace Biru.UI.Widgets {
         private Gtk.Entry search_entry { get; set; }
         private Loading loading;
         private Navigation navi;
-        private Gtk.Button options;
-        private Gtk.Button protect;
+        private RightBar rightbar;
 
         public signal void sig_search_activated (string query);
         public signal void sig_btn_home ();
+        public signal void sig_navi (bool back);
+        public signal void sig_rightbar (RightBarBtn btn);
 
         public HeaderBar () {
             get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -39,13 +40,14 @@ namespace Biru.UI.Widgets {
             this.show_close_button = true;
 
             this.navi = new Navigation ();
+            this.rightbar = new RightBar ();
+            this.rightbar.stack_view (this.view);
             this.loading = new Loading ();
             search_entry = new Gtk.Entry ();
             search_entry.margin = 2;
             search_entry.expand = true;
             search_entry.placeholder_text = S.HEADER_SEARCH_PLACEHOLDER;
             search_entry.primary_icon_name = "folder-saved-search-symbolic";
-            search_entry.progress_pulse_step = 2.4;
             // search_entry.sensitive = true;
 
             // shamelessly copied from github.com/calo001/fondo
@@ -58,16 +60,12 @@ namespace Biru.UI.Widgets {
                 }
             });
 
-            this.options = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic");
-            this.protect = new Gtk.Button.from_icon_name ("system-lock-screen-symbolic");
-
             this.pack_start (this.navi);
             this.pack_start (this.loading);
             this.pack_start (this.search_entry);
 
             // button to lock app
-            this.pack_end (this.protect);
-            this.pack_end (this.options);
+            this.pack_end (this.rightbar);
 
             // signals
             this.search_entry.activate.connect (() => {

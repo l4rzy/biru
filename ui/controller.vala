@@ -32,7 +32,7 @@ namespace Biru.UI {
         private Gtk.Stack stack;
 
         // widgets
-        private Widgets.HeaderBar headerbar;
+        private Widgets.HeaderBar headerbar { get; set; }
         private Views.Home home;
 
         private API api;
@@ -43,6 +43,7 @@ namespace Biru.UI {
 
             // window setup
             this.app = app;
+            this.stack = new Gtk.Stack ();
             this.win = new Windows.MainWin (this.app);
             this.headerbar = new Widgets.HeaderBar ();
             this.home = new Views.Home ();
