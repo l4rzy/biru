@@ -4,8 +4,15 @@ project('biru', ['vala', 'c'],
 )
 
 c_args = [
-    '-fuse-ld=lld'
+    '-O0'
 ]
+
+gnome = import('gnome')
+biru_resource = gnome.compile_resources(
+    'brsrc', 'ui/resources/biru.gresource.xml',
+    source_dir: 'ui/resources',
+    c_name: 'brsrc'
+)
 
 sources = files(
     'main.vala'
@@ -23,6 +30,7 @@ dependencies = [
 ]
 
 e = executable('biru',
+    biru_resource,
     sources: sources,
     c_args: c_args,
     dependencies: dependencies,

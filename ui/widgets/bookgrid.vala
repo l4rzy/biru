@@ -29,6 +29,7 @@ namespace Biru.UI.Widgets {
             this.set_selection_mode (Gtk.SelectionMode.NONE);
             this.activate_on_single_click = false;
             this.homogeneous = false;
+            this.column_spacing = 10;
             this.orientation = Gtk.Orientation.HORIZONTAL;
         }
 
@@ -44,6 +45,8 @@ namespace Biru.UI.Widgets {
         }
 
         public void clean () {
+            // TODO: cancel all current async tasks
+
             this.@foreach ((w) => {
                 w.destroy ();
             });

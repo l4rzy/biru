@@ -68,14 +68,12 @@ namespace Biru.UI {
                 this.home.reset ();
             });
 
-            this.home.sig_loading.connect (() => {
-                message ("home searching");
-                this.headerbar.start_loading ();
-            });
-
-            this.home.sig_loading_done.connect (() => {
-                message ("home loading done");
-                this.headerbar.stop_loading ();
+            this.home.sig_loading.connect ((load) => {
+                if (load == true) {
+                    this.headerbar.start_loading ();
+                } else {
+                    this.headerbar.stop_loading ();
+                }
             });
 
             // application setup

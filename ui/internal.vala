@@ -16,18 +16,9 @@
  *
  */
 
-using Biru.UI.Widgets;
-using Biru.Service.Models;
+// implement priority queue for async tasks
 
-namespace Biru.UI.Windows {
-    public class Reader : Gtk.Window {
-        private unowned Book book;
-        private Image image;
-        private int page { get; set; default = 0; }
-
-        public Reader (Book book) {
-            this.book = book;
-            this.image = new Image ();
-        }
+namespace Biru.UI.Internal {
+    public class AsyncQueue : Gee.PriorityQueue {
     }
 }

@@ -4,7 +4,7 @@ These instructions will get you a brief view of how to set up development enviro
 
 ### Disclaimer
 
-This project is in a very early stage, so things are expected to change a lot, including project structure and UI design, if you propose to make a big change in code or UI, discuss in [Issue](https://github.com/l4rzy/biru/issues) before doing any PRs. Also I'm quite new with Vala, so if you have experience working with Vala and want you help, you have my warmest welcome ;)
+This project is in a very early stage, so things are expected to change a lot, including project structure and UI design, if you propose to make a big change in code or UI, discuss in [Issue](https://github.com/l4rzy/biru/issues) before doing any PRs. Also I'm quite new with Vala, so if you have experience working with Vala and want to help, you have my warmest welcome ;)
 
 ### Environment setup
 

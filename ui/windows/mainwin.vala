@@ -9,6 +9,15 @@ namespace Biru.UI.Windows {
             );
 
             set_default_size (Constants.WINDOW_X, Constants.WINDOW_Y);
+
+            var css_provider = new Gtk.CssProvider ();
+            css_provider.load_from_resource (Constants.RESOURCE_CSS);
+
+            Gtk.StyleContext.add_provider_for_screen (
+                Gdk.Screen.get_default (),
+                css_provider,
+                Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+            );
         }
     }
 }

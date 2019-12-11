@@ -19,6 +19,10 @@
 using Biru.Service.Configs;
 
 namespace Biru.Service.Models {
+    public enum Language {
+        ENGLISH,
+        JAPANESE
+    }
 
     public class Page : Object {
         public string t { get; set; }

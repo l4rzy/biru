@@ -16,18 +16,30 @@
  *
  */
 
-using Biru.UI.Widgets;
-using Biru.Service.Models;
+namespace Biru.UI.Widgets {
+    public class WarningLabel : Gtk.Box {
+        private Gtk.Image icon;
+        private Gtk.Label mess;
+        private Gtk.Button button;
 
-namespace Biru.UI.Windows {
-    public class Reader : Gtk.Window {
-        private unowned Book book;
-        private Image image;
-        private int page { get; set; default = 0; }
+        public signal void sig_btn_reload ();
 
-        public Reader (Book book) {
-            this.book = book;
-            this.image = new Image ();
+        public WarningLabel (string s) {
+            Object ();
+            this.mess = new Gtk.Label (s);
+            this.button = new Gtk.Button.from_icon_name ("view-refresh-symbolic");
+
+            this.pack_start (mess);
+            this.pack_end (button);
+
+            // connect signal
+            this.button.clicked.connect ((event) => {
+                sig_btn_reload ();
+            });
+        }
+
+        public void set_label (string s) {
+            this.mess.label = s;
         }
     }
 }

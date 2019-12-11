@@ -31,6 +31,7 @@ namespace Biru.UI.Widgets {
             );
 
             this.header = header;
+            this.get_style_context ().add_class ("labeltop");
         }
 
         public void search_result (string query) {

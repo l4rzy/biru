@@ -15,8 +15,7 @@
  * MA 02110-1301, USA.
  *
  */
+using Biru.UI.Widgets;
 
 namespace Biru.UI.Views {
-    public class Reader {
-    }
 }

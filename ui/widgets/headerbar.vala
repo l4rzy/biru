@@ -21,9 +21,13 @@ using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class HeaderBar : Gtk.HeaderBar {
-        private Gtk.SearchEntry search_entry { get; set; }
+        public StackView view { get; set; default = STACK_HOME; }
+
+        private Gtk.Entry search_entry { get; set; }
         private Loading loading;
         private Navigation navi;
+        private Gtk.Button options;
+        private Gtk.Button protect;
 
         public signal void sig_search_activated (string query);
         public signal void sig_btn_home ();
@@ -36,10 +40,12 @@ namespace Biru.UI.Widgets {
 
             this.navi = new Navigation ();
             this.loading = new Loading ();
-            search_entry = new Gtk.SearchEntry ();
-            search_entry.margin = 6;
+            search_entry = new Gtk.Entry ();
+            search_entry.margin = 2;
             search_entry.expand = true;
             search_entry.placeholder_text = S.HEADER_SEARCH_PLACEHOLDER;
+            search_entry.primary_icon_name = "folder-saved-search-symbolic";
+            search_entry.progress_pulse_step = 2.4;
             // search_entry.sensitive = true;
 
             // shamelessly copied from github.com/calo001/fondo
@@ -52,9 +58,16 @@ namespace Biru.UI.Widgets {
                 }
             });
 
+            this.options = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic");
+            this.protect = new Gtk.Button.from_icon_name ("system-lock-screen-symbolic");
+
             this.pack_start (this.navi);
             this.pack_start (this.loading);
             this.pack_start (this.search_entry);
+
+            // button to lock app
+            this.pack_end (this.protect);
+            this.pack_end (this.options);
 
             // signals
             this.search_entry.activate.connect (() => {
@@ -62,12 +75,10 @@ namespace Biru.UI.Widgets {
                 if (query.length > 0) {
                     sig_search_activated (query);
                     this.loading.start ();
-                    message ("search activated");
                 }
             });
 
             this.navi.sig_btn_home.connect (() => {
-                message ("home pressed");
                 sig_btn_home ();
             });
         }
