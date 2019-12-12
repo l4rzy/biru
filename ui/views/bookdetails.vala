@@ -25,6 +25,8 @@ namespace Biru.UI.Views {
         private Models.Book ? book;
         private Image cover;
 
+        public signal void sig_loaded ();
+
         public BookDetails () {
             this.box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
             this.cover = new Image ();
@@ -35,11 +37,17 @@ namespace Biru.UI.Views {
             this.show_all ();
         }
 
+        public string get_book_name () {
+            return this.book.title.pretty;
+        }
+
         public void load_book (Models.Book b) {
             this.cover.clear ();
             this.book = b;
             var file = File.new_for_uri (b.cover_url ());
-            this.cover.set_from_file_async.begin (file, (int) b.images.cover.w, (int) b.images.cover.h, true, null);
+            this.cover.set_from_file_async.begin (file, (int) b.images.cover.w, (int) b.images.cover.h, true, null, () => {
+                this.sig_loaded ();
+            });
         }
     }
 }

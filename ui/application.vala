@@ -36,7 +36,7 @@ namespace Biru.UI {
             this.set_accels_for_action ("app.quit", { "<Control>q" });
 
             quit_action.activate.connect (() => {
-                message("control q pressed");
+                message ("control q pressed");
                 if (this.ctl != null) {
                     this.ctl.quit ();
                 }

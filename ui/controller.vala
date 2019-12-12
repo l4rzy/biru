@@ -85,8 +85,8 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_btn_home.connect (() => {
-                this.view.home ();
                 this.home.reset ();
+                this.view.home ();
             });
 
             this.headerbar.sig_navi.connect ((back) => {
@@ -99,6 +99,7 @@ namespace Biru.UI {
                 }
             });
 
+            // signals of views
             this.home.sig_loading.connect ((load) => {
                 if (load == true) {
                     this.headerbar.start_loading ();
@@ -111,8 +112,23 @@ namespace Biru.UI {
 
             this.home.sig_book_clicked.connect ((b) => {
                 message ("clicked %s", b.title.pretty);
-                this.view.details ();
                 this.details.load_book (b);
+                this.view.details ();
+                this.headerbar.start_loading ();
+            });
+
+            this.details.sig_loaded.connect (() => {
+                this.headerbar.stop_loading ();
+            });
+
+            this.view.sig_switch_view.connect ((v) => {
+                if (v == Constants.STACK_HOME) {
+                    this.headerbar.set_title (Constants.APP_NAME);
+                    return;
+                }
+                if (v == Constants.STACK_DETAILS) {
+                    this.headerbar.set_title (this.details.get_book_name ());
+                }
             });
 
             // application setup

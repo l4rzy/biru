@@ -17,10 +17,10 @@
  */
 
 using Biru.UI.Configs;
+using Biru.Service;
 
 namespace Biru.UI {
     public class ViewPort {
-        // List to maintain navigation history
         private unowned Gtk.Stack stack;
         private unowned Widgets.HeaderBar header;
         private string current { get; set; default = Constants.STACK_HOME; }
@@ -28,6 +28,7 @@ namespace Biru.UI {
         private Gtk.StackTransitionType anim_left { get; set; default = Gtk.StackTransitionType.CROSSFADE; }
         private Gtk.StackTransitionType anim_right { get; set; default = Gtk.StackTransitionType.CROSSFADE; }
 
+        public signal void sig_switch_view (string v);
 
         public ViewPort (Gtk.Stack stack, Widgets.HeaderBar header) {
             this.stack = stack;
@@ -57,6 +58,7 @@ namespace Biru.UI {
             this.set_to (Constants.STACK_WARNING);
             this.header.navigation (true, false);
             this.header.rightbar_buttons (false, false);
+            this.sig_switch_view (this.current);
         }
 
         // new view to the right, and switch to that view
@@ -64,6 +66,7 @@ namespace Biru.UI {
             this.set_to (Constants.STACK_DETAILS, this.anim_right);
             this.header.navigation (true, false);
             this.header.rightbar_buttons (true, true);
+            this.sig_switch_view (this.current);
         }
 
         public void home (bool warning = false) {
@@ -74,10 +77,12 @@ namespace Biru.UI {
                 this.header.navigation (false, true);
             }
             this.header.rightbar_buttons (false, false);
+            this.sig_switch_view (this.current);
         }
 
         public void reset () {
             this.init ();
+            this.sig_switch_view (this.current);
         }
     }
 }

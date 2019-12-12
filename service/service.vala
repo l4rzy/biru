@@ -104,6 +104,8 @@ namespace Biru.Service {
         public API () {
             this.session = new Soup.Session ();
             this.session.ssl_strict = false;
+            this.session.max_conns = 32;
+            // this.session.use_thread_context = false;
             this.session.user_agent = Constants.NH_UA;
         }
 
