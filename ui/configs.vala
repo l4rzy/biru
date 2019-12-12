@@ -26,6 +26,10 @@ namespace Biru.UI.Configs {
         public const int WINDOW_X = 1024;
         public const int WINDOW_Y = 654;
 
+        // stack view
+        public const string STACK_HOME = "STACK_HOME";
+        public const string STACK_WARNING = "STACK_WARNING";
+
         // bookcards from home
         public const int BOOKCARD_MAX_W = 300;
         public const int BOOKCARD_MAX_H = 200;
@@ -35,13 +39,15 @@ namespace Biru.UI.Configs {
         public const string RESOURCE_CSS = RESOURCE_PREFIX + "style.css";
         public const string RESOURCE_JPN_FLG = RESOURCE_PREFIX + "japan32.png";
         public const string RESOURCE_UK_FLG = RESOURCE_PREFIX + "uk32.png";
+        public const string RESOURCE_CN_FLG = RESOURCE_PREFIX + "china32.png";
         public const string RESOURCE_NH_LOGO = RESOURCE_PREFIX + "logo.svg";
     }
 
     public enum StackView {
         STACK_HOME,
         STACK_DETAILS,
-        STACK_HISTORY
+        STACK_HISTORY,
+        STACK_WARNING
     }
 
     public class S {

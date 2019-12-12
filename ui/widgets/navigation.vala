@@ -22,8 +22,7 @@ namespace Biru.UI.Widgets {
         private Gtk.Button forw;
         private Gtk.Button home;
 
-        public signal void sig_btn_back ();
-        public signal void sig_btn_forw ();
+        public signal void sig_btn_navi (bool back);
         public signal void sig_btn_home ();
 
         public Navigation () {
@@ -42,11 +41,11 @@ namespace Biru.UI.Widgets {
 
             // connect signals
             this.back.clicked.connect (() => {
-                sig_btn_back ();
+                sig_btn_navi (true);
             });
 
             this.forw.clicked.connect (() => {
-                sig_btn_forw ();
+                sig_btn_navi (false);
             });
 
             this.home.clicked.connect (() => {
@@ -54,20 +53,12 @@ namespace Biru.UI.Widgets {
             });
         }
 
-        public void enable_back () {
-            this.back.sensitive = true;
+        public void enable_back (bool val) {
+            this.back.sensitive = val;
         }
 
-        public void disable_back () {
-            this.back.sensitive = false;
-        }
-
-        public void enable_forw () {
-            this.forw.sensitive = true;
-        }
-
-        public void disable_forw () {
-            this.back.sensitive = false;
+        public void enable_forw (bool val) {
+            this.forw.sensitive = val;
         }
     }
 }

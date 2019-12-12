@@ -7,11 +7,11 @@ sources += files (
     'widgets/image.vala',
     'widgets/navigation.vala',
     'widgets/rightbar.vala',
-    'widgets/warning.vala',
     
     'views/homepage.vala',
     'views/bookdetails.vala',
     'views/history.vala',
+    'views/warning.vala',
     
     'windows/mainwin.vala',
     'windows/reader.vala',
@@ -22,6 +22,7 @@ sources += files (
     'configs.vala',
     'internal.vala',
     'controller.vala',
+    'stackhist.vala',
     'application.vala'
 )
 

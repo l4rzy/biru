@@ -16,7 +16,10 @@
  *
  */
 
+using Biru.UI.Widgets;
+
 namespace Biru.UI.Views {
     class BookDetails : Gtk.Box {
+        private Image cover;
     }
 }

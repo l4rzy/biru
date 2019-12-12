@@ -18,18 +18,18 @@
 
 using Biru.UI.Configs;
 
-namespace Biru.UI.Widgets {
-    public class WarningLabel : Gtk.Box {
+namespace Biru.UI.Views {
+    public class Warning : Gtk.Box {
         private Gtk.Image icon;
         private Gtk.Label mess;
         private Gtk.Button button;
 
         public signal void sig_btn_reload ();
 
-        public WarningLabel (string s) {
+        public Warning () {
             Object ();
             this.icon = new Gtk.Image.from_resource (Constants.RESOURCE_NH_LOGO);
-            this.mess = new Gtk.Label (s);
+            this.mess = new Gtk.Label ("Warning");
             this.button = new Gtk.Button.from_icon_name ("view-refresh-symbolic");
 
             this.pack_start (icon);

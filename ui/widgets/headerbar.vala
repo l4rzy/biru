@@ -31,10 +31,10 @@ namespace Biru.UI.Widgets {
         public signal void sig_search_activated (string query);
         public signal void sig_btn_home ();
         public signal void sig_navi (bool back);
-        public signal void sig_rightbar (RightBarBtn btn);
+        public signal void sig_rightbar (int btn);
 
         public HeaderBar () {
-            get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+            // get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
             this.set_title (Constants.APP_NAME);
             this.set_subtitle (Constants.APP_LONGNAME);
             this.show_close_button = true;
@@ -79,6 +79,23 @@ namespace Biru.UI.Widgets {
             this.navi.sig_btn_home.connect (() => {
                 sig_btn_home ();
             });
+
+            this.navi.sig_btn_navi.connect ((back) => {
+                sig_navi (back);
+            });
+
+            this.rightbar.sig_selected.connect ((btn) => {
+                sig_rightbar (btn);
+            });
+        }
+
+        public void navigation (bool left, bool right) {
+            this.navi.enable_back (left);
+            this.navi.enable_forw (right);
+        }
+
+        public void block (bool block) {
+            this.search_entry.sensitive = !block;
         }
 
         public void stop_loading () {

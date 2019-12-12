@@ -31,19 +31,19 @@ namespace Biru.UI.Widgets {
         private Gtk.Button options;
         private Gtk.Button protect;
 
-        private Gtk.Button browser; // for details only
-        private Gtk.Button share; // for details only
+        private Gtk.Button fav;
+        private Gtk.Button read;
 
         public signal void sig_selected (RightBarBtn btn);
 
         public RightBar () {
             this.options = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic");
             this.protect = new Gtk.Button.from_icon_name ("system-lock-screen-symbolic");
-            this.browser = new Gtk.Button.from_icon_name ("network-workgroup-symbolic");
-            this.share = new Gtk.Button.from_icon_name ("emblem-shared-symbolic");
+            this.fav = new Gtk.Button.from_icon_name ("emblem-favorite-symbolic");
+            this.read = new Gtk.Button.from_icon_name ("view-paged-symbolic");
 
-            this.pack_start (this.browser);
-            this.pack_start (this.share);
+            this.pack_start (this.fav);
+            this.pack_start (this.read);
             this.pack_start (this.options);
             this.pack_end (this.protect);
 
@@ -64,12 +64,16 @@ namespace Biru.UI.Widgets {
 
         public void stack_view (StackView v) {
             if (v == STACK_HOME) {
-                this.browser.sensitive = false;
-                this.share.sensitive = false;
+                this.fav.sensitive = false;
+                this.read.sensitive = false;
             }
             if (v == STACK_DETAILS) {
-                this.browser.sensitive = true;
-                this.share.sensitive = true;
+                this.fav.sensitive = true;
+                this.read.sensitive = true;
+            }
+            if (v == STACK_WARNING) {
+                this.fav.sensitive = true;
+                this.read.sensitive = true;
             }
         }
     }

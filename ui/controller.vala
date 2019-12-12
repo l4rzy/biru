@@ -19,39 +19,51 @@
 using Biru.UI;
 using Biru.Utils;
 using Biru.Service;
+using Biru.UI.Configs;
 
 /*
  * the main UI flow controller of App
  */
 namespace Biru.UI {
     public class AppController {
-        private Gtk.Application app;
+        private unowned Gtk.Application app;
         private Windows.MainWin win { get; private set; default = null; }
 
         // stack to put all views in that
         private Gtk.Stack stack;
+        private StackHist hist;
 
         // widgets
         private Widgets.HeaderBar headerbar { get; set; }
+
+        // views
         private Views.Home home;
+        private Views.Warning warning;
 
         private API api;
 
         public AppController (Gtk.Application app) {
             // service setup, this will also initialize the service api
             this.api = API.get ();
+            this.app = app;
 
             // window setup
-            this.app = app;
-            this.stack = new Gtk.Stack ();
             this.win = new Windows.MainWin (this.app);
             this.headerbar = new Widgets.HeaderBar ();
             this.home = new Views.Home ();
-            // this.loading = new Widgets.Loading();
-
+            this.warning = new Views.Warning ();
             this.win.set_titlebar (this.headerbar);
-            // this.win.add(loading);
-            this.win.add (home);
+
+            this.stack = new Gtk.Stack ();
+            this.hist = new StackHist (this.stack, this.headerbar);
+            this.stack.transition_duration = 400;
+            this.stack.hhomogeneous = false;
+            this.stack.interpolate_size = true;
+
+            this.stack.add_named (this.home, Constants.STACK_HOME);
+            this.hist.new_right (Constants.STACK_HOME);
+            this.stack.add_named (this.warning, Constants.STACK_WARNING);
+            this.win.add (this.stack);
 
             // global signals setup
             this.api.sig_error.connect ((err) => {
@@ -59,6 +71,7 @@ namespace Biru.UI {
                 this.headerbar.stop_loading ();
             });
 
+            // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
                 this.home.api_page = 1;
                 this.api.search (query, home.api_page, SORT_DATE);
@@ -66,14 +79,29 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_btn_home.connect (() => {
+                if (this.hist.current () != Constants.STACK_HOME) {
+                    this.hist.new_right (Constants.STACK_HOME);
+                }
                 this.home.reset ();
+            });
+
+            this.headerbar.sig_navi.connect ((back) => {
+                if (back == true) {
+                    message ("go back");
+                    this.hist.backward ();
+                } else {
+                    message ("go fwd");
+                    this.hist.forward ();
+                }
             });
 
             this.home.sig_loading.connect ((load) => {
                 if (load == true) {
                     this.headerbar.start_loading ();
+                    this.block_header (true);
                 } else {
                     this.headerbar.stop_loading ();
+                    this.block_header (false);
                 }
             });
 
@@ -81,8 +109,13 @@ namespace Biru.UI {
             this.app.add_window (this.win);
         }
 
+        public void block_header (bool block) {
+            this.headerbar.block (block);
+        }
+
         public void activate () {
             this.win.show_all ();
+            this.stack.set_visible_child_full (Constants.STACK_HOME, Gtk.StackTransitionType.CROSSFADE);
             this.home.reset ();
         }
 
