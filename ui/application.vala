@@ -32,10 +32,11 @@ namespace Biru.UI {
             // setup
             var quit_action = new SimpleAction ("quit", null);
 
-            add_action (quit_action);
-            set_accels_for_action ("app.quit", { "<Control>q" });
+            this.add_action (quit_action);
+            this.set_accels_for_action ("app.quit", { "<Control>q" });
 
             quit_action.activate.connect (() => {
+                message("control q pressed");
                 if (this.ctl != null) {
                     this.ctl.quit ();
                 }
