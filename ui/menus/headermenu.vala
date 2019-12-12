@@ -20,16 +20,38 @@ using Biru.UI.Configs;
 
 namespace Biru.UI.Menus {
     public class HeaderMenu : Gtk.Popover {
-        private Gtk.Image logo;
+        private Gtk.Grid grid;
+
+        public signal void sig_pop_clicked ();
+
         public HeaderMenu (Gtk.Widget widget) {
             Object (
                 relative_to: widget,
                 position: Gtk.PositionType.TOP,
                 modal: true
             );
-            this.logo = new Gtk.Image.from_resource (Constants.RESOURCE_NH_LOGO);
-            this.add (this.logo);
-            this.logo.show_all ();
+            this.grid = new Gtk.Grid ();
+            grid.margin = 12;
+            grid.column_spacing = 8;
+            grid.row_spacing = 8;
+
+            var btn_settings = new Gtk.Button.with_label (S.HEADER_MENU_SETTINGS);
+            btn_settings.get_style_context ().add_class ("birubutton");
+            btn_settings.can_focus = false;
+            var btn_about = new Gtk.Button.with_label (S.HEADER_MENU_ABOUT);
+            btn_about.get_style_context ().add_class ("birubutton");
+            btn_about.can_focus = false;
+
+            grid.attach (btn_settings, 0, 1, 1, 1);
+            grid.attach (btn_about, 0, 2, 1, 1);
+
+            grid.show_all ();
+            this.add (this.grid);
+
+            // signals
+            btn_about.clicked.connect (() => {
+                message ("Biru is an online manga reading utility");
+            });
         }
     }
 }

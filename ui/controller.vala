@@ -60,10 +60,6 @@ namespace Biru.UI {
 
             // views container is a stack
             this.stack = new Gtk.Stack ();
-            this.stack.transition_duration = 200;
-            this.stack.hhomogeneous = false;
-            this.stack.interpolate_size = true;
-
             this.stack.add_named (this.home, Constants.STACK_HOME);
             this.stack.add_named (this.details, Constants.STACK_DETAILS);
             this.stack.add_named (this.warning, Constants.STACK_WARNING);
@@ -84,6 +80,7 @@ namespace Biru.UI {
             this.headerbar.sig_search_activated.connect ((query) => {
                 this.home.api_page = 1;
                 this.api.search (query, home.api_page, SORT_DATE);
+                this.view.home ();
                 this.headerbar.start_loading ();
             });
 
@@ -128,7 +125,7 @@ namespace Biru.UI {
 
         public void activate () {
             this.win.show_all ();
-            this.view.home ();
+            this.view.init ();
             this.home.reset ();
         }
 

@@ -56,5 +56,8 @@ namespace Biru.UI.Configs {
         public const string BOOKCARD_MENU_READ = "Read";
         public const string BOOKCARD_MENU_FAVOR = "Add to favors";
         public const string BOOKCARD_MENU_DOWNLOAD = "Download";
+
+        public const string HEADER_MENU_SETTINGS = "Settings";
+        public const string HEADER_MENU_ABOUT = "About";
     }
 }

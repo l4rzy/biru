@@ -94,6 +94,10 @@ namespace Biru.UI.Widgets {
             this.navi.enable_forw (right);
         }
 
+        public void rightbar_buttons (bool fav, bool read) {
+            this.rightbar.buttons (fav, read);
+        }
+
         public void block (bool block) {
             this.search_entry.sensitive = !block;
         }

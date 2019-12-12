@@ -110,12 +110,16 @@ namespace Biru.UI.Widgets {
 
             // signals
             this.button_press_event.connect ((event) => {
+                if (event.button == 3) {
+                    // right click
+                    var menu = new BookCardMenu (this);
+                    menu.sig_pop_clicked.connect (() => {
+                        message ("book %s download", book.title.pretty);
+                    });
+                    menu.popup ();
+                    return true;
+                }
                 this.sig_book_clicked (this.book);
-                var menu = new BookCardMenu (this);
-                menu.sig_pop_clicked.connect (() => {
-                    message ("book %s download", book.title.pretty);
-                });
-                menu.popup ();
                 return true;
             });
         }

@@ -25,14 +25,21 @@ namespace Biru.UI {
         private unowned Widgets.HeaderBar header;
         private string current { get; set; default = Constants.STACK_HOME; }
         private string last { get; set; default = Constants.STACK_HOME; }
+        private Gtk.StackTransitionType anim_left { get; set; default = Gtk.StackTransitionType.CROSSFADE; }
+        private Gtk.StackTransitionType anim_right { get; set; default = Gtk.StackTransitionType.CROSSFADE; }
+
 
         public ViewPort (Gtk.Stack stack, Widgets.HeaderBar header) {
             this.stack = stack;
+            this.stack.transition_duration = 120;
+            this.stack.hhomogeneous = false;
+            this.stack.interpolate_size = true;
             this.header = header;
         }
 
         public void init () {
             this.header.navigation (false, false);
+            this.set_to (Constants.STACK_HOME);
             // this.stack.set_visible_child_full (this.current, Gtk.StackTransitionType.CROSSFADE);
         }
 
@@ -40,29 +47,33 @@ namespace Biru.UI {
             return this.current;
         }
 
-        void set_to (string v) {
+        void set_to (string v, Gtk.StackTransitionType anim = Gtk.StackTransitionType.CROSSFADE) {
             this.current = v;
-            this.stack.set_visible_child_full (v, Gtk.StackTransitionType.CROSSFADE);
+            this.stack.set_visible_child_full (v, anim);
         }
 
         public void warning () {
+            this.last = this.current;
             this.set_to (Constants.STACK_WARNING);
             this.header.navigation (true, false);
+            this.header.rightbar_buttons (false, false);
         }
 
         // new view to the right, and switch to that view
         public void details () {
-            this.set_to (Constants.STACK_DETAILS);
+            this.set_to (Constants.STACK_DETAILS, this.anim_right);
             this.header.navigation (true, false);
+            this.header.rightbar_buttons (true, true);
         }
 
         public void home (bool warning = false) {
             if (warning == true) {
                 this.set_to (this.last);
             } else {
-                this.set_to (Constants.STACK_HOME);
+                this.set_to (Constants.STACK_HOME, this.anim_left);
                 this.header.navigation (false, true);
             }
+            this.header.rightbar_buttons (false, false);
         }
 
         public void reset () {

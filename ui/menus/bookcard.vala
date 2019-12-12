@@ -37,14 +37,14 @@ namespace Biru.UI.Menus {
             grid.row_spacing = 8;
 
             var btn_read = new Gtk.Button.with_label (S.BOOKCARD_MENU_READ);
-            btn_read.get_style_context ().add_class ("bookcardpopbtn");
+            btn_read.get_style_context ().add_class ("birubutton");
             btn_read.can_focus = false;
             var btn_fav = new Gtk.Button.with_label (S.BOOKCARD_MENU_FAVOR);
-            btn_fav.get_style_context ().add_class ("bookcardpopbtn");
+            btn_fav.get_style_context ().add_class ("birubutton");
             btn_fav.can_focus = false;
             var btn_download = new Gtk.Button.with_label (S.BOOKCARD_MENU_DOWNLOAD);
             btn_download.can_focus = false;
-            btn_download.get_style_context ().add_class ("bookcardpopbtn");
+            btn_download.get_style_context ().add_class ("birubutton");
 
             grid.attach (btn_read, 0, 1, 1, 1);
             grid.attach (btn_fav, 0, 2, 1, 1);

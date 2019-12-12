@@ -30,6 +30,7 @@ namespace Biru.UI.Widgets {
     public class RightBar : Gtk.Box {
         private Gtk.Button options;
         private Gtk.Button protect;
+        private Gtk.Separator separator;
         private Gtk.Button fav;
         private Gtk.Button read;
 
@@ -40,13 +41,18 @@ namespace Biru.UI.Widgets {
         public RightBar () {
             this.options = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic");
             this.protect = new Gtk.Button.from_icon_name ("system-lock-screen-symbolic");
+            this.separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
+            this.separator.set_vexpand (true);
+            this.separator.set_hexpand (false);
             this.fav = new Gtk.Button.from_icon_name ("emblem-favorite-symbolic");
             this.read = new Gtk.Button.from_icon_name ("view-paged-symbolic");
 
             this.pack_start (this.fav);
             this.pack_start (this.read);
-            this.pack_start (this.options);
+            this.pack_start (this.separator);
             this.pack_end (this.protect);
+            this.pack_end (this.options);
+
 
             this.menu = new HeaderMenu (this.options);
 
@@ -62,6 +68,11 @@ namespace Biru.UI.Widgets {
             this.protect.clicked.connect (() => {
                 sig_selected (RIGHTBAR_PROTECT);
             });
+        }
+
+        public void buttons (bool fav, bool read) {
+            this.fav.sensitive = fav;
+            this.read.sensitive = read;
         }
 
         public void stack_view (StackView v) {

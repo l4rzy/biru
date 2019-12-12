@@ -24,7 +24,7 @@ sources += files (
     'configs.vala',
     'internal.vala',
     'controller.vala',
-    'stackhist.vala',
+    'viewport.vala',
     'application.vala'
 )
 
