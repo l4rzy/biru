@@ -29,6 +29,7 @@ namespace Biru.UI.Configs {
         // stack view
         public const string STACK_HOME = "STACK_HOME";
         public const string STACK_WARNING = "STACK_WARNING";
+        public const string STACK_DETAILS = "STACK_DETAILS";
 
         // bookcards from home
         public const int BOOKCARD_MAX_W = 300;
@@ -52,5 +53,8 @@ namespace Biru.UI.Configs {
 
     public class S {
         public const string HEADER_SEARCH_PLACEHOLDER = "Type to search";
+        public const string BOOKCARD_MENU_READ = "Read";
+        public const string BOOKCARD_MENU_FAVOR = "Add to favors";
+        public const string BOOKCARD_MENU_DOWNLOAD = "Download";
     }
 }

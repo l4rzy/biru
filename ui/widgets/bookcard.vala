@@ -18,6 +18,7 @@
 
 using Biru.Service;
 using Biru.UI.Configs;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public enum BookCardOption {
@@ -41,6 +42,7 @@ namespace Biru.UI.Widgets {
         // signals
         public signal void sig_selected ();
         public signal void sig_favorite ();
+        public signal void sig_book_clicked (Models.Book b);
 
         public BookCard (Models.Book book) {
             Object (
@@ -103,13 +105,18 @@ namespace Biru.UI.Widgets {
             this.overlay.add_overlay (this.titlecon);
 
             // add widgets to the button
-
             this.add (this.overlay);
             this.show_all ();
 
             // signals
-            this.clicked.connect ((event) => {
-                message ("clicked %s", book.title.pretty);
+            this.button_press_event.connect ((event) => {
+                this.sig_book_clicked (this.book);
+                var menu = new BookCardMenu (this);
+                menu.sig_pop_clicked.connect (() => {
+                    message ("book %s download", book.title.pretty);
+                });
+                menu.popup ();
+                return true;
             });
         }
     }

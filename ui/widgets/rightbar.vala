@@ -30,9 +30,10 @@ namespace Biru.UI.Widgets {
     public class RightBar : Gtk.Box {
         private Gtk.Button options;
         private Gtk.Button protect;
-
         private Gtk.Button fav;
         private Gtk.Button read;
+
+        private HeaderMenu menu;
 
         public signal void sig_selected (RightBarBtn btn);
 
@@ -47,7 +48,8 @@ namespace Biru.UI.Widgets {
             this.pack_start (this.options);
             this.pack_end (this.protect);
 
-            var menu = new HeaderMenu (this.options);
+            this.menu = new HeaderMenu (this.options);
+
             this.options.clicked.connect (() => {
                 menu.popup ();
             });

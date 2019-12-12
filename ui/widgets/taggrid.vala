@@ -16,40 +16,7 @@
  *
  */
 
-@keyframes pulse {
-  from {background-color: #77a;}
-  to {background-color: #335;}
-}
-
-.bookcard {
-    border-color: #113;
-    background-color: #335;
-    padding: 4px;
-    border-radius: 4px;
-    box-shadow: 0 0 8px #222;
-    animation-name: pulse;
-    animation-duration: 3s;
-}
-
-.bookcardpop {
-    border-color: #113;
-    background-color: #335;
-}
-
-.bookcardpopbtn {
-    border-radius: 16px;
-}
-
-.bookcard:hover {
-    box-shadow: 0 0 12px #111;
-}
-
-.labeltop {
-    font-weight: bold;
-    font-size: 1.4em;
-}
-
-entry {
-    border-radius: 18px;
-    padding: 6px;
+namespace Biru.UI.Widgets {
+    public class TagGrid : Gtk.Grid {
+    }
 }

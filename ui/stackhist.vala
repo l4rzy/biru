@@ -16,61 +16,57 @@
  *
  */
 
+using Biru.UI.Configs;
+
 namespace Biru.UI {
-    public class StackHist {
+    public class ViewPort {
         // List to maintain navigation history
-        private Queue<string> history;
-        private int view { get; set; default = -1; }
         private unowned Gtk.Stack stack;
         private unowned Widgets.HeaderBar header;
+        private string current { get; set; default = Constants.STACK_HOME; }
+        private string last { get; set; default = Constants.STACK_HOME; }
 
-        public StackHist (Gtk.Stack stack, Widgets.HeaderBar header) {
+        public ViewPort (Gtk.Stack stack, Widgets.HeaderBar header) {
             this.stack = stack;
             this.header = header;
-            this.history = new Queue<string>();
         }
 
-        public string current () {
-            return this.history.peek_nth (this.view);
+        public void init () {
+            this.header.navigation (false, false);
+            // this.stack.set_visible_child_full (this.current, Gtk.StackTransitionType.CROSSFADE);
+        }
+
+        public string get_view () {
+            return this.current;
+        }
+
+        void set_to (string v) {
+            this.current = v;
+            this.stack.set_visible_child_full (v, Gtk.StackTransitionType.CROSSFADE);
+        }
+
+        public void warning () {
+            this.set_to (Constants.STACK_WARNING);
+            this.header.navigation (true, false);
         }
 
         // new view to the right, and switch to that view
-        public void new_right (string v) {
-            this.view++;
-            this.history.push_nth (v, this.view);
-            this.stack.set_visible_child_full (this.current (), Gtk.StackTransitionType.CROSSFADE);
-            if (this.history.get_length () == 1) {
-                this.header.navigation (false, false);
-            } else {
-                this.header.navigation (true, false);
-            }
+        public void details () {
+            this.set_to (Constants.STACK_DETAILS);
+            this.header.navigation (true, false);
         }
 
-        public void forward () {
-            if (this.history.peek_nth (this.view + 1) != null) {
-                this.view++;
-            }
-            this.stack.set_visible_child_full (this.current (), Gtk.StackTransitionType.CROSSFADE);
-            if (this.history.peek_nth (this.view + 1) != null) {
-                this.header.navigation (true, true);
+        public void home (bool warning = false) {
+            if (warning == true) {
+                this.set_to (this.last);
             } else {
-                this.header.navigation (true, false);
-            }
-        }
-
-        public void backward () {
-            if (this.history.peek_nth (this.view - 1) != null) {
-                this.view--;
-            }
-            this.stack.set_visible_child_full (this.current (), Gtk.StackTransitionType.CROSSFADE);
-            if (this.history.peek_nth (this.view - 1) != null) {
-                this.header.navigation (true, true);
-            } else {
+                this.set_to (Constants.STACK_HOME);
                 this.header.navigation (false, true);
             }
         }
 
         public void reset () {
+            this.init ();
         }
     }
 }

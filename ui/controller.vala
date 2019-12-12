@@ -31,13 +31,14 @@ namespace Biru.UI {
 
         // stack to put all views in that
         private Gtk.Stack stack;
-        private StackHist hist;
 
         // widgets
         private Widgets.HeaderBar headerbar { get; set; }
 
         // views
+        private ViewPort view;
         private Views.Home home;
+        private Views.BookDetails details;
         private Views.Warning warning;
 
         private API api;
@@ -47,26 +48,34 @@ namespace Biru.UI {
             this.api = API.get ();
             this.app = app;
 
-            // window setup
+            // window setup with headerbar
             this.win = new Windows.MainWin (this.app);
             this.headerbar = new Widgets.HeaderBar ();
-            this.home = new Views.Home ();
-            this.warning = new Views.Warning ();
             this.win.set_titlebar (this.headerbar);
 
+            // views setup
+            this.home = new Views.Home ();
+            this.details = new Views.BookDetails ();
+            this.warning = new Views.Warning ();
+
+            // views container is a stack
             this.stack = new Gtk.Stack ();
-            this.hist = new StackHist (this.stack, this.headerbar);
-            this.stack.transition_duration = 400;
+            this.stack.transition_duration = 200;
             this.stack.hhomogeneous = false;
             this.stack.interpolate_size = true;
 
             this.stack.add_named (this.home, Constants.STACK_HOME);
-            this.hist.new_right (Constants.STACK_HOME);
+            this.stack.add_named (this.details, Constants.STACK_DETAILS);
             this.stack.add_named (this.warning, Constants.STACK_WARNING);
+
+            // stack hist to control stack views
+            this.view = new ViewPort (this.stack, this.headerbar);
+
             this.win.add (this.stack);
 
             // global signals setup
             this.api.sig_error.connect ((err) => {
+                this.view.warning ();
                 message ("api request error");
                 this.headerbar.stop_loading ();
             });
@@ -79,19 +88,17 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_btn_home.connect (() => {
-                if (this.hist.current () != Constants.STACK_HOME) {
-                    this.hist.new_right (Constants.STACK_HOME);
-                }
+                this.view.home ();
                 this.home.reset ();
             });
 
             this.headerbar.sig_navi.connect ((back) => {
                 if (back == true) {
-                    message ("go back");
-                    this.hist.backward ();
+                    message ("go back to home");
+                    this.view.home ();
                 } else {
-                    message ("go fwd");
-                    this.hist.forward ();
+                    message ("go fwd to details");
+                    this.view.details ();
                 }
             });
 
@@ -105,6 +112,12 @@ namespace Biru.UI {
                 }
             });
 
+            this.home.sig_book_clicked.connect ((b) => {
+                message ("clicked %s", b.title.pretty);
+                this.view.details ();
+                this.details.load_book (b);
+            });
+
             // application setup
             this.app.add_window (this.win);
         }
@@ -115,7 +128,7 @@ namespace Biru.UI {
 
         public void activate () {
             this.win.show_all ();
-            this.stack.set_visible_child_full (Constants.STACK_HOME, Gtk.StackTransitionType.CROSSFADE);
+            this.view.home ();
             this.home.reset ();
         }
 

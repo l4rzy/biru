@@ -23,6 +23,8 @@ namespace Biru.UI.Widgets {
         private unowned List<Models.Book ? > books;
         // private unowned List<GLib.File ? > files;
 
+        public signal void sig_book_clicked (Models.Book book);
+
         public BookGrid () {
             this.margin_end = 10;
             this.margin_start = 10;
@@ -39,6 +41,9 @@ namespace Biru.UI.Widgets {
 
             foreach (var b in this.books) {
                 var card = new BookCard (b);
+                card.sig_book_clicked.connect (() => {
+                    sig_book_clicked (b);
+                });
                 this.add (card);
                 card.show_all ();
             }

@@ -20,12 +20,43 @@ using Biru.UI.Configs;
 
 namespace Biru.UI.Menus {
     public class BookCardMenu : Gtk.Popover {
+        private Gtk.Grid grid;
+
+        public signal void sig_pop_clicked ();
+
         public BookCardMenu (Gtk.Widget widget) {
             Object (
                 relative_to: widget,
                 position: Gtk.PositionType.TOP,
                 modal: true
             );
+            this.grid = new Gtk.Grid ();
+            this.get_style_context ().add_class ("bookcardpop");
+            grid.margin = 12;
+            grid.column_spacing = 8;
+            grid.row_spacing = 8;
+
+            var btn_read = new Gtk.Button.with_label (S.BOOKCARD_MENU_READ);
+            btn_read.get_style_context ().add_class ("bookcardpopbtn");
+            btn_read.can_focus = false;
+            var btn_fav = new Gtk.Button.with_label (S.BOOKCARD_MENU_FAVOR);
+            btn_fav.get_style_context ().add_class ("bookcardpopbtn");
+            btn_fav.can_focus = false;
+            var btn_download = new Gtk.Button.with_label (S.BOOKCARD_MENU_DOWNLOAD);
+            btn_download.can_focus = false;
+            btn_download.get_style_context ().add_class ("bookcardpopbtn");
+
+            grid.attach (btn_read, 0, 1, 1, 1);
+            grid.attach (btn_fav, 0, 2, 1, 1);
+            grid.attach (btn_download, 0, 3, 1, 1);
+
+            grid.show_all ();
+            this.add (this.grid);
+
+            // signals
+            btn_read.clicked.connect (() => {
+                sig_pop_clicked ();
+            });
         }
     }
 }

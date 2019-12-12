@@ -42,6 +42,7 @@ namespace Biru.UI.Views {
         // signals
         public signal void sig_scroll_bottom ();
         public signal void sig_loading (bool load);
+        public signal void sig_book_clicked (Models.Book b);
 
         public Home () {
             this.api = API.get ();
@@ -89,6 +90,11 @@ namespace Biru.UI.Views {
                     }
                     this.sig_loading (true);
                 }
+            });
+
+            // bood grid
+            this.grid.sig_book_clicked.connect ((book) => {
+                this.sig_book_clicked (book);
             });
         }
 
