@@ -32,8 +32,7 @@
 }
 
 .bookcard:hover {
-    background-color: #446;
-    box-shadow: 0 0 10px #111;
+    box-shadow: 0 0 12px #111;
 }
 
 .labeltop {
@@ -44,8 +43,4 @@
 entry {
     border-radius: 18px;
     padding: 6px;
-}
-
-.favbtn {
-    color: yellow;
 }

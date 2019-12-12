@@ -21,7 +21,8 @@ using Biru.Service.Configs;
 namespace Biru.Service.Models {
     public enum Language {
         ENGLISH,
-        JAPANESE
+        JAPANESE,
+        CHINESE
     }
 
     public class Page : Object {
@@ -134,6 +135,20 @@ namespace Biru.Service.Models {
         // for search & home pages
         public string thumb_url () {
             return @"$(Constants.NH_THUMB)/galleries/$(media_id)/thumb.$(images.thumbnail.kind())";
+        }
+
+        public Language language () {
+            foreach (var t in this.tags) {
+                if (t._type == "language") {
+                    switch (t.name) {
+                        case "english":
+                            return ENGLISH;
+                        case "chinese":
+                            return CHINESE;
+                    }
+                }
+            }
+            return JAPANESE;
         }
     }
 }

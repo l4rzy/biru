@@ -28,7 +28,7 @@ namespace Biru.UI.Widgets {
     public class BookCard : Gtk.Button {
         private File file;
         private Models.Book book;
-        //private Gtk.Button cardcon; // this will receive the event and do the hover effect
+        // private Gtk.Button cardcon; // this will receive the event and do the hover effect
         private Gtk.Overlay overlay;
         private Gtk.Image lang;
         private Image cimage;
@@ -43,9 +43,10 @@ namespace Biru.UI.Widgets {
         public signal void sig_favorite ();
 
         public BookCard (Models.Book book) {
+            Object (
+                can_focus: false
+            );
             this.book = book;
-            this.can_focus = true;
-            // this.orientation = Gtk.Orientation.VERTICAL;
             this.halign = Gtk.Align.CENTER;
             this.valign = Gtk.Align.START;
             this.margin_start = 8;
@@ -68,8 +69,18 @@ namespace Biru.UI.Widgets {
             this.title = new Gtk.Label (book.title.pretty);
             this.title.can_focus = false;
             this.title.margin_start = 10;
-            // TODO: get language from book
-            this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_JPN_FLG);
+
+            switch (this.book.language ()) {
+                case ENGLISH:
+                    this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_UK_FLG);
+                    break;
+                case CHINESE:
+                    this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_CN_FLG);
+                    break;
+                case JAPANESE:
+                    this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_JPN_FLG);
+                    break;
+            }
             this.lang.margin_start = 4;
             this.title.set_tooltip_text (book.title.pretty);
 
