@@ -39,7 +39,7 @@ namespace Biru.UI.Views {
             this.cover.clear ();
             this.book = b;
             var file = File.new_for_uri (b.cover_url ());
-            this.cover.set_from_file_async (file, (int) b.images.cover.w, (int) b.images.cover.h, true, null);
+            this.cover.set_from_file_async.begin (file, (int) b.images.cover.w, (int) b.images.cover.h, true, null);
         }
     }
 }
