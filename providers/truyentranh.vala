@@ -15,8 +15,8 @@
  * MA 02110-1301, USA.
  *
  */
-
-namespace Biru.Providers.TruyenTranh {
+/*
+   namespace Biru.Providers.TruyenTranh {
     public class URLBuilder {
         public static string homepage_url (int page_num) {
             return @"http://truyentranh.net/danh-sach.tall.html?p=$(page_num.to_string())";
@@ -44,17 +44,19 @@ namespace Biru.Providers.TruyenTranh {
             try {
                 var istream = yield this.session.send_async (mess);
 
-                var buf = new uint8[100];
-                istream.read_all (buf, 100);
+                var buf = new uint8[1];
+                var bytes_read = 0;
+                istream.read_all (buf, &bytes_read);
                 message ((string) buf);
             } catch (Error e) {
                 throw e;
             }
         }
     }
-}
+   }
 
-void main () {
+   void main () {
     var tt = new TruyenTranh ();
     var ret = tt.homepage (1);
-}
+   }
+ */

@@ -19,7 +19,8 @@ sources = files(
     'main.vala'
 )
 
-subdir('internal')
+subdir('providers')
+subdir('core')
 subdir('service')
 subdir('ui')
 subdir('utils')
@@ -28,8 +29,21 @@ dependencies = [
     dependency('gtk+-3.0'),
     dependency('json-glib-1.0'),
     dependency('libsoup-2.4'),
+    dependency('gmodule-2.0'),
     meson.get_compiler('vala').find_library('posix'),
 ]
+
+lnh_deps = [
+    dependency('json-glib-1.0'),
+    dependency('gmodule-2.0'),
+    dependency('libsoup-2.4')
+]
+
+lnh = shared_library('nhentai',
+    dependencies: lnh_deps,
+    sources: lnh_src,
+    install: false
+)
 
 e = executable('biru',
     biru_resources,
