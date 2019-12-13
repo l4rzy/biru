@@ -34,7 +34,8 @@ namespace Biru.Core.Plugin.Models {
         public abstract List<IBook ? > get_related ();
     }
 
-    public interface IProvider : Object {
+    public interface MangaProvider : Object {
+        public abstract unowned MangaProvider init ();
         public abstract unowned ProviderInfo get_info ();
         public abstract async List<IBook ? > homepage (int page_num, string sort_type);
         public abstract async List<IBook ? > search (string query, int page_num, string sort_type);

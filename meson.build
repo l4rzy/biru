@@ -24,6 +24,7 @@ subdir('core')
 subdir('service')
 subdir('ui')
 subdir('utils')
+subdir('test')
 
 dependencies = [
     dependency('gtk+-3.0'),
@@ -39,16 +40,27 @@ lnh_deps = [
     dependency('libsoup-2.4')
 ]
 
+test_deps = [
+    dependency('json-glib-1.0'),
+    dependency('gmodule-2.0')
+]
+
 lnh = shared_library('nhentai',
     dependencies: lnh_deps,
     sources: lnh_src,
     install: false
 )
 
-e = executable('biru',
+main_e = executable('biru',
     biru_resources,
     sources: sources,
     c_args: c_args,
     dependencies: dependencies,
     install : false
+)
+
+test_e = executable('testlib',
+    sources: test_src,
+    dependencies: test_deps,
+    install: false
 )

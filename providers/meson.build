@@ -4,3 +4,9 @@ lnh_src = files (
     '../core/models.vala'
 )
 
+ltt_src = files (
+    'truyentranh.vala',
+    '../core/plugin.vala',
+    '../core/models.vala'
+)
+

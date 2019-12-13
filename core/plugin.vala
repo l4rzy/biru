@@ -18,16 +18,16 @@
 
 namespace Biru.Core.Plugin {
     public class ProviderInfo {
-        public string name;
-        public string desc;
-        public string version;
-        public string maintainer;
-        public string maintainer_address;
-        public int features;
-        public string[] sort_types;
+        public string name { get; set; }
+        public string desc { get; set; }
+        public string version { get; set; }
+        public string maintainer { get; set; }
+        public string maintainer_address { get; set; }
+        public int features { get; set; }
+        public string[] sort_types { get; set; }
 
         public void print () {
-            stdout.printf ("name: %s\ndesc: %s\n", this.name, this.desc);
+            stdout.printf ("name: %s\ndesc: %s\nversion: %s\n", this.name, this.desc, this.version);
         }
     }
 
@@ -46,7 +46,7 @@ namespace Biru.Core.Plugin {
         public bool load () {
             stdout.printf ("Loading plugin with path: '%s'\n", path);
 
-            module = Module.open (path, ModuleFlags.LAZY);
+            module = Module.open (path, ModuleFlags.LOCAL);
             if (module == null) {
                 return false;
             }
@@ -63,7 +63,7 @@ namespace Biru.Core.Plugin {
         }
 
         public T new_object () {
-            return Object.new (type);
+            return Object.@new (this.type);
         }
     }
 }
