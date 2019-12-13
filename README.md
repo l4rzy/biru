@@ -59,6 +59,13 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md)
 
 * **l4rzy** - *Initial work* -
 
+## Acknowledges
+
+* [vala-gkt-examples](https://github.com/gerito1/vala-gtk-examples) - exellent sample code
+* [official vala tutorial](https://wiki.gnome.org/Projects/Vala) - good sample code for async
+* [hackup](https://github.com/mdh34/hackup) - nice sample code
+* [fondo](https://github.com/calo001/fondo) - ui inspiration and some code tricks
+
 ## License
 
 GPLv3
