@@ -27,7 +27,6 @@ namespace Biru.UI.Widgets {
     }
 
     public class BookCard : Gtk.Button {
-        private File file;
         private Models.Book book;
         // private Gtk.Button cardcon; // this will receive the event and do the hover effect
         private Gtk.Overlay overlay;
@@ -90,8 +89,7 @@ namespace Biru.UI.Widgets {
             this.cimage = new Image ();
             this.cimage.halign = Gtk.Align.CENTER;
             this.cimage.valign = Gtk.Align.START;
-            this.file = File.new_for_uri (book.thumb_url ());
-            this.cimage.set_from_file_async.begin (this.file, this.w, this.h, true, null);
+            this.cimage.set_from_url_async.begin (book.thumb_url (), this.w, this.h, true, null);
 
             this.titlecon = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             this.titlecon.halign = Gtk.Align.START;
