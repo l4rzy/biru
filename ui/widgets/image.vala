@@ -24,6 +24,8 @@ namespace Biru.UI.Widgets {
 
     public class Image : Gtk.Image {
         private int current_scale_factor = 1;
+        public int width { get; set; }
+        public int height { get; set; }
         private unowned Soup.Session session;
         private Cancellable cnl;
 
@@ -59,22 +61,34 @@ namespace Biru.UI.Widgets {
         }
 
         public async void set_from_url_async (string url,
-                                              int width,
-                                              int height,
+                                              int max_width,
+                                              int max_height,
                                               bool preserve_aspect_ratio,
                                               Cancellable ? cancellable = null) throws Error {
             try {
                 var mess = new Soup.Message ("GET", url);
                 var stream = yield this.session.send_async (mess, null);
 
-                var pixbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async (
+                var pixbuf = yield new Gdk.Pixbuf.from_stream_async (
                     stream,
-                    width * this.current_scale_factor,
-                    height * this.current_scale_factor,
-                    preserve_aspect_ratio,
                     cancellable
                 );
-                this.surface = Gdk.cairo_surface_create_from_pixbuf (pixbuf, this.current_scale_factor, null);
+
+                // scale pixbuf to max size
+                if (preserve_aspect_ratio) {
+                    var real_width = pixbuf.get_width ();
+                    var real_height = pixbuf.get_height ();
+                    var ratio = max_width / (double) real_width;
+
+                    this.width = (int) (ratio * real_width);
+                    this.height = (int) (ratio * real_height);
+                } else {
+                    this.width = max_width;
+                    this.height = max_height;
+                }
+
+                var npixbuf = pixbuf.scale_simple (this.width, this.height, Gdk.InterpType.BILINEAR);
+                this.surface = Gdk.cairo_surface_create_from_pixbuf (npixbuf, this.current_scale_factor, null);
             } catch (Error e) {
                 throw e;
             }

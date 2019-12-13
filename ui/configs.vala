@@ -32,8 +32,13 @@ namespace Biru.UI.Configs {
         public const string STACK_DETAILS = "STACK_DETAILS";
 
         // bookcards from home
-        public const int BOOKCARD_MAX_W = 300;
-        public const int BOOKCARD_MAX_H = 200;
+        public const int BOOKCARD_MAX_W = 250;
+        public const int BOOKCARD_MAX_H = 350;
+        public const int BOOKCARD_TITLE_H = 42;
+
+        // bookdetails cover
+        public const int BOOKDETAILS_MAX_W = 600;
+        public const int BOOKDETAILS_MAX_H = 850;
 
         // resources
         public const string RESOURCE_PREFIX = "/io/l4rzy/biru/";

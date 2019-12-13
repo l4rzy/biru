@@ -18,6 +18,7 @@
 
 using Biru.UI.Widgets;
 using Biru.Service;
+using Biru.UI.Configs;
 
 namespace Biru.UI.Views {
     class BookDetails : Gtk.ScrolledWindow {
@@ -44,8 +45,8 @@ namespace Biru.UI.Views {
         public void load_book (Models.Book b) {
             this.cover.clear ();
             this.book = b;
-            var file = File.new_for_uri (b.cover_url ());
-            this.cover.set_from_file_async.begin (file, (int) b.images.cover.w, (int) b.images.cover.h, true, null, () => {
+            this.cover.set_from_url_async.begin (b.cover_url (), Constants.BOOKDETAILS_MAX_W,
+                                                 Constants.BOOKDETAILS_MAX_H, true, null, () => {
                 this.sig_loaded ();
             });
         }

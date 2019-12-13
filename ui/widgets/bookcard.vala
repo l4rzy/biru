@@ -63,8 +63,8 @@ namespace Biru.UI.Widgets {
             this.overlay = new Gtk.Overlay ();
             this.overlay.can_focus = false;
             this.overlay.halign = Gtk.Align.CENTER;
-            this.overlay.width_request = this.w;
-            this.overlay.height_request = this.h + 42; // TODO: handle this better
+            this.overlay.width_request = Constants.BOOKCARD_MAX_W;
+            this.overlay.height_request = Constants.BOOKCARD_MAX_H + Constants.BOOKCARD_TITLE_H;
 
             // language flag + info
             this.title = new Gtk.Label (book.title.pretty);
@@ -89,7 +89,10 @@ namespace Biru.UI.Widgets {
             this.cimage = new Image ();
             this.cimage.halign = Gtk.Align.CENTER;
             this.cimage.valign = Gtk.Align.START;
-            this.cimage.set_from_url_async.begin (book.thumb_url (), this.w, this.h, true, null);
+            this.cimage.set_from_url_async.begin (book.thumb_url (), Constants.BOOKCARD_MAX_W, Constants.BOOKCARD_MAX_H, true, null, () => {
+                this.overlay.width_request = this.cimage.width;
+                this.overlay.height_request = this.cimage.height + Constants.BOOKCARD_TITLE_H;
+            });
 
             this.titlecon = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             this.titlecon.halign = Gtk.Align.START;

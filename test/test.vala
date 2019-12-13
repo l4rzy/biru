@@ -16,6 +16,6 @@ void main (string[] args) {
     }
 
     var nhentai = registrar.new_object ();
-    nhentai.init ();
-    nhentai.get_info ().print ();
+    var api = nhentai.init ();
+    api.get_info ().print ();
 }

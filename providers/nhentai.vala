@@ -201,19 +201,22 @@ public class Book : Object, Models.IBook, Models.IBookDetails {
 
 public class NHentai : Object, Models.MangaProvider {
     public static NHentai instance;
-    public ProviderInfo info { get; set; }
-    // private Soup.Session session;
+    private ProviderInfo info { get; set; }
+    private Soup.Session session;
 
     public unowned Models.MangaProvider init () {
         if (instance == null) {
-            this.info = new ProviderInfo ();
-            this.info.name = "NHentai";
-            this.info.desc = "NHentai plugin for Biru";
-            this.info.version = "0.0.1";
-            this.info.features = 0;
-            this.info.maintainer = "l4rzy <Lam Nguyen>";
-            this.info.maintainer_address = "l4.foss@gmail.com";
-            this.info.sort_types = { "popular", "date" };
+            instance = new NHentai ();
+            instance.info = new ProviderInfo ();
+            instance.info.name = "NHentai";
+            instance.info.desc = "NHentai plugin for Biru";
+            instance.info.version = "0.0.1";
+            instance.info.features = 0;
+            instance.info.maintainer = "l4rzy <Lam Nguyen>";
+            instance.info.maintainer_address = "l4.foss@gmail.com";
+            instance.info.sort_types = { "popular", "date" };
+
+            instance.session = new Soup.Session ();
         }
         return instance;
     }
