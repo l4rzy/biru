@@ -8,7 +8,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### NSFW warning
 
-A part of this project promotes some NSFW contents, you've been warned
+A part of this project promotes some NSFW contents, you've been warned. Support for other manga providers has been considered, but for now only [NHentai](https://nhentai.net) is supported.
 
 ### But wait, what does `biru` mean?
 
@@ -16,11 +16,11 @@ Originally, I came up with `kuchibiru` (唇), which means `lips` in Japanese, bu
 
 ### Dependencies
 
-In order to run, you must have these software installed, depends on your GNU/Linux distro, package names may vary
+In order to run, you must have `gtk3` and `libsoup` installed, depends on your GNU/Linux distro, package names may vary. Vala compiler and meson are required to build, not to run.
 
 ```sh
 # on Archlinux
-sudo pacman -S --needed gtk3 gvfs libsoup vala meson
+sudo pacman -S --needed gtk3 libsoup vala meson
 ```
 
 ### Building

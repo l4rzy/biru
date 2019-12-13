@@ -179,5 +179,13 @@ namespace Biru.Service {
             }
             return instance;
         }
+
+        public static unowned Soup.Session get_session () {
+            if (instance == null) {
+                instance = new API ();
+            }
+
+            return instance.session;
+        }
     }
 }
