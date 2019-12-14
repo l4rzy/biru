@@ -50,21 +50,21 @@ public class TruyenTranh : Object, Models.MangaProvider {
         return instance;
     }
 
-    public unowned ProviderInfo get_info () {
-        return this.info;
+    public ProviderInfo get_info () {
+        return new ProviderInfo();
     }
 
-    public async void homepage (int page_num, string sort_type) throws Error {
-        var uri = URLBuilder.homepage_url (page_num);
+    public async void homepage (Soup.Session session, int page_num, string sort_type) throws Error {
+        //var uri = URLBuilder.homepage_url (page_num);
     }
 
-    public async void search (string query, int page_num, string sort_type) throws Error {
+    public async void search (Soup.Session session, string query, int page_num, string sort_type) throws Error {
     }
 
-    public async void get_details (IBook book) throws Error {
+    public async void get_details (Soup.Session session, IBook book) throws Error {
     }
 
-    public async void get_related (IBook book) throws Error {
+    public async void get_related (Soup.Session session, IBook book) throws Error {
     }
 }
 

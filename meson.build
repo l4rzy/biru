@@ -21,7 +21,7 @@ sources = files(
 
 subdir('providers')
 subdir('core')
-subdir('service')
+#subdir('service')
 subdir('ui')
 subdir('utils')
 subdir('test')
@@ -57,16 +57,9 @@ ltt = shared_library('truyentranh',
     install: false
 )
 
-main_e = executable('biru',
-    biru_resources,
-    sources: sources,
-    c_args: c_args,
-    dependencies: dependencies,
-    install : false
-)
 
 test_e = executable('modtest',
     sources: test_src,
-    dependencies: test_deps,
+    dependencies: lnh_deps,
     install: false
 )

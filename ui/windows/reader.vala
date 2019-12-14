@@ -16,16 +16,16 @@
  *
  */
 
+using Biru.Core.Plugin;
 using Biru.UI.Widgets;
-using Biru.Service.Models;
 
 namespace Biru.UI.Windows {
     public class Reader : Gtk.Window {
-        private unowned Book book;
+        private unowned Models.IBook book;
         private Image image;
         private int page { get; set; default = 0; }
 
-        public Reader (Book book) {
+        public Reader (Models.IBook book) {
             this.book = book;
             this.image = new Image ();
         }

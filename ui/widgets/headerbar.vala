@@ -17,7 +17,6 @@
  */
 
 using Biru.UI.Configs;
-using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class HeaderBar : Gtk.HeaderBar {

@@ -42,16 +42,16 @@ namespace Biru.Core.Plugin.Models {
 
     public interface MangaProvider : Object {
         public signal void sig_homepage_result (List<IBook ? > ret);
-        public signal void sig_search_result (List<IBook ? > ret);
+        public signal void sig_search_result (List<IBook ? > ret, string query);
         public signal void sig_details_result (IBookDetails ? ret);
         public signal void sig_related_result (List<IBook ? > ret);
         public signal void sig_error (Error e);
 
-        public abstract unowned MangaProvider init ();
-        public abstract unowned ProviderInfo get_info ();
-        public abstract async void homepage (int page_num, string sort_type) throws Error;
-        public abstract async void search (string query, int page_num, string sort_type) throws Error;
-        public abstract async void get_details (IBook book) throws Error;
-        public abstract async void get_related (IBook book) throws Error;
+        public abstract ProviderInfo get_info ();
+        
+        public abstract async void homepage (Soup.Session session, int page_num, string sort_type) throws Error;
+        public abstract async void search (Soup.Session session, string query, int page_num, string sort_type) throws Error;
+        public abstract async void get_details (Soup.Session session, IBook book) throws Error;
+        public abstract async void get_related (Soup.Session session, IBook book) throws Error;
     }
 }

@@ -15,13 +15,12 @@
  * MA 02110-1301, USA.
  *
  */
-
-using Biru.Service;
+using Biru.Core.Plugin;
 
 namespace Biru.UI.Widgets {
     public class Tag : Gtk.Button {
-        private unowned Models.Tag tag;
-        public Tag (Models.Tag tag) {
+        private unowned Models.ITag tag;
+        public Tag (Models.ITag tag) {
             this.tag = tag;
         }
     }

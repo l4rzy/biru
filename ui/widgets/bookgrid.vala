@@ -16,14 +16,14 @@
  *
  */
 
-using Biru.Service;
+using Biru.Core.Plugin;
 
 namespace Biru.UI.Widgets {
     public class BookGrid : Gtk.FlowBox {
-        private unowned List<Models.Book ? > books;
+        private unowned List<Models.IBook ? > books;
         // private unowned List<GLib.File ? > files;
 
-        public signal void sig_book_clicked (Models.Book book);
+        public signal void sig_book_clicked (Models.IBook book);
 
         public BookGrid () {
             this.margin_end = 10;
@@ -36,7 +36,7 @@ namespace Biru.UI.Widgets {
         }
 
         // TODO: async load image in perceptive field first
-        public void insert_books (List<Models.Book ? > books) {
+        public void insert_books (List<Models.IBook ? > books) {
             this.books = books;
 
             foreach (var b in this.books) {

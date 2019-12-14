@@ -44,7 +44,7 @@ namespace Biru.Core.Plugin {
         }
 
         public bool load () {
-            module = Module.open (path, ModuleFlags.LOCAL);
+            module = Module.open (path, ModuleFlags.LAZY);
             if (module == null) {
                 return false;
             }

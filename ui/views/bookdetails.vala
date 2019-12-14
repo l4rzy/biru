@@ -16,14 +16,14 @@
  *
  */
 
+using Biru.Core.Plugin;
 using Biru.UI.Widgets;
-using Biru.Service;
 using Biru.UI.Configs;
 
 namespace Biru.UI.Views {
     class BookDetails : Gtk.ScrolledWindow {
         private Gtk.Box box;
-        private Models.Book ? book;
+        private Models.IBook ? book;
         private Image cover;
 
         public signal void sig_loaded ();
@@ -39,13 +39,13 @@ namespace Biru.UI.Views {
         }
 
         public string get_book_name () {
-            return this.book.title.pretty;
+            return this.book.get_name();
         }
 
-        public void load_book (Models.Book b) {
+        public void load_book (Models.IBook b) {
             this.cover.clear ();
             this.book = b;
-            this.cover.set_from_url_async.begin (b.cover_url (), Constants.BOOKDETAILS_MAX_W,
+            this.cover.set_from_url_async.begin (b.get_cover_url (), Constants.BOOKDETAILS_MAX_W,
                                                  Constants.BOOKDETAILS_MAX_H, true, null, () => {
                 this.sig_loaded ();
             });

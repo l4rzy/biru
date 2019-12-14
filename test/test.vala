@@ -1,34 +1,48 @@
 using Biru.Core.Plugin;
 using Biru.Core.Plugin.Models;
 
-void main (string[] args) {
+public class Mock {
+    private unowned MangaProvider api;
+    
+    public Mock(MangaProvider api) {
+        var sss = new Soup.Session();
+        this.api = api;
+        this.api.homepage.begin(sss, 1, "popular");
+    }
+}
+
+public class PlugTest {
+    //private MangaProvider api;
+    public PlugTest() {
+        var sss = new Soup.Session();
+        var registrar = new PluginRegistrar<MangaProvider>("nhentai");
+        registrar.load ();
+        var api = registrar.new_object ();
+        message("ok");
+        api.sig_homepage_result.connect((ret) => {
+            message("request home ok");
+        });
+
+        message("about to make request");
+        api.homepage.begin(sss, 1, "popular");
+    }
+}
+
+void main(string[] args) {
     MainLoop loop = new MainLoop ();
-    string pname = "plugin";
-    if (args.length == 2) {
-        pname = args[1];
-    }
-    stdout.printf ("=> loading '%s'\n", pname);
-    var registrar = new PluginRegistrar<MangaProvider>(pname);
-    var ret = registrar.load ();
 
-    if (!ret) {
-        message ("Error loading module");
-        return;
-    }
+    var p = new PlugTest();
 
-    var nhentai = registrar.new_object ();
-    var api = nhentai.init ();
+//        var sss = new Soup.Session();
+//        var registrar = new PluginRegistrar<MangaProvider>("nhentai");
+//        registrar.load ();
+//        var api = registrar.new_object ();
+//        message("ok");
+//        api.sig_homepage_result.connect((ret) => {
+//            message("request home ok");
+//        });
 
-    api.sig_homepage_result.connect ((books) => {
-        foreach (var b in books) {
-            message (b.get_web_url ());
-        }
-    });
-
-    api.get_info ().print ();
-    api.homepage.begin (1, "popular", () => {
-        message ("loading done");
-        loop.quit ();
-    });
-    loop.run ();
+//        message("about to make request");
+//        api.homepage.begin(sss, 1, "popular");        
+    loop.run();
 }

@@ -16,7 +16,7 @@
  *
  */
 
-using Biru.Service;
+using Biru.Core.Plugin;
 using Biru.UI.Configs;
 using Biru.UI.Menus;
 
@@ -27,7 +27,7 @@ namespace Biru.UI.Widgets {
     }
 
     public class BookCard : Gtk.Button {
-        private Models.Book book;
+        private Models.IBook book;
         // private Gtk.Button cardcon; // this will receive the event and do the hover effect
         private Gtk.Overlay overlay;
         private Gtk.Image lang;
@@ -35,15 +35,13 @@ namespace Biru.UI.Widgets {
 
         private Gtk.Box titlecon;
         private Gtk.Label title;
-        private int w;
-        private int h;
 
         // signals
         public signal void sig_selected ();
         public signal void sig_favorite ();
-        public signal void sig_book_clicked (Models.Book b);
+        public signal void sig_book_clicked (Models.IBook b);
 
-        public BookCard (Models.Book book) {
+        public BookCard (Models.IBook book) {
             Object (
                 can_focus: false
             );
@@ -54,9 +52,7 @@ namespace Biru.UI.Widgets {
             this.margin_end = 8;
             this.margin_top = 12;
             this.margin_bottom = 6;
-            // jsons are all about int64
-            this.w = (int) book.images.thumbnail.w;
-            this.h = (int) book.images.thumbnail.h;
+
             this.get_style_context ().add_class ("bookcard");
 
             // container for book card
@@ -67,29 +63,29 @@ namespace Biru.UI.Widgets {
             this.overlay.height_request = Constants.BOOKCARD_MAX_H + Constants.BOOKCARD_TITLE_H;
 
             // language flag + info
-            this.title = new Gtk.Label (book.title.pretty);
+            this.title = new Gtk.Label (book.get_name());
             this.title.can_focus = false;
             this.title.margin_start = 10;
 
-            switch (this.book.language ()) {
-                case ENGLISH:
+            switch (this.book.get_language ()) {
+                case "english":
                     this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_UK_FLG);
                     break;
-                case CHINESE:
+                case "chinese":
                     this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_CN_FLG);
                     break;
-                case JAPANESE:
+                case "japanese":
                     this.lang = new Gtk.Image.from_resource (Constants.RESOURCE_JPN_FLG);
                     break;
             }
             this.lang.margin_start = 4;
-            this.title.set_tooltip_text (book.title.pretty);
+            this.title.set_tooltip_text (book.get_name());
 
             // image
             this.cimage = new Image ();
             this.cimage.halign = Gtk.Align.CENTER;
             this.cimage.valign = Gtk.Align.START;
-            this.cimage.set_from_url_async.begin (book.thumb_url (), Constants.BOOKCARD_MAX_W, Constants.BOOKCARD_MAX_H, true, null, () => {
+            this.cimage.set_from_url_async.begin (book.get_thumb_url (), Constants.BOOKCARD_MAX_W, Constants.BOOKCARD_MAX_H, true, null, () => {
                 this.overlay.width_request = this.cimage.width;
                 this.overlay.height_request = this.cimage.height + Constants.BOOKCARD_TITLE_H;
             });
@@ -115,7 +111,7 @@ namespace Biru.UI.Widgets {
                     // right click
                     var menu = new BookCardMenu (this);
                     menu.sig_pop_clicked.connect (() => {
-                        message ("book %s download", book.title.pretty);
+                        message ("book %s download", book.get_name());
                     });
                     menu.popup ();
                     return true;

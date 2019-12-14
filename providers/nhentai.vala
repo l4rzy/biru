@@ -267,40 +267,16 @@ public class Book : Object, Models.IBook, Models.IBookDetails {
 }
 
 public class NHentai : Object, Models.MangaProvider {
-    public static NHentai instance;
-    private ProviderInfo info { get; set; }
-    private Soup.Session session;
-
-    // public override signal void sig_homepage_result(List<Book?> ret);
-
-    public unowned Models.MangaProvider init () {
-        if (instance == null) {
-            instance = new NHentai ();
-            instance.info = new ProviderInfo ();
-            instance.info.name = "NHentai";
-            instance.info.desc = "NHentai plugin for Biru";
-            instance.info.version = @"$(Constants.VER_MAJOR.to_string()).$(Constants.VER_MINOR.to_string()).$(Constants.VER_PATCH.to_string())";
-            instance.info.features = 0;
-            instance.info.maintainer = "l4rzy <Lam Nguyen>";
-            instance.info.maintainer_address = "l4.foss@gmail.com";
-            instance.info.sort_types = { "popular", "date" };
-
-            instance.session = new Soup.Session ();
-            instance.session.ssl_strict = false;
-            instance.session.max_conns = 32;
-        }
-        return instance;
+    public ProviderInfo get_info () {
+        return new ProviderInfo();
     }
 
-    public unowned ProviderInfo get_info () {
-        return this.info;
-    }
-
-    public async void homepage (int page_num, string sort_type) throws Error {
+    public async void homepage (Soup.Session session, int page_num, string sort_type) throws Error {
         var mess = new Soup.Message ("GET", URLBuilder.get_homepage_url (page_num, sort_type));
         try {
-            InputStream istream = yield this.session.send_async (mess, null);
-
+            assert(session != null);
+            InputStream istream = yield session.send_async (mess, null);
+            message("here");
             var ret = yield Parser.parse_search_result (istream);
 
             sig_homepage_result (ret);
@@ -310,25 +286,25 @@ public class NHentai : Object, Models.MangaProvider {
         }
     }
 
-    public async void search (string query, int page_num, string sort_type) throws Error {
+    public async void search (Soup.Session session, string query, int page_num, string sort_type) throws Error {
         var mess = new Soup.Message ("GET", URLBuilder.get_search_url (query, page_num, sort_type));
         try {
-            InputStream istream = yield this.session.send_async (mess, null);
+            InputStream istream = yield session.send_async (mess, null);
 
             var ret = yield Parser.parse_search_result (istream);
 
-            sig_search_result (ret);
+            sig_search_result (ret, query);
         } catch (Error e) {
             sig_error (e);
             throw e;
         }
     }
 
-    public async void get_details (IBook book) throws Error {
+    public async void get_details (Soup.Session session, IBook book) throws Error {
         sig_details_result ((IBookDetails) book);
     }
 
-    public async void get_related (IBook book) throws Error {
+    public async void get_related (Soup.Session session, IBook book) throws Error {
         yield;
     }
 }

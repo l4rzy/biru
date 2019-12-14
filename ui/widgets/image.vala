@@ -16,7 +16,7 @@
  *
  */
 
-using Biru.Service;
+using Biru.UI;
 
 // originally copied and modified from Granite.AsyncImage
 // to drop out granite dependency
@@ -26,12 +26,14 @@ namespace Biru.UI.Widgets {
         private int current_scale_factor = 1;
         public int width { get; set; }
         public int height { get; set; }
-        private unowned Soup.Session session;
+        private static Soup.Session? session;
         private Cancellable cnl;
 
         public Image () {
             Object ();
-            this.session = API.get_session ();
+            if (session == null) {
+                session = new Soup.Session();
+            }
         }
 
         public async void set_from_file_async (File file,
@@ -67,7 +69,7 @@ namespace Biru.UI.Widgets {
                                               Cancellable ? cancellable = null) throws Error {
             try {
                 var mess = new Soup.Message ("GET", url);
-                var stream = yield this.session.send_async (mess, null);
+                var stream = yield Image.session.send_async (mess, null);
 
                 var pixbuf = yield new Gdk.Pixbuf.from_stream_async (
                     stream,

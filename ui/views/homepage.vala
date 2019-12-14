@@ -16,7 +16,9 @@
  *
  */
 
-using Biru.Service;
+using Biru.Core.Plugin;
+using Biru.Core.Plugin.Models;
+using Biru.UI;
 using Biru.UI.Widgets;
 
 // home view that partly acts as a controller on its own
@@ -29,10 +31,12 @@ namespace Biru.UI.Views {
     public class Home : Gtk.ScrolledWindow {
         // common fields
         private bool continous { get; set; default = false; }
-        private API api;
+        private unowned MangaProvider api;
+        private unowned Soup.Session session;
         public int api_page { get; set; default = 1; }
         private HomeType home_type { get; set; default = HOME_HOME; }
-        private SortType home_sort { get; set; default = SORT_POPULAR; }
+        private string home_sort { get; set; }
+        private string last_query {get; set; }
 
         // widgets
         private LabelTop label;
@@ -42,11 +46,13 @@ namespace Biru.UI.Views {
         // signals
         public signal void sig_scroll_bottom ();
         public signal void sig_loading (bool load);
-        public signal void sig_book_clicked (Models.Book b);
+        public signal void sig_book_clicked (Models.IBook b);
 
-        public Home () {
-            this.api = API.get ();
-
+        public Home (MangaProvider api, Soup.Session session) {
+            this.api = api;
+            this.session = session;
+            
+            this.home_sort = "popular";//api.get_info().sort_types[0];
             this.label = new LabelTop ("Homepage");
             this.content = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
             this.grid = new BookGrid ();
@@ -57,8 +63,9 @@ namespace Biru.UI.Views {
             this.add (this.content);
 
             // connect signals
-            this.api.sig_search_ok.connect ((lst) => {
-                this.label.search_result (this.api.last_query);
+            this.api.sig_search_result.connect ((lst, query) => {
+                this.label.search_result (query);
+                this.last_query = query;
                 this.home_type = HOME_SEARCH;
                 if (!this.continous) {
                     this.clean ();
@@ -67,7 +74,7 @@ namespace Biru.UI.Views {
                 this.insert_books (lst);
             });
 
-            this.api.sig_homepage_ok.connect ((lst) => {
+            this.api.sig_homepage_result.connect ((lst) => {
                 this.home_type = HOME_HOME;
                 if (!this.continous) {
                     this.clean ();
@@ -83,10 +90,10 @@ namespace Biru.UI.Views {
                     this.continous = true;
                     this.api_page++;
                     if (this.home_type == HOME_HOME) {
-                        this.api.homepage (this.api_page, home_sort);
+                        this.api.homepage.begin(this.session, this.api_page, home_sort);
                     } else {
-                        var query = this.api.last_query;
-                        this.api.search (query, this.api_page, home_sort);
+                        var query = this.last_query;
+                        this.api.search.begin(this.session, query, this.api_page, home_sort);
                     }
                     this.sig_loading (true);
                 }
@@ -102,11 +109,11 @@ namespace Biru.UI.Views {
         public void reset () {
             this.api_page = 1;
             this.label.home ();
-            this.api.homepage (this.api_page, home_sort);
+            this.api.homepage.begin(this.session, this.api_page, home_sort);
             this.sig_loading (true);
         }
 
-        public void insert_books (List<Models.Book ? > lst) {
+        public void insert_books (List<Models.IBook ? > lst) {
             this.grid.insert_books (lst);
             this.sig_loading (false);
         }

@@ -16,9 +16,10 @@
  *
  */
 
+using Biru.Core.Plugin;
+using Biru.Core.Plugin.Models;
 using Biru.UI;
 using Biru.Utils;
-using Biru.Service;
 using Biru.UI.Configs;
 
 /*
@@ -29,6 +30,9 @@ namespace Biru.UI {
         private string provider { get; set; default = "nhentai"; }
         private unowned Gtk.Application app;
         private Windows.MainWin win { get; private set; default = null; }
+
+        // maintain a HTTP session for api to load
+        private Soup.Session session {get; set;}
 
         // stack to put all views in that
         private Gtk.Stack stack;
@@ -42,11 +46,16 @@ namespace Biru.UI {
         private Views.BookDetails details;
         private Views.Warning warning;
 
-        private API api;
+        // api
+        private MangaProvider api {get; set;}
 
         public AppController (Gtk.Application app) {
             // service setup, this will also initialize the service api
-            this.api = API.get ();
+            var plugreg = new PluginRegistrar<MangaProvider>(this.provider);
+            plugreg.load();
+            this.api = plugreg.new_object();
+
+            this.session = new Soup.Session();
             this.app = app;
 
             // window setup with headerbar
@@ -55,7 +64,7 @@ namespace Biru.UI {
             this.win.set_titlebar (this.headerbar);
 
             // views setup
-            this.home = new Views.Home ();
+            this.home = new Views.Home (this.api, this.session);
             this.details = new Views.BookDetails ();
             this.warning = new Views.Warning ();
 
@@ -80,7 +89,7 @@ namespace Biru.UI {
             // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
                 this.home.api_page = 1;
-                this.api.search (query, home.api_page, SORT_DATE);
+                this.api.search.begin(this.session, query, home.api_page, "popular"); // TODO: fix this work-around
                 this.view.home ();
                 this.headerbar.start_loading ();
             });
@@ -112,7 +121,7 @@ namespace Biru.UI {
             });
 
             this.home.sig_book_clicked.connect ((b) => {
-                message ("clicked %s", b.title.pretty);
+                message ("clicked %s", b.get_name());
                 this.details.load_book (b);
                 this.view.details ();
                 this.headerbar.start_loading ();

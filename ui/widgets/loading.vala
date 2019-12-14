@@ -16,8 +16,6 @@
  *
  */
 
-using Biru.Service;
-
 namespace Biru.UI.Widgets {
     public class Loading : Gtk.Box {
         private Gtk.Spinner spinner;
