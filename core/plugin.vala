@@ -27,7 +27,7 @@ namespace Biru.Core.Plugin {
         public string[] sort_types { get; set; }
 
         public void print () {
-            stdout.printf ("name: %s\ndesc: %s\nversion: %s\n", this.name, this.desc, this.version);
+            stdout.printf ("name: %s\ndesc: %s\nversion: %s\nauthor: %s\n", this.name, this.desc, this.version, this.maintainer);
         }
     }
 
@@ -44,21 +44,17 @@ namespace Biru.Core.Plugin {
         }
 
         public bool load () {
-            stdout.printf ("Loading plugin with path: '%s'\n", path);
-
             module = Module.open (path, ModuleFlags.LOCAL);
             if (module == null) {
                 return false;
             }
-
-            stdout.printf ("Loaded module: '%s'\n", module.name ());
+            message ("Loaded module: '%s'", module.name ());
 
             void * function;
             module.symbol ("register_plugin", out function);
             unowned RegisterPluginFunction register_plugin = (RegisterPluginFunction) function;
 
             type = register_plugin (module);
-            stdout.printf ("Plugin type: %s\n\n", type.name ());
             return true;
         }
 

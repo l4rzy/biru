@@ -20,9 +20,55 @@ using Biru.Core.Plugin;
 using Biru.Core.Plugin.Models;
 
 class Constants {
+    public const int VER_MAJOR = 0;
+    public const int VER_MINOR = 0;
+    public const int VER_PATCH = 1;
     public const string NH_HOME = "https://nhentai.net";
     public const string NH_IMG = "https://i.nhentai.net";
     public const string NH_THUMB = "https://t.nhentai.net";
+}
+
+public class URLBuilder {
+    // books and galleries are not exchangable terms
+    public static string get_search_url (string query, int page_num, string sort) {
+        // preprocessing query by replacing all whitespaces with '+'
+        string formal_query = query.replace (" ", "+");
+
+        return @"$(Constants.NH_HOME)/api/galleries/search?query=$(formal_query)&page=$(page_num.to_string())&sort=$(sort)";
+    }
+
+    public static string get_homepage_url (int page_num, string sort) {
+        return @"$(Constants.NH_HOME)/api/galleries/all?page=$(page_num.to_string())&sort=$(sort)";
+    }
+
+    // functions that are called from within objects
+    public static string get_book_url (int64 book_id) {
+        return @"$(Constants.NH_HOME)/api/gallery/$(book_id.to_string())";
+    }
+
+    public static string __get_t_url (string media_id) {
+        return @"$(Constants.NH_THUMB)/galleries/$(media_id)";
+    }
+
+    public static string __get_i_url (string media_id) {
+        return @"$(Constants.NH_IMG)/galleries/$(media_id)";
+    }
+
+    public static string get_book_cover_url (string media_id, string ext) {
+        return @"$(__get_t_url(media_id))/cover.$(ext)";
+    }
+
+    public static string get_book_thumbnail_url (string media_id, string ext) {
+        return @"$(__get_t_url(media_id))/thumb.$(ext)";
+    }
+
+    public static string get_book_web_url (int64 book_id) {
+        return @"$(Constants.NH_HOME)/g/$(book_id.to_string())";
+    }
+
+    public static string get_related_books_url (int64 book_id) {
+        return @"$(Constants.NH_HOME)/api/gallery/$(book_id.to_string())/related";
+    }
 }
 
 public class Parser {
@@ -35,11 +81,12 @@ public class Parser {
         return b;
     }
 
-    public static List<Book ? > parse_search_result (string data) throws Error {
+    public static async List<Book ? > parse_search_result (InputStream istream) throws Error {
         var list = new List<Book ? >();
         var parser = new Json.Parser ();
         try {
-            parser.load_from_data (data);
+            yield parser.load_from_stream_async (istream, null);
+
             var node = parser.get_root ().get_object ();
             // per_page is always 25
             // num_pages is currently ignored
@@ -72,7 +119,7 @@ public class Page : Object {
     }
 }
 
-public class Tag : Object {
+public class Tag : Object, Models.ITag {
     public int64 id { get; set; }
     public string _type { get; set; } // type is a keyword, so it will not be deserialized properly
     public string name { get; set; }
@@ -85,6 +132,18 @@ public class Tag : Object {
         ret._type = jtag.get_object ().get_string_member ("type");
 
         return ret;
+    }
+
+    public string get_kind () {
+        return this._type;
+    }
+
+    public string get_name () {
+        return this.name;
+    }
+
+    public string get_link () {
+        return this.url;
     }
 }
 
@@ -163,6 +222,10 @@ public class Book : Object, Models.IBook, Models.IBookDetails {
         return this.title.pretty;
     }
 
+    public string get_desc () {
+        return "-- hentai doesn't need any description ;) --";
+    }
+
     public string get_web_url () {
         return @"$(Constants.NH_HOME)/g/$(this.id.to_string())";
     }
@@ -194,6 +257,10 @@ public class Book : Object, Models.IBook, Models.IBookDetails {
         return new List<string>();
     }
 
+    public List<ITag ? > get_tags () {
+        return new List<Tag ? >();
+    }
+
     public List<IBook ? > get_related () {
         return new List<IBook>();
     }
@@ -203,6 +270,8 @@ public class NHentai : Object, Models.MangaProvider {
     public static NHentai instance;
     private ProviderInfo info { get; set; }
     private Soup.Session session;
+
+    // public override signal void sig_homepage_result(List<Book?> ret);
 
     public unowned Models.MangaProvider init () {
         if (instance == null) {
@@ -225,24 +294,40 @@ public class NHentai : Object, Models.MangaProvider {
         return this.info;
     }
 
-    public async List<IBook ? > homepage (int page_num, string sort_type) {
-        yield;
-        return new List<Book ? >();
+    public async void homepage (int page_num, string sort_type) throws Error {
+        var mess = new Soup.Message ("GET", URLBuilder.get_homepage_url (page_num, sort_type));
+        try {
+            InputStream istream = yield this.session.send_async (mess, null);
+
+            var ret = yield Parser.parse_search_result (istream);
+
+            sig_homepage_result (ret);
+        } catch (Error e) {
+            sig_error (e);
+            throw e;
+        }
     }
 
-    public async List<IBook ? > search (string query, int page_num, string sort_type) {
-        yield;
-        return new List<Book ? >();
+    public async void search (string query, int page_num, string sort_type) throws Error {
+        var mess = new Soup.Message ("GET", URLBuilder.get_search_url (query, page_num, sort_type));
+        try {
+            InputStream istream = yield this.session.send_async (mess, null);
+
+            var ret = yield Parser.parse_search_result (istream);
+
+            sig_search_result (ret);
+        } catch (Error e) {
+            sig_error (e);
+            throw e;
+        }
     }
 
-    public async Models.IBookDetails ? get_details (IBook book) {
-        yield;
-        return new Book ();
+    public async void get_details (IBook book) throws Error {
+        sig_details_result ((IBookDetails) book);
     }
 
-    public async List<IBook ? > get_related (IBook book) {
+    public async void get_related (IBook book) {
         yield;
-        return new List<Book ? >();
     }
 }
 

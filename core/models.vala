@@ -17,9 +17,16 @@
  */
 
 namespace Biru.Core.Plugin.Models {
+    public interface ITag : Object {
+        public abstract string get_kind ();
+        public abstract string get_name ();
+        public abstract string get_link ();
+    }
+
     public interface IBook : Object {
         public abstract int64 get_id ();
         public abstract string get_name ();
+        public abstract string get_desc ();
         public abstract string get_language ();
         public abstract string get_cover_url ();
         public abstract string get_thumb_url ();
@@ -29,17 +36,23 @@ namespace Biru.Core.Plugin.Models {
     public interface IBookDetails : Object {
         public abstract List<string ? > get_page_urls ();
         public abstract List<string ? > get_page_thumb_urls ();
+        public abstract List<ITag ? > get_tags ();
 
         // this is for chapters in some providers
         public abstract List<IBook ? > get_related ();
     }
 
     public interface MangaProvider : Object {
+        public signal void sig_homepage_result (List<IBook ? > ret);
+        public signal void sig_search_result (List<IBook ? > ret);
+        public signal void sig_details_result (IBookDetails ? ret);
+        public signal void sig_error (Error e);
+
         public abstract unowned MangaProvider init ();
         public abstract unowned ProviderInfo get_info ();
-        public abstract async List<IBook ? > homepage (int page_num, string sort_type);
-        public abstract async List<IBook ? > search (string query, int page_num, string sort_type);
+        public abstract async void homepage (int page_num, string sort_type) throws Error;
+        public abstract async void search (string query, int page_num, string sort_type) throws Error;
 
-        public abstract async IBookDetails ? get_details (IBook book);
+        public abstract async void get_details (IBook book) throws Error;
     }
 }

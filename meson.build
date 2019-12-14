@@ -59,7 +59,7 @@ main_e = executable('biru',
     install : false
 )
 
-test_e = executable('testlib',
+test_e = executable('modtest',
     sources: test_src,
     dependencies: test_deps,
     install: false
