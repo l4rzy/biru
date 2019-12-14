@@ -279,13 +279,15 @@ public class NHentai : Object, Models.MangaProvider {
             instance.info = new ProviderInfo ();
             instance.info.name = "NHentai";
             instance.info.desc = "NHentai plugin for Biru";
-            instance.info.version = "0.0.1";
+            instance.info.version = @"$(Constants.VER_MAJOR.to_string()).$(Constants.VER_MINOR.to_string()).$(Constants.VER_PATCH.to_string())";
             instance.info.features = 0;
             instance.info.maintainer = "l4rzy <Lam Nguyen>";
             instance.info.maintainer_address = "l4.foss@gmail.com";
             instance.info.sort_types = { "popular", "date" };
 
             instance.session = new Soup.Session ();
+            instance.session.ssl_strict = false;
+            instance.session.max_conns = 32;
         }
         return instance;
     }
@@ -326,7 +328,7 @@ public class NHentai : Object, Models.MangaProvider {
         sig_details_result ((IBookDetails) book);
     }
 
-    public async void get_related (IBook book) {
+    public async void get_related (IBook book) throws Error {
         yield;
     }
 }

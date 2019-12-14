@@ -51,6 +51,12 @@ lnh = shared_library('nhentai',
     install: false
 )
 
+ltt = shared_library('truyentranh',
+    dependencies: lnh_deps,
+    sources: ltt_src,
+    install: false
+)
+
 main_e = executable('biru',
     biru_resources,
     sources: sources,

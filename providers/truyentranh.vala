@@ -15,48 +15,59 @@
  * MA 02110-1301, USA.
  *
  */
-/*
-   namespace Biru.Providers.TruyenTranh {
-    public class URLBuilder {
-        public static string homepage_url (int page_num) {
-            return @"http://truyentranh.net/danh-sach.tall.html?p=$(page_num.to_string())";
+
+using Biru.Core.Plugin;
+using Biru.Core.Plugin.Models;
+
+public class Constants {
+    public const int VER_MAJOR = 0;
+    public const int VER_MINOR = 0;
+    public const int VER_PATCH = 1;
+}
+
+public class URLBuilder {
+    public static string homepage_url (int page_num) {
+        return @"http://truyentranh.net/danh-sach.tall.html?p=$(page_num.to_string())";
+    }
+}
+
+public class TruyenTranh : Object, Models.MangaProvider {
+    private ProviderInfo info { get; set; }
+    private static TruyenTranh ? instance;
+
+    public unowned Models.MangaProvider init () {
+        if (instance == null) {
+            instance = new TruyenTranh ();
+            instance.info = new ProviderInfo ();
+            instance.info.name = "TruyenTranh";
+            instance.info.desc = "https://truyentranh.net plugin for Biru";
+            instance.info.version = @"$(Constants.VER_MAJOR.to_string()).$(Constants.VER_MINOR.to_string()).$(Constants.VER_PATCH.to_string())";
+            instance.info.features = 0;
+            instance.info.maintainer = "l4rzy <Lam Nguyen>";
+            instance.info.maintainer_address = "l4.foss@gmail.com";
+            instance.info.sort_types = { "popular", "date" };
         }
+        return instance;
     }
 
-    public class Book {
-        private string name { get; set; }
+    public unowned ProviderInfo get_info () {
+        return this.info;
     }
 
-    public class TruyenTranh {
-        private Soup.Session session;
-
-        public TruyenTranh () {
-            this.session = new Soup.Session ();
-            this.session.ssl_strict = false;
-            this.session.max_conns = 32;
-            // this.session.use_thread_context = false;
-        }
-
-        public async List<Book> ? homepage (int page_num) throws Error {
-            var uri = URLBuilder.homepage_url (page_num);
-            var ret = new List<Book>();
-            var mess = new Soup.Message ("GET", uri);
-            try {
-                var istream = yield this.session.send_async (mess);
-
-                var buf = new uint8[1];
-                var bytes_read = 0;
-                istream.read_all (buf, &bytes_read);
-                message ((string) buf);
-            } catch (Error e) {
-                throw e;
-            }
-        }
+    public async void homepage (int page_num, string sort_type) throws Error {
+        var uri = URLBuilder.homepage_url (page_num);
     }
-   }
 
-   void main () {
-    var tt = new TruyenTranh ();
-    var ret = tt.homepage (1);
-   }
- */
+    public async void search (string query, int page_num, string sort_type) throws Error {
+    }
+
+    public async void get_details (IBook book) throws Error {
+    }
+
+    public async void get_related (IBook book) throws Error {
+    }
+}
+
+public Type register_plugin (Module module) {
+    return typeof (TruyenTranh);
+}

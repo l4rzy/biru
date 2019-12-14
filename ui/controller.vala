@@ -26,6 +26,7 @@ using Biru.UI.Configs;
  */
 namespace Biru.UI {
     public class AppController {
+        private string provider { get; set; default = "nhentai"; }
         private unowned Gtk.Application app;
         private Windows.MainWin win { get; private set; default = null; }
 
