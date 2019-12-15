@@ -17,6 +17,9 @@
  */
 
 namespace Biru.UI.Widgets {
-    public class CoverAnim : Image {
+    public class BookPreview : Gtk.FlowBox {
+        public BookPreview () {
+            Object ();
+        }
     }
 }

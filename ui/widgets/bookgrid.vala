@@ -21,11 +21,11 @@ using Biru.Service;
 namespace Biru.UI.Widgets {
     public class BookGrid : Gtk.FlowBox {
         private unowned List<Models.Book ? > books;
-        // private unowned List<GLib.File ? > files;
 
         public signal void sig_book_clicked (Models.Book book);
 
         public BookGrid () {
+            Object ();
             this.margin_end = 10;
             this.margin_start = 10;
             this.set_selection_mode (Gtk.SelectionMode.NONE);

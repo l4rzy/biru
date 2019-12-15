@@ -19,15 +19,33 @@
 using Biru.Service;
 
 namespace Biru.UI.Widgets {
-    public class TagButton : Gtk.Button {
-        private unowned Models.Tag tag;
+    public class BookInfo : Gtk.Box {
+        private Gtk.Label title_en;
+        private Gtk.Label title_jp;
 
-        public TagButton (Models.Tag tag) {
-            this.get_style_context ().add_class ("tagbtn");
-            this.tag = tag;
-            this.hexpand = false;
+        public BookInfo () {
+            Object (
+                orientation: Gtk.Orientation.VERTICAL,
+                spacing: 10
+            );
 
-            this.set_label (@"$(tag._type): $(tag.name)");
+            this.title_en = new Gtk.Label (null);
+            this.title_jp = new Gtk.Label (null);
+            this.pack_start (title_en);
+            this.pack_start (title_jp);
+        }
+
+        public void set_title_en (string t) {
+            this.title_en.set_label (t);
+        }
+
+        public void set_title_jp (string t) {
+            this.title_jp.set_label (t);
+        }
+
+        public void load_title (Models.Title title) {
+            this.set_title_en (title.english);
+            this.set_title_jp (title.japanese);
         }
     }
 }

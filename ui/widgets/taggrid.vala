@@ -16,7 +16,37 @@
  *
  */
 
+using Biru.Service.Models;
+
 namespace Biru.UI.Widgets {
-    public class TagGrid : Gtk.Grid {
+    public class TagGrid : Gtk.FlowBox {
+        private unowned List<Tag ? > tags;
+
+        public signal void sig_tag_clicked (Tag tag);
+
+        public TagGrid () {
+            Object ();
+            this.margin_end = 20;
+            this.margin_start = 20;
+            this.set_selection_mode (Gtk.SelectionMode.NONE);
+            this.activate_on_single_click = false;
+            this.homogeneous = false;
+            this.column_spacing = 20;
+            this.orientation = Gtk.Orientation.HORIZONTAL;
+        }
+
+        public void insert_tags (List<Tag ? > tags) {
+            this.tags = tags;
+
+            foreach (Tag t in this.tags) {
+                var tag = new TagButton (t);
+
+                tag.clicked.connect (() => {
+                    sig_tag_clicked (t);
+                });
+                this.add (tag);
+                tag.show_all ();
+            }
+        }
     }
 }

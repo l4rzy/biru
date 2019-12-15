@@ -57,7 +57,7 @@ namespace Biru.UI {
             this.last = this.current;
             this.set_to (Constants.STACK_WARNING);
             this.header.navigation (true, false);
-            this.header.rightbar_buttons (false, false);
+            this.header.rightbar_buttons (this.current);
             this.sig_switch_view (this.current);
         }
 
@@ -65,7 +65,7 @@ namespace Biru.UI {
         public void details () {
             this.set_to (Constants.STACK_DETAILS, this.anim_right);
             this.header.navigation (true, false);
-            this.header.rightbar_buttons (true, true);
+            this.header.rightbar_buttons (this.current);
             this.sig_switch_view (this.current);
         }
 
@@ -76,7 +76,7 @@ namespace Biru.UI {
                 this.set_to (Constants.STACK_HOME, this.anim_left);
                 this.header.navigation (false, true);
             }
-            this.header.rightbar_buttons (false, false);
+            this.header.rightbar_buttons (this.current);
             this.sig_switch_view (this.current);
         }
 

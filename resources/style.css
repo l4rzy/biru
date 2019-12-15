@@ -53,3 +53,8 @@ entry {
     border-radius: 20px;
     padding: 8px;
 }
+
+.tagbtn {
+    border-radius: 16px;
+    background-color: green;
+}

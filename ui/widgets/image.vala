@@ -51,9 +51,9 @@ namespace Biru.UI.Widgets {
                     cancellable
                 );
                 this.surface = Gdk.cairo_surface_create_from_pixbuf (pixbuf, this.current_scale_factor, null);
-                // set_size_request (-1, -1);
+                set_size_request (-1, -1);
             } catch (Error e) {
-                // set_size_request (-1, -1);
+                set_size_request (-1, -1);
                 throw e;
             }
         }

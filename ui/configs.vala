@@ -44,13 +44,6 @@ namespace Biru.UI.Configs {
         public const string RESOURCE_NH_LOGO = RESOURCE_PREFIX + "logo.svg";
     }
 
-    public enum StackView {
-        STACK_HOME,
-        STACK_DETAILS,
-        STACK_HISTORY,
-        STACK_WARNING
-    }
-
     public class S {
         public const string HEADER_SEARCH_PLACEHOLDER = "Type to search";
         public const string BOOKCARD_MENU_READ = "Read";

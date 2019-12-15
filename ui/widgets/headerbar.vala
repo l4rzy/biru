@@ -21,7 +21,7 @@ using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class HeaderBar : Gtk.HeaderBar {
-        public StackView view { get; set; default = STACK_HOME; }
+        public string view { get; set; default = Constants.STACK_HOME; }
 
         private Gtk.Entry search_entry { get; set; }
         private Loading loading;
@@ -94,8 +94,8 @@ namespace Biru.UI.Widgets {
             this.navi.enable_forw (right);
         }
 
-        public void rightbar_buttons (bool fav, bool read) {
-            this.rightbar.buttons (fav, read);
+        public void rightbar_buttons (string v) {
+            this.rightbar.stack_view (v);
         }
 
         public void block (bool block) {

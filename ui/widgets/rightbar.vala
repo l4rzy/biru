@@ -23,6 +23,7 @@ namespace Biru.UI.Widgets {
     public enum RightBarBtn {
         RIGHTBAR_BROWSER,
         RIGHTBAR_SHARE,
+        RIGHTBAR_DOWNLOAD,
         RIGHTBAR_OPTIONS,
         RIGHTBAR_PROTECT
     }
@@ -33,6 +34,7 @@ namespace Biru.UI.Widgets {
         private Gtk.Separator separator;
         private Gtk.Button fav;
         private Gtk.Button read;
+        private Gtk.Button download;
 
         private HeaderMenu menu;
 
@@ -42,12 +44,14 @@ namespace Biru.UI.Widgets {
             this.options = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic");
             this.protect = new Gtk.Button.from_icon_name ("system-lock-screen-symbolic");
             this.separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
-            this.separator.set_vexpand (true);
+            this.separator.set_vexpand (false);
             this.separator.set_hexpand (false);
             this.fav = new Gtk.Button.from_icon_name ("emblem-favorite-symbolic");
             this.read = new Gtk.Button.from_icon_name ("view-paged-symbolic");
+            this.download = new Gtk.Button.from_icon_name ("folder-download-symbolic");
 
             this.pack_start (this.fav);
+            this.pack_start (this.download);
             this.pack_start (this.read);
             this.pack_start (this.separator);
             this.pack_end (this.protect);
@@ -70,23 +74,26 @@ namespace Biru.UI.Widgets {
             });
         }
 
-        public void buttons (bool fav, bool read) {
-            this.fav.sensitive = fav;
-            this.read.sensitive = read;
-        }
+// public void buttons (bool fav, bool read, bool download) {
+// this.fav.sensitive = fav;
+// this.read.sensitive = read;
+// }
 
-        public void stack_view (StackView v) {
-            if (v == STACK_HOME) {
+        public void stack_view (string v) {
+            if (v == Constants.STACK_HOME) {
                 this.fav.sensitive = false;
                 this.read.sensitive = false;
+                this.download.sensitive = false;
             }
-            if (v == STACK_DETAILS) {
+            if (v == Constants.STACK_DETAILS) {
                 this.fav.sensitive = true;
                 this.read.sensitive = true;
+                this.download.sensitive = true;
             }
-            if (v == STACK_WARNING) {
-                this.fav.sensitive = true;
-                this.read.sensitive = true;
+            if (v == Constants.STACK_WARNING) {
+                this.fav.sensitive = false;
+                this.read.sensitive = false;
+                this.download.sensitive = false;
             }
         }
     }

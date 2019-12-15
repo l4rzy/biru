@@ -121,13 +121,19 @@ namespace Biru.UI {
                 this.headerbar.stop_loading ();
             });
 
+            this.details.sig_tag_clicked.connect ((tag) => {
+                message ("tag %s", tag.name);
+            });
+
             this.view.sig_switch_view.connect ((v) => {
                 if (v == Constants.STACK_HOME) {
                     this.headerbar.set_title (Constants.APP_NAME);
+                    this.headerbar.set_subtitle (Constants.APP_LONGNAME);
                     return;
                 }
                 if (v == Constants.STACK_DETAILS) {
                     this.headerbar.set_title (this.details.get_book_name ());
+                    this.headerbar.set_subtitle (this.details.get_book_jp_name ());
                 }
             });
 
