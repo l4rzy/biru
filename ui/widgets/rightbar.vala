@@ -21,8 +21,8 @@ using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public enum RightBarBtn {
-        RIGHTBAR_BROWSER,
-        RIGHTBAR_SHARE,
+        RIGHTBAR_FAVORITE,
+        RIGHTBAR_READ,
         RIGHTBAR_DOWNLOAD,
         RIGHTBAR_OPTIONS,
         RIGHTBAR_PROTECT
@@ -71,6 +71,18 @@ namespace Biru.UI.Widgets {
 
             this.protect.clicked.connect (() => {
                 sig_selected (RIGHTBAR_PROTECT);
+            });
+
+            this.fav.clicked.connect (() => {
+                sig_selected (RIGHTBAR_FAVORITE);
+            });
+
+            this.read.clicked.connect (() => {
+                sig_selected (RIGHTBAR_READ);
+            });
+
+            this.download.clicked.connect (() => {
+                sig_selected (RIGHTBAR_DOWNLOAD);
             });
         }
 

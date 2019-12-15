@@ -29,18 +29,19 @@ namespace Biru.Service.Serde {
             return b;
         }
 
-        public static List<Book ? > parse_search_result (string data) throws Error {
+        public static async List<Book ? > parse_search_result (InputStream istream) throws Error {
             var list = new List<Book ? >();
             var parser = new Json.Parser ();
             try {
-                parser.load_from_data (data);
+                yield parser.load_from_stream_async (istream, null);
+
                 var node = parser.get_root ().get_object ();
                 // per_page is always 25
                 // num_pages is currently ignored
                 var result = node.get_array_member ("result");
 
                 foreach (var jbook in result.get_elements ()) {
-                    var b = parse_book (jbook);
+                    var b = Parser.parse_book (jbook);
                     list.append (b);
                 }
             } catch (Error e) {

@@ -74,12 +74,13 @@ namespace Biru.UI {
                 this.view.warning ();
                 message ("api request error");
                 this.headerbar.stop_loading ();
+                this.block_header (false);
             });
 
             // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
                 this.home.api_page = 1;
-                this.api.search (query, home.api_page, SORT_DATE);
+                this.api.search.begin (query, home.api_page, SORT_DATE);
                 this.view.home ();
                 this.headerbar.start_loading ();
             });
@@ -97,6 +98,10 @@ namespace Biru.UI {
                     message ("go fwd to details");
                     this.view.details ();
                 }
+            });
+
+            this.headerbar.sig_rightbar.connect ((btn) => {
+                message ("button %d", btn);
             });
 
             // signals of views

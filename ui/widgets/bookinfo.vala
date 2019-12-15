@@ -30,7 +30,9 @@ namespace Biru.UI.Widgets {
             );
 
             this.title_en = new Gtk.Label (null);
+            this.title_en.set_line_wrap (true);
             this.title_jp = new Gtk.Label (null);
+            this.title_jp.set_line_wrap (true);
             this.pack_start (title_en);
             this.pack_start (title_jp);
         }

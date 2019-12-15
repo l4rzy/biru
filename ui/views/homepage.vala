@@ -57,7 +57,7 @@ namespace Biru.UI.Views {
             this.add (this.content);
 
             // connect signals
-            this.api.sig_search_ok.connect ((lst) => {
+            this.api.sig_search_result.connect ((lst) => {
                 this.label.search_result (this.api.last_query);
                 this.home_type = HOME_SEARCH;
                 if (!this.continous) {
@@ -67,7 +67,7 @@ namespace Biru.UI.Views {
                 this.insert_books (lst);
             });
 
-            this.api.sig_homepage_ok.connect ((lst) => {
+            this.api.sig_homepage_result.connect ((lst) => {
                 this.home_type = HOME_HOME;
                 if (!this.continous) {
                     this.clean ();
@@ -83,10 +83,10 @@ namespace Biru.UI.Views {
                     this.continous = true;
                     this.api_page++;
                     if (this.home_type == HOME_HOME) {
-                        this.api.homepage (this.api_page, home_sort);
+                        this.api.homepage.begin (this.api_page, home_sort);
                     } else {
                         var query = this.api.last_query;
-                        this.api.search (query, this.api_page, home_sort);
+                        this.api.search.begin (query, this.api_page, home_sort);
                     }
                     this.sig_loading (true);
                 }
@@ -102,7 +102,7 @@ namespace Biru.UI.Views {
         public void reset () {
             this.api_page = 1;
             this.label.home ();
-            this.api.homepage (this.api_page, home_sort);
+            this.api.homepage.begin (this.api_page, home_sort);
             this.sig_loading (true);
         }
 

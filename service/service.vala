@@ -92,9 +92,9 @@ namespace Biru.Service {
 
         // api functions are called asynchronously from the UI, so it returns
         // by emitting signals
-        public signal void sig_search_ok (List<Book ? > lst);
-        public signal void sig_homepage_ok (List<Book ? > lst);
-        public signal void sig_get_related_books_ok (List<Book ? > lst);
+        public signal void sig_search_result (List<Book ? > lst);
+        public signal void sig_homepage_result (List<Book ? > lst);
+        public signal void sig_related_result (List<Book ? > lst);
         public signal void sig_error (Error err);
 
         // this makes API sharable amongst objects via API.get()
@@ -109,68 +109,57 @@ namespace Biru.Service {
             this.session.user_agent = Constants.NH_UA;
         }
 
-        public void search (string query, int page_num, SortType sort) {
+        public async void search (string query, int page_num, SortType sort) throws Error {
             this.last_query = query;
             this.last_page_num = page_num;
             this.last_sort = sort;
 
-            var uri = URLBuilder.get_search_url (query, page_num, sort);
-            message ("url: %s", uri);
-            var mess = new Soup.Message ("GET", uri);
+            var url = URLBuilder.get_search_url (query, page_num, sort);
+            var mess = new Soup.Message ("GET", url);
+            try {
+                InputStream istream = yield session.send_async (mess, null);
 
-            // makes api query in background and raises signals when
-            // request is done
-            this.session.queue_message (mess, (sess, mess) => {
-                if (mess.status_code == 200) {
-                    try {
-                        var ret = Parser.parse_search_result ((string) mess.response_body.flatten ().data);
-                        sig_search_ok (ret);
-                    } catch (Error e) {
-                        sig_error (e);
-                    }
-                } else {
-                    sig_error (new ErrorAPI.UNKNOWN (@"error loading code: $(mess.status_code)"));
-                }
-            });
+                var ret = yield Parser.parse_search_result (istream);
+
+                sig_search_result (ret);
+            } catch (Error e) {
+                sig_error (e);
+                throw e;
+            }
         }
 
-        public void homepage (int page_num, SortType sort) {
+        public async void homepage (int page_num, SortType sort) throws Error {
             this.last_page_num = page_num;
-            this.last_sort = sort;
 
-            var uri = URLBuilder.get_homepage_url (page_num, sort);
-            var mess = new Soup.Message ("GET", uri);
+            var url = URLBuilder.get_homepage_url (page_num, sort);
+            var mess = new Soup.Message ("GET", url);
+            try {
+                assert (session != null);
+                InputStream istream = yield this.session.send_async (mess, null);
 
-            this.session.queue_message (mess, (sess, mess) => {
-                if (mess.status_code == 200) {
-                    try {
-                        var ret = Parser.parse_search_result ((string) mess.response_body.flatten ().data);
-                        sig_homepage_ok (ret);
-                    } catch (Error e) {
-                        sig_error (e);
-                    }
-                } else {
-                    sig_error (new ErrorAPI.UNKNOWN (@"error loading code: $(mess.status_code)"));
-                }
-            });
+                var ret = yield Parser.parse_search_result (istream);
+
+                sig_homepage_result (ret);
+            } catch (Error e) {
+                sig_error (e);
+                throw e;
+            }
         }
 
-        public void related (int64 book_id) {
-            var uri = URLBuilder.get_related_books_url (book_id);
-            var mess = new Soup.Message ("GET", uri);
+        public async void related (int64 book_id) throws Error {
+            var url = URLBuilder.get_related_books_url (book_id);
+            var mess = new Soup.Message ("GET", url);
 
-            this.session.queue_message (mess, (sess, mess) => {
-                if (mess.status_code == 200) {
-                    try {
-                        var ret = Parser.parse_search_result ((string) mess.response_body.flatten ().data);
-                        sig_get_related_books_ok (ret);
-                    } catch (Error e) {
-                        sig_error (e);
-                    }
-                } else {
-                    sig_error (new ErrorAPI.UNKNOWN (@"error loading code: $(mess.status_code)"));
-                }
-            });
+            try {
+                InputStream istream = yield this.session.send_async (mess, null);
+
+                var ret = yield Parser.parse_search_result (istream);
+
+                sig_related_result (ret);
+            } catch (Error e) {
+                sig_error (e);
+                throw e;
+            }
         }
 
         public static unowned API get () {
