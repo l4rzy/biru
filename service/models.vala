@@ -137,6 +137,10 @@ namespace Biru.Service.Models {
             return @"$(Constants.NH_THUMB)/galleries/$(media_id)/thumb.$(images.thumbnail.kind())";
         }
 
+        public DateTime date () {
+            return new DateTime.from_unix_utc (this.upload_date);
+        }
+
         public Language language () {
             foreach (var t in this.tags) {
                 if (t._type == "language") {
@@ -149,6 +153,10 @@ namespace Biru.Service.Models {
                 }
             }
             return JAPANESE;
+        }
+
+        public List<string ? > page_urls () {
+            return new List<string ? >();
         }
     }
 }

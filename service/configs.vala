@@ -23,6 +23,6 @@ namespace Biru.Service.Configs {
         public const string NH_IMG = "https://i.nhentai.net";
         public const string NH_THUMB = "https://t.nhentai.net";
 
-        public const string NH_UA = "biru/libsoup";
+        public const string NH_UA = "biru/libsoup2.4";
     }
 }

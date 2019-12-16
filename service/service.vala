@@ -104,12 +104,12 @@ namespace Biru.Service {
         public API () {
             this.session = new Soup.Session ();
             this.session.ssl_strict = false;
-            this.session.max_conns = 32;
+            this.session.max_conns = 16;
             // this.session.use_thread_context = false;
             this.session.user_agent = Constants.NH_UA;
         }
 
-        public async void search (string query, int page_num, SortType sort) throws Error {
+        public async void search_x (string query, int page_num, SortType sort) throws Error {
             this.last_query = query;
             this.last_page_num = page_num;
             this.last_sort = sort;
@@ -119,7 +119,7 @@ namespace Biru.Service {
             try {
                 InputStream istream = yield session.send_async (mess, null);
 
-                var ret = yield Parser.parse_search_result (istream);
+                var ret = yield Parser.parse_search_result_async (istream);
 
                 sig_search_result (ret);
             } catch (Error e) {
@@ -128,22 +128,70 @@ namespace Biru.Service {
             }
         }
 
-        public async void homepage (int page_num, SortType sort) throws Error {
+        // experimental: bring request to background thread to prevent ui block
+        public async void search (string query, int page_num, SortType sort) throws Error {
+            SourceFunc callb = search.callback;
+
+            new Thread<bool>("request search", () => {
+                this.last_query = query;
+                this.last_page_num = page_num;
+                this.last_sort = sort;
+
+                var url = URLBuilder.get_search_url (query, page_num, sort);
+                var mess = new Soup.Message ("GET", url);
+                try {
+                    InputStream istream = session.send (mess, null);
+
+                    var ret = Parser.parse_search_result (istream);
+
+                    sig_search_result (ret);
+                } catch (Error e) {
+                    sig_error (e);
+                }
+                return true;
+            });
+            Idle.add ((owned) callb);
+            yield;
+        }
+
+        public async void homepage_x (int page_num, SortType sort) throws Error {
             this.last_page_num = page_num;
 
             var url = URLBuilder.get_homepage_url (page_num, sort);
             var mess = new Soup.Message ("GET", url);
             try {
-                assert (session != null);
                 InputStream istream = yield this.session.send_async (mess, null);
 
-                var ret = yield Parser.parse_search_result (istream);
+                var ret = yield Parser.parse_search_result_async (istream);
 
                 sig_homepage_result (ret);
             } catch (Error e) {
                 sig_error (e);
                 throw e;
             }
+        }
+
+        // experimental: bring request to background thread to prevent ui block
+        public async void homepage (int page_num, SortType sort) throws ThreadError {
+            SourceFunc callb = homepage.callback;
+
+            new Thread<bool>("request home", () => {
+                this.last_page_num = page_num;
+
+                var url = URLBuilder.get_homepage_url (page_num, sort);
+                var mess = new Soup.Message ("GET", url);
+                try {
+                    InputStream istream = this.session.send (mess, null);
+                    var ret = Parser.parse_search_result (istream);
+
+                    sig_homepage_result (ret);
+                } catch (Error e) {
+                    sig_error (e);
+                }
+                return true;
+            });
+            Idle.add ((owned) callb);
+            yield;
         }
 
         public async void related (int64 book_id) throws Error {
@@ -153,7 +201,7 @@ namespace Biru.Service {
             try {
                 InputStream istream = yield this.session.send_async (mess, null);
 
-                var ret = yield Parser.parse_search_result (istream);
+                var ret = yield Parser.parse_search_result_async (istream);
 
                 sig_related_result (ret);
             } catch (Error e) {
