@@ -155,8 +155,20 @@ namespace Biru.Service.Models {
             return JAPANESE;
         }
 
+        public List<string?> page_thumb_urls () {
+            return new List<string?> ();
+        }
+
         public List<string ? > page_urls () {
-            return new List<string ? >();
+            var urls = new List<string?>();
+            
+            var pnum = 1;
+            this.images.pages.foreach((page) => {
+                urls.append(@"$(Constants.NH_IMG)/galleries/$(this.media_id)/$(pnum.to_string()).$(page.kind())");
+                pnum += 1;
+            });
+            
+            return (owned) urls;
         }
     }
 }

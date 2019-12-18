@@ -52,26 +52,20 @@
 entry {
     border-radius: 20px;
     padding: 8px;
+    background: rgba(0,0,0,0.2);
 }
 
 .tagbtn {
     border-radius: 16px;
-    background-color: green;
+    background-color: orange;
 }
 
 .reader {
-    background-position: 0px 0px, 8px 8px, 0px 1px, 8px 9px;
-    background-repeat: repeat, repeat, repeat, repeat;
-    background-image: radial-gradient(at center center, black 15%, transparent 16%), radial-gradient(at center center, black 15%, transparent 16%), radial-gradient(at center center, rgba(255, 255, 255, 0.1) 15%, transparent 20%), radial-gradient(at center center, rgba(255, 255, 255, 0.1) 15%, transparent 20%);
-    background-origin: padding-box, padding-box, padding-box, padding-box;
-    background-clip: border-box, border-box, border-box, border-box;
-    background-color: rgb(40, 40, 40);
-    background-size: 16px 16px;
-}
-
-.reader2 {
-    background-color: rgb(85, 85, 102);
-    background-image: linear-gradient(30deg, rgb(68, 68, 85) 12%, transparent 12.5%, transparent 87%, rgb(68, 68, 85) 87.5%, rgb(68, 68, 85)), linear-gradient(150deg, rgb(68, 68, 85) 12%, transparent 12.5%, transparent 87%, rgb(68, 68, 85) 87.5%, rgb(68, 68, 85)), linear-gradient(30deg, rgb(68, 68, 85) 12%, transparent 12.5%, transparent 87%, rgb(68, 68, 85) 87.5%, rgb(68, 68, 85)), linear-gradient(150deg, rgb(68, 68, 85) 12%, transparent 12.5%, transparent 87%, rgb(68, 68, 85) 87.5%, rgb(68, 68, 85)), linear-gradient(60deg, rgb(153, 153, 170) 25%, transparent 25.5%, transparent 75%, rgb(153, 153, 170) 75%, rgb(153, 153, 170)), linear-gradient(60deg, rgb(153, 153, 170) 25%, transparent 25.5%, transparent 75%, rgb(153, 153, 170) 75%, rgb(153, 153, 170));
-    background-size: 80px 140px;
-    background-position: 0px 0px, 0px 0px, 40px 70px, 40px 70px, 0px 0px, 40px 70px
+    background-position: 0% 0%, 0px 64px;
+    background-repeat: repeat, repeat;
+    background-image: linear-gradient(135deg, rgb(112, 128, 144) 21px, rgb(217, 236, 255) 22px, rgb(217, 236, 255) 24px, transparent 24px, transparent 67px, rgb(217, 236, 255) 67px, rgb(217, 236, 255) 69px, transparent 69px), linear-gradient(225deg, rgb(112, 128, 144) 21px, rgb(217, 236, 255) 22px, rgb(217, 236, 255) 24px, transparent 24px, transparent 67px, rgb(217, 236, 255) 67px, rgb(217, 236, 255) 69px, transparent 69px);
+    background-origin: padding-box, padding-box;
+    background-clip: border-box, border-box;
+    background-color: green; /*rgb(112, 128, 144); */
+    background-size: 64px 128px;
 }

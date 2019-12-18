@@ -51,7 +51,7 @@ namespace Biru.UI.Views {
 
             this.label = new LabelTop ("Homepage");
             this.content = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
-            this.grid = new BookGrid ();
+            this.grid = new BookGrid (this.cancl);
 
             this.content.add (label);
             this.content.add (grid);
@@ -81,16 +81,21 @@ namespace Biru.UI.Views {
             this.edge_reached.connect ((pos) => {
                 if (pos == Gtk.PositionType.BOTTOM) {
                     message ("scrolling reached bottom");
-                    sig_scroll_bottom ();
-                    this.continous = true;
-                    this.api_page++;
-                    if (this.home_type == HOME_HOME) {
-                        this.api.homepage.begin (this.api_page, home_sort, this.cancl);
-                    } else {
-                        var query = this.api.last_query;
-                        this.api.search.begin (query, this.api_page, home_sort, this.cancl);
+                    if (!this.api.is_running()) {
+                        sig_scroll_bottom ();
+                        this.continous = true;
+                        this.api_page++;
+                        if (this.home_type == HOME_HOME) {
+                            this.api.homepage.begin (this.api_page, home_sort, this.cancl);
+                        } else {
+                            var query = this.api.last_query;
+                            this.api.search.begin (query, this.api_page, home_sort, this.cancl);
+                        }
+                        this.sig_loading (true);
                     }
-                    this.sig_loading (true);
+                    else {
+                        message("please wait a bit more, api is running");
+                    }
                 }
             });
 
@@ -115,6 +120,8 @@ namespace Biru.UI.Views {
 
         // cancel all current async task
         public void cancel_loading () {
+            this.cancl.cancel();
+            this.cancl.reset();
         }
 
         public void pause_loading () {

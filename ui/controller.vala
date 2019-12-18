@@ -42,7 +42,6 @@ namespace Biru.UI {
         private Views.Warning warning;
 
         private API api;
-        private Cancellable cancl;
 
         public AppController (Gtk.Application app) {
             // service setup, this will also initialize the service api
@@ -80,6 +79,8 @@ namespace Biru.UI {
 
             // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
+                // cancel all previous image loadings
+                this.home.cancel_loading();
                 this.home.api_page = 1;
                 this.api.search.begin (query, home.api_page, SORT_POPULAR, null);
                 this.view.home ();
@@ -87,6 +88,8 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_btn_home.connect (() => {
+                // cancel all image loadings first
+                this.home.cancel_loading();
                 this.home.reset ();
                 this.view.home ();
             });

@@ -20,12 +20,14 @@ using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class BookGrid : Gtk.FlowBox {
+        private unowned Cancellable cancl;
         private unowned List<Models.Book ? > books;
 
         public signal void sig_book_clicked (Models.Book book);
 
-        public BookGrid () {
+        public BookGrid (Cancellable cancl) {
             Object ();
+            this.cancl = cancl;
             this.margin_end = 10;
             this.margin_start = 10;
             this.set_selection_mode (Gtk.SelectionMode.NONE);
@@ -40,7 +42,7 @@ namespace Biru.UI.Widgets {
             this.books = books;
 
             foreach (var b in this.books) {
-                var card = new BookCard (b);
+                var card = new BookCard (b, this.cancl);
                 card.sig_book_clicked.connect (() => {
                     sig_book_clicked (b);
                 });

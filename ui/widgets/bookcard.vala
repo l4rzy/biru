@@ -43,7 +43,7 @@ namespace Biru.UI.Widgets {
         public signal void sig_favorite ();
         public signal void sig_book_clicked (Models.Book b);
 
-        public BookCard (Models.Book book) {
+        public BookCard (Models.Book book, Cancellable cancl) {
             Object (
                 can_focus: false
             );
@@ -89,7 +89,9 @@ namespace Biru.UI.Widgets {
             this.cimage = new Image ();
             this.cimage.halign = Gtk.Align.CENTER;
             this.cimage.valign = Gtk.Align.START;
-            this.cimage.set_from_url_async.begin (book.thumb_url (), this.w, this.h, true, null);
+            this.cimage.set_from_url_async.begin (book.thumb_url (), this.w, this.h, true, cancl, () => {
+                message("done loading %s", book.thumb_url());
+            });
 
             this.titlecon = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             this.titlecon.halign = Gtk.Align.START;

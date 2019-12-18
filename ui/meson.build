@@ -23,7 +23,6 @@ sources += files (
     'menus/headermenu.vala',
 
     'configs.vala',
-    'internal.vala',
     'controller.vala',
     'viewport.vala',
     'application.vala'

@@ -43,18 +43,20 @@ namespace Biru.UI.Windows {
     }
 
     public class Reader : Gtk.Window {
-        private int curr_page { get; set; default = 0; }
+        private int view { get; set; default = 0; }
+        private uint page {get; set; default = 0; }
         private unowned Book book;
         private Gtk.Stack stack;
         private ReaderImage image[3];
-        private int page { get; set; default = 0; }
         private Gtk.StackTransitionType anim;
+        private List<string?> page_urls;
 
         public Reader (Book book) {
             Object ();
             this.get_style_context ().add_class ("reader");
-            this.fullscreen();
+            //this.fullscreen();
             this.book = book;
+            this.page_urls = book.page_urls();
             this.anim = Gtk.StackTransitionType.CROSSFADE;
             for (var i = 0; i < 3; i++) {
                 image[i] = new ReaderImage ();
@@ -88,30 +90,44 @@ namespace Biru.UI.Windows {
             });
         }
 
+        public void switch_view(int v) {
+            this.stack.set_visible_child_full (v.to_string(), anim);
+            this.view = v;
+        }
+
         public void next () {
-            if (this.curr_page == 2) {
-                this.stack.set_visible_child_full ("0", anim);
-                message ("preloading 0");
-                load (0);
-                this.curr_page == 0;
-            } else {
-                this.stack.set_visible_child_full ((curr_page + 1).to_string (), anim);
-                message (@"preloading $(curr_page+1)");
-                load (curr_page + 1);
-                this.curr_page++;
+            if (this.view == 2) {
+                this.switch_view(0);
+                message ("preloading view 1 & 2");
+                load (1, page+1);
+                //load(2, page+2);
+            } else if (this.view == 1) {
+                this.switch_view(2);
+                message ("preloading view 0 & 1");
+                load (0, page+1);
+                //load (1, page+2);
+            } else if (this.view == 0) {
+                this.switch_view(1);
+                message ("preloading view 2 & 0");
+                load (2, page+1);
+                //load (0, page+2);
             }
+            message("next");
+            page += 1;
         }
 
         public void prev () {
             message ("prev");
         }
 
-        public void load (int num) {
-            this.image[num].load (this.book.cover_url ());
+        public void load (int view, uint page) {
+            this.image[view].load (this.page_urls.nth_data(page));
         }
 
         public void init () {
-            load (0);
+            load(0, page);
+            load(1, page+1);
+            load(2, page+2);
             this.stack.set_visible_child_full ("0", anim);
         }
     }

@@ -85,6 +85,7 @@ namespace Biru.Service {
 
     // to create new API instance, create with `new API()`
     public class API {
+        private bool running {get; set; default = false;}
         private Soup.Session session;
         public string last_query { get; set; default = ""; }
         public int last_page_num { get; set; default = 1; }
@@ -144,6 +145,7 @@ namespace Biru.Service {
 
         // experimental: bring request to background thread to prevent ui block
         public async void search (string query, int page_num, SortType sort, Cancellable ? cancl) throws Error {
+            this.running = true;
             this.last_query = query;
             this.last_page_num = page_num;
             this.last_sort = sort;
@@ -158,6 +160,7 @@ namespace Biru.Service {
             });
             yield;
             sig_search_result (ret);
+            this.running = false;
         }
 
         public async void homepage_a (int page_num, SortType sort, Cancellable ? cancl) throws Error {
@@ -192,6 +195,7 @@ namespace Biru.Service {
 
         // experimental: bring request to background thread to prevent ui block
         public async void homepage (int page_num, SortType sort, Cancellable ? cancl) throws Error {
+            this.running = true;
             this.last_page_num = page_num;
 
             var ret = new List<Book ? >();
@@ -204,6 +208,7 @@ namespace Biru.Service {
             });
             yield;
             sig_homepage_result (ret);
+            this.running = false;
         }
 
         public async void related (int64 book_id) throws Error {
@@ -220,6 +225,10 @@ namespace Biru.Service {
                 sig_error (e);
                 throw e;
             }
+        }
+
+        public bool is_running () {
+            return this.running;
         }
 
         public static unowned API get () {
