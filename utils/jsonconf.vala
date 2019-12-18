@@ -17,6 +17,6 @@
  */
 
 namespace Biru.Utils {
-    public class JsonConf {
+    public class JsonConf : Object {
     }
 }

@@ -25,7 +25,7 @@ namespace Biru.UI.Widgets {
     public class Image : Gtk.Image {
         private int current_scale_factor = 1;
         private unowned Soup.Session session;
-        private Cancellable cnl;
+        private Cancellable cncl;
 
         public Image () {
             Object ();
@@ -37,7 +37,7 @@ namespace Biru.UI.Widgets {
                                                int height,
                                                bool preserve_aspect_ratio,
                                                Cancellable ? cancellable = null) throws Error {
-            this.cnl = cancellable;
+            this.cncl = cancellable;
             set_size_request (width, height);
 
             try {
@@ -63,9 +63,12 @@ namespace Biru.UI.Widgets {
                                               int height,
                                               bool preserve_aspect_ratio,
                                               Cancellable ? cancellable = null) throws Error {
+            this.cncl = cancellable;
+            this.set_size_request (width, height);
+
             try {
                 var mess = new Soup.Message ("GET", url);
-                var stream = yield this.session.send_async (mess, null);
+                var stream = yield this.session.send_async (mess, cancellable);
 
                 var pixbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async (
                     stream,
@@ -75,7 +78,9 @@ namespace Biru.UI.Widgets {
                     cancellable
                 );
                 this.surface = Gdk.cairo_surface_create_from_pixbuf (pixbuf, this.current_scale_factor, null);
+                set_size_request (-1, -1);
             } catch (Error e) {
+                set_size_request (-1, -1);
                 throw e;
             }
         }

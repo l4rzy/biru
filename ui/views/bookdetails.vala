@@ -21,11 +21,13 @@ using Biru.Service;
 
 namespace Biru.UI.Views {
     class BookDetails : Gtk.ScrolledWindow {
+        private Gtk.Grid grid;
+
         private Gtk.Box hbox;
         private Gtk.Box vbox;
         private Models.Book ? book;
         private Image cover;
-        private TagGrid grid;
+        private TagGrid tgrid;
         private BookInfo info;
 
         public signal void sig_loaded ();
@@ -34,22 +36,28 @@ namespace Biru.UI.Views {
         public BookDetails () {
             Object ();
             this.book = null;
-            this.hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 10);
-            this.hbox.homogeneous = false;
-            this.vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-            this.vbox.homogeneous = false;
+            this.grid = new Gtk.Grid ();
+// this.hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 10);
+// this.hbox.homogeneous = false;
+// this.vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+// this.vbox.homogeneous = false;
             this.cover = new Image ();
-            this.grid = new TagGrid ();
+            this.grid.attach (cover, 0, 0, 1, 1);
+// this.cover.halign = Gtk.Align.START;
+// this.cover.valign = Gtk.Align.START;
+            this.tgrid = new TagGrid ();
+            this.grid.attach (tgrid, 1, 0, 1, 1);
             this.info = new BookInfo ();
 
-            this.hbox.pack_start (this.cover);
-            this.hbox.pack_end (this.vbox);
-            this.vbox.pack_start (this.info);
-            this.vbox.pack_start (this.grid);
-            this.add (hbox);
+// this.hbox.pack_start (this.cover);
+// this.hbox.pack_end (this.vbox);
+// this.vbox.pack_start (this.info);
+// this.vbox.pack_start (this.grid);
+// this.add (hbox);
+            this.add (grid);
             this.show_all ();
 
-            this.grid.sig_tag_clicked.connect ((tag) => {
+            this.tgrid.sig_tag_clicked.connect ((tag) => {
                 this.sig_tag_clicked (tag);
             });
         }
@@ -58,8 +66,12 @@ namespace Biru.UI.Views {
             return this.book.title.pretty;
         }
 
-        public string get_book_jp_name () {
+        public string ? get_book_jp_name () {
             return this.book.title.japanese;
+        }
+
+        public unowned Models.Book get_book () {
+            return this.book;
         }
 
         public void load_book (Models.Book b) {
@@ -69,8 +81,8 @@ namespace Biru.UI.Views {
                 this.sig_loaded ();
             });
 
-            this.grid.insert_tags (b.tags);
-            this.info.load_title (b.title);
+            this.tgrid.insert_tags (b.tags);
+            this.info.load_book (b);
         }
     }
 }

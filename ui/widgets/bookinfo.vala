@@ -22,6 +22,7 @@ namespace Biru.UI.Widgets {
     public class BookInfo : Gtk.Box {
         private Gtk.Label title_en;
         private Gtk.Label title_jp;
+        private Gtk.Label date;
 
         public BookInfo () {
             Object (
@@ -33,8 +34,10 @@ namespace Biru.UI.Widgets {
             this.title_en.set_line_wrap (true);
             this.title_jp = new Gtk.Label (null);
             this.title_jp.set_line_wrap (true);
+            this.date = new Gtk.Label (null);
             this.pack_start (title_en);
             this.pack_start (title_jp);
+            this.pack_start (date);
         }
 
         public void set_title_en (string t) {
@@ -45,9 +48,10 @@ namespace Biru.UI.Widgets {
             this.title_jp.set_label (t);
         }
 
-        public void load_title (Models.Title title) {
-            this.set_title_en (title.english);
-            this.set_title_jp (title.japanese);
+        public void load_book (Models.Book book) {
+            this.set_title_en (book.title.english);
+            this.set_title_jp (book.title.japanese);
+            this.date.set_label (book.date ().to_string ());
         }
     }
 }
