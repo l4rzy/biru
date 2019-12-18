@@ -43,7 +43,7 @@ namespace Biru.UI.Views {
         // signals
         public signal void sig_scroll_bottom ();
         public signal void sig_loading (bool load);
-        public signal void sig_book_clicked (Models.Book b);
+        public signal void sig_book_clicked (Models.Book book, BookCardOption opt);
 
         public Home () {
             this.api = API.get ();
@@ -81,7 +81,7 @@ namespace Biru.UI.Views {
             this.edge_reached.connect ((pos) => {
                 if (pos == Gtk.PositionType.BOTTOM) {
                     message ("scrolling reached bottom");
-                    if (!this.api.is_running()) {
+                    if (!this.api.is_running ()) {
                         sig_scroll_bottom ();
                         this.continous = true;
                         this.api_page++;
@@ -92,16 +92,15 @@ namespace Biru.UI.Views {
                             this.api.search.begin (query, this.api_page, home_sort, this.cancl);
                         }
                         this.sig_loading (true);
-                    }
-                    else {
-                        message("please wait a bit more, api is running");
+                    } else {
+                        message ("please wait a bit more, api is running");
                     }
                 }
             });
 
             // bood grid
-            this.grid.sig_book_clicked.connect ((book) => {
-                this.sig_book_clicked (book);
+            this.grid.sig_book_clicked.connect ((book, opt) => {
+                this.sig_book_clicked (book, opt);
             });
         }
 
@@ -120,8 +119,8 @@ namespace Biru.UI.Views {
 
         // cancel all current async task
         public void cancel_loading () {
-            this.cancl.cancel();
-            this.cancl.reset();
+            this.cancl.cancel ();
+            this.cancl.reset ();
         }
 
         public void pause_loading () {

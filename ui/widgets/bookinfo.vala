@@ -49,8 +49,9 @@ namespace Biru.UI.Widgets {
         }
 
         public void load_book (Models.Book book) {
-            this.set_title_en (book.title.english);
-            this.set_title_jp (book.title.japanese);
+            this.set_title_en (book.title.pretty);
+            if (book.title.japanese != null)
+                this.set_title_jp (book.title.japanese);
             this.date.set_label (book.date ().to_string ());
         }
     }

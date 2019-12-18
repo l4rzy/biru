@@ -47,6 +47,7 @@ namespace Biru.UI.Configs {
     public class S {
         public const string HEADER_SEARCH_PLACEHOLDER = "Type to search";
         public const string BOOKCARD_MENU_READ = "Read";
+        public const string BOOKCARD_MENU_DETAILS = "Details";
         public const string BOOKCARD_MENU_FAVOR = "Add to favors";
         public const string BOOKCARD_MENU_DOWNLOAD = "Download";
 

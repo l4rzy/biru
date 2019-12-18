@@ -23,7 +23,7 @@ namespace Biru.UI.Widgets {
         private unowned Cancellable cancl;
         private unowned List<Models.Book ? > books;
 
-        public signal void sig_book_clicked (Models.Book book);
+        public signal void sig_book_clicked (Models.Book book, BookCardOption opt);
 
         public BookGrid (Cancellable cancl) {
             Object ();
@@ -41,10 +41,10 @@ namespace Biru.UI.Widgets {
         public void insert_books (List<Models.Book ? > books) {
             this.books = books;
 
-            foreach (var b in this.books) {
-                var card = new BookCard (b, this.cancl);
-                card.sig_book_clicked.connect (() => {
-                    sig_book_clicked (b);
+            foreach (var book in this.books) {
+                var card = new BookCard (book, this.cancl);
+                card.sig_book_clicked.connect ((book, opt) => {
+                    this.sig_book_clicked (book, opt);
                 });
                 this.add (card);
                 card.show_all ();

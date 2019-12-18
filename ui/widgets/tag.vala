@@ -27,7 +27,7 @@ namespace Biru.UI.Widgets {
             this.tag = tag;
             this.hexpand = false;
 
-            this.set_label (@"$(tag._type): $(tag.name)");
+            this.set_label (@"$(tag.name)");
         }
     }
 }

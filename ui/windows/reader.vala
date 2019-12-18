@@ -44,19 +44,19 @@ namespace Biru.UI.Windows {
 
     public class Reader : Gtk.Window {
         private int view { get; set; default = 0; }
-        private uint page {get; set; default = 0; }
+        private uint page { get; set; default = 0; }
         private unowned Book book;
         private Gtk.Stack stack;
         private ReaderImage image[3];
         private Gtk.StackTransitionType anim;
-        private List<string?> page_urls;
+        private List<string ? > page_urls;
 
         public Reader (Book book) {
             Object ();
             this.get_style_context ().add_class ("reader");
-            //this.fullscreen();
+            // this.fullscreen();
             this.book = book;
-            this.page_urls = book.page_urls();
+            this.page_urls = book.page_urls ();
             this.anim = Gtk.StackTransitionType.CROSSFADE;
             for (var i = 0; i < 3; i++) {
                 image[i] = new ReaderImage ();
@@ -90,29 +90,29 @@ namespace Biru.UI.Windows {
             });
         }
 
-        public void switch_view(int v) {
-            this.stack.set_visible_child_full (v.to_string(), anim);
+        public void switch_view (int v) {
+            this.stack.set_visible_child_full (v.to_string (), anim);
             this.view = v;
         }
 
         public void next () {
             if (this.view == 2) {
-                this.switch_view(0);
+                this.switch_view (0);
                 message ("preloading view 1 & 2");
-                load (1, page+1);
-                //load(2, page+2);
+                load (1, page + 1);
+                // load(2, page+2);
             } else if (this.view == 1) {
-                this.switch_view(2);
+                this.switch_view (2);
                 message ("preloading view 0 & 1");
-                load (0, page+1);
-                //load (1, page+2);
+                load (0, page + 1);
+                // load (1, page+2);
             } else if (this.view == 0) {
-                this.switch_view(1);
+                this.switch_view (1);
                 message ("preloading view 2 & 0");
-                load (2, page+1);
-                //load (0, page+2);
+                load (2, page + 1);
+                // load (0, page+2);
             }
-            message("next");
+            message ("next");
             page += 1;
         }
 
@@ -121,13 +121,13 @@ namespace Biru.UI.Windows {
         }
 
         public void load (int view, uint page) {
-            this.image[view].load (this.page_urls.nth_data(page));
+            this.image[view].load (this.page_urls.nth_data (page));
         }
 
         public void init () {
-            load(0, page);
-            load(1, page+1);
-            load(2, page+2);
+            load (0, page);
+            load (1, page + 1);
+            load (2, page + 2);
             this.stack.set_visible_child_full ("0", anim);
         }
     }

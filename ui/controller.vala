@@ -80,7 +80,7 @@ namespace Biru.UI {
             // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
                 // cancel all previous image loadings
-                this.home.cancel_loading();
+                this.home.cancel_loading ();
                 this.home.api_page = 1;
                 this.api.search.begin (query, home.api_page, SORT_POPULAR, null);
                 this.view.home ();
@@ -89,7 +89,7 @@ namespace Biru.UI {
 
             this.headerbar.sig_btn_home.connect (() => {
                 // cancel all image loadings first
-                this.home.cancel_loading();
+                this.home.cancel_loading ();
                 this.home.reset ();
                 this.view.home ();
             });
@@ -123,11 +123,23 @@ namespace Biru.UI {
                 }
             });
 
-            this.home.sig_book_clicked.connect ((b) => {
-                message ("clicked %s", b.title.pretty);
-                this.details.load_book (b);
-                this.view.details ();
-                this.headerbar.start_loading ();
+            this.home.sig_book_clicked.connect ((book, opt) => {
+                switch (opt) {
+                    case Widgets.BookCardOption.BOOKCARD_DETAILS:
+                        message ("clicked %s", book.title.pretty);
+                        this.details.load_book (book);
+                        this.view.details ();
+                        this.headerbar.start_loading ();
+                        break;
+                    case Widgets.BookCardOption.BOOKCARD_READ:
+                        var reader = new Windows.Reader (book);
+                        reader.show_all ();
+                        reader.init ();
+                        break;
+                    default:
+                        message ("not implemented yet");
+                        break;
+                }
             });
 
             this.details.sig_loaded.connect (() => {

@@ -22,7 +22,9 @@ using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public enum BookCardOption {
+        BOOKCARD_READ,
         BOOKCARD_DETAILS,
+        BOOKCARD_FAVOR,
         BOOKCARD_DOWNLOAD
     }
 
@@ -41,7 +43,7 @@ namespace Biru.UI.Widgets {
         // signals
         public signal void sig_selected ();
         public signal void sig_favorite ();
-        public signal void sig_book_clicked (Models.Book b);
+        public signal void sig_book_clicked (Models.Book b, BookCardOption opt);
 
         public BookCard (Models.Book book, Cancellable cancl) {
             Object (
@@ -89,9 +91,7 @@ namespace Biru.UI.Widgets {
             this.cimage = new Image ();
             this.cimage.halign = Gtk.Align.CENTER;
             this.cimage.valign = Gtk.Align.START;
-            this.cimage.set_from_url_async.begin (book.thumb_url (), this.w, this.h, true, cancl, () => {
-                message("done loading %s", book.thumb_url());
-            });
+            this.cimage.set_from_url_async.begin (book.thumb_url (), this.w, this.h, true, cancl);
 
             this.titlecon = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             this.titlecon.halign = Gtk.Align.START;
@@ -113,13 +113,14 @@ namespace Biru.UI.Widgets {
                 if (event.button == 3) {
                     // right click
                     var menu = new BookCardMenu (this);
-                    menu.sig_pop_clicked.connect (() => {
+                    menu.sig_pop_clicked.connect ((opt) => {
                         message ("book %s download", book.title.pretty);
+                        this.sig_book_clicked (this.book, opt);
                     });
                     menu.popup ();
-                    return true;
+                } else if (event.button == 1) {
+                    this.sig_book_clicked (this.book, BOOKCARD_DETAILS);
                 }
-                this.sig_book_clicked (this.book);
                 return true;
             });
         }

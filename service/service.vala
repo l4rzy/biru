@@ -85,7 +85,7 @@ namespace Biru.Service {
 
     // to create new API instance, create with `new API()`
     public class API {
-        private bool running {get; set; default = false;}
+        private bool running { get; set; default = false; }
         private Soup.Session session;
         public string last_query { get; set; default = ""; }
         public int last_page_num { get; set; default = 1; }
