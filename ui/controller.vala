@@ -42,6 +42,7 @@ namespace Biru.UI {
         private Views.Warning warning;
 
         private API api;
+        private Cancellable cancl;
 
         public AppController (Gtk.Application app) {
             // service setup, this will also initialize the service api
@@ -80,7 +81,7 @@ namespace Biru.UI {
             // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
                 this.home.api_page = 1;
-                this.api.search.begin (query, home.api_page, SORT_DATE);
+                this.api.search.begin (query, home.api_page, SORT_POPULAR, null);
                 this.view.home ();
                 this.headerbar.start_loading ();
             });
@@ -101,7 +102,11 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_rightbar.connect ((btn) => {
-                message ("button %d", btn);
+                if (btn == 1) {
+                    var reader = new Windows.Reader (this.details.get_book ());
+                    reader.show_all ();
+                    reader.init ();
+                }
             });
 
             // signals of views
@@ -138,7 +143,8 @@ namespace Biru.UI {
                 }
                 if (v == Constants.STACK_DETAILS) {
                     this.headerbar.set_title (this.details.get_book_name ());
-                    this.headerbar.set_subtitle (this.details.get_book_jp_name ());
+                    if (this.details.get_book_jp_name () != null)
+                        this.headerbar.set_subtitle (this.details.get_book_jp_name ());
                 }
             });
 

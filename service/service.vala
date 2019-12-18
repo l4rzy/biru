@@ -109,7 +109,7 @@ namespace Biru.Service {
             this.session.user_agent = Constants.NH_UA;
         }
 
-        public async void search_x (string query, int page_num, SortType sort) throws Error {
+        public async void search_a (string query, int page_num, SortType sort, Cancellable ? cancl) throws Error {
             this.last_query = query;
             this.last_page_num = page_num;
             this.last_sort = sort;
@@ -117,7 +117,7 @@ namespace Biru.Service {
             var url = URLBuilder.get_search_url (query, page_num, sort);
             var mess = new Soup.Message ("GET", url);
             try {
-                InputStream istream = yield session.send_async (mess, null);
+                InputStream istream = yield session.send_async (mess, cancl);
 
                 var ret = yield Parser.parse_search_result_async (istream);
 
@@ -128,39 +128,45 @@ namespace Biru.Service {
             }
         }
 
-        // experimental: bring request to background thread to prevent ui block
-        public async void search (string query, int page_num, SortType sort) throws Error {
-            SourceFunc callb = search.callback;
+        // synchronous search function
+        public List<Book ? > __search (string query, int page_num, SortType sort, Cancellable ? cancl) {
+            var url = URLBuilder.get_search_url (query, page_num, sort);
+            var mess = new Soup.Message ("GET", url);
 
-            new Thread<bool>("request search", () => {
-                this.last_query = query;
-                this.last_page_num = page_num;
-                this.last_sort = sort;
-
-                var url = URLBuilder.get_search_url (query, page_num, sort);
-                var mess = new Soup.Message ("GET", url);
-                try {
-                    InputStream istream = session.send (mess, null);
-
-                    var ret = Parser.parse_search_result (istream);
-
-                    sig_search_result (ret);
-                } catch (Error e) {
-                    sig_error (e);
-                }
-                return true;
-            });
-            Idle.add ((owned) callb);
-            yield;
+            try {
+                InputStream istream = this.session.send (mess, cancl);
+                var ret = Parser.parse_search_result (istream);
+                return ret;
+            } catch (Error e) {
+                return new List<Book ? >();
+            }
         }
 
-        public async void homepage_x (int page_num, SortType sort) throws Error {
+        // experimental: bring request to background thread to prevent ui block
+        public async void search (string query, int page_num, SortType sort, Cancellable ? cancl) throws Error {
+            this.last_query = query;
+            this.last_page_num = page_num;
+            this.last_sort = sort;
+
+            SourceFunc callb = search.callback;
+            var ret = new List<Book ? >();
+
+            new Thread<bool>("request search", () => {
+                ret = __search (query, page_num, sort, cancl);
+                Idle.add ((owned) callb);
+                return true;
+            });
+            yield;
+            sig_search_result (ret);
+        }
+
+        public async void homepage_a (int page_num, SortType sort, Cancellable ? cancl) throws Error {
             this.last_page_num = page_num;
 
             var url = URLBuilder.get_homepage_url (page_num, sort);
             var mess = new Soup.Message ("GET", url);
             try {
-                InputStream istream = yield this.session.send_async (mess, null);
+                InputStream istream = yield this.session.send_async (mess, cancl);
 
                 var ret = yield Parser.parse_search_result_async (istream);
 
@@ -171,27 +177,33 @@ namespace Biru.Service {
             }
         }
 
+        // synchronous function to call in another thread
+        public List<Book ? > __homepage (int page_num, SortType sort, Cancellable ? cancl) {
+            var url = URLBuilder.get_homepage_url (page_num, sort);
+            var mess = new Soup.Message ("GET", url);
+            try {
+                InputStream istream = this.session.send (mess, cancl);
+                var ret = Parser.parse_search_result (istream);
+                return ret;
+            } catch (Error e) {
+                return new List<Book ? >();
+            }
+        }
+
         // experimental: bring request to background thread to prevent ui block
-        public async void homepage (int page_num, SortType sort) throws ThreadError {
+        public async void homepage (int page_num, SortType sort, Cancellable ? cancl) throws Error {
+            this.last_page_num = page_num;
+
+            var ret = new List<Book ? >();
             SourceFunc callb = homepage.callback;
 
             new Thread<bool>("request home", () => {
-                this.last_page_num = page_num;
-
-                var url = URLBuilder.get_homepage_url (page_num, sort);
-                var mess = new Soup.Message ("GET", url);
-                try {
-                    InputStream istream = this.session.send (mess, null);
-                    var ret = Parser.parse_search_result (istream);
-
-                    sig_homepage_result (ret);
-                } catch (Error e) {
-                    sig_error (e);
-                }
+                ret = __homepage (page_num, sort, cancl);
+                Idle.add ((owned) callb);
                 return true;
             });
-            Idle.add ((owned) callb);
             yield;
+            sig_homepage_result (ret);
         }
 
         public async void related (int64 book_id) throws Error {

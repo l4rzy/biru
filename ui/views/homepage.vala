@@ -28,6 +28,7 @@ namespace Biru.UI.Views {
 
     public class Home : Gtk.ScrolledWindow {
         // common fields
+        private Cancellable cancl;
         private bool continous { get; set; default = false; }
         private API api;
         public int api_page { get; set; default = 1; }
@@ -46,6 +47,7 @@ namespace Biru.UI.Views {
 
         public Home () {
             this.api = API.get ();
+            this.cancl = new Cancellable ();
 
             this.label = new LabelTop ("Homepage");
             this.content = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
@@ -83,10 +85,10 @@ namespace Biru.UI.Views {
                     this.continous = true;
                     this.api_page++;
                     if (this.home_type == HOME_HOME) {
-                        this.api.homepage.begin (this.api_page, home_sort);
+                        this.api.homepage.begin (this.api_page, home_sort, this.cancl);
                     } else {
                         var query = this.api.last_query;
-                        this.api.search.begin (query, this.api_page, home_sort);
+                        this.api.search.begin (query, this.api_page, home_sort, this.cancl);
                     }
                     this.sig_loading (true);
                 }
@@ -102,13 +104,23 @@ namespace Biru.UI.Views {
         public void reset () {
             this.api_page = 1;
             this.label.home ();
-            this.api.homepage.begin (this.api_page, home_sort);
+            this.api.homepage.begin (this.api_page, home_sort, this.cancl);
             this.sig_loading (true);
         }
 
         public void insert_books (List<Models.Book ? > lst) {
             this.grid.insert_books (lst);
             this.sig_loading (false);
+        }
+
+        // cancel all current async task
+        public void cancel_loading () {
+        }
+
+        public void pause_loading () {
+        }
+
+        public void continue_loading () {
         }
 
         public void clean () {
