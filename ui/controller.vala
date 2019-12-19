@@ -127,6 +127,7 @@ namespace Biru.UI {
                 switch (opt) {
                     case Widgets.BookCardOption.BOOKCARD_DETAILS:
                         message ("clicked %s", book.title.pretty);
+                        this.details.reset ();
                         this.details.load_book (book);
                         this.view.details ();
                         this.headerbar.start_loading ();
@@ -146,8 +147,8 @@ namespace Biru.UI {
                 this.headerbar.stop_loading ();
             });
 
-            this.details.sig_tag_clicked.connect ((tag) => {
-                message ("tag %s", tag.name);
+            this.details.sig_tag_clicked.connect ((tag, opt) => {
+                message ("tag %s - opt: %d", tag.name, opt);
             });
 
             this.view.sig_switch_view.connect ((v) => {

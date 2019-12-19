@@ -171,6 +171,10 @@ namespace Biru.Service.Models {
             return (owned) urls;
         }
 
+        public Page pageno (int num) {
+            return this.images.pages.nth_data (num);
+        }
+
         // use first page instead of cover since cover is pixelated on hidpi
         public string pageno_url (int num) {
             // TODO: out of bound checking

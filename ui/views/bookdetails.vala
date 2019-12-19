@@ -18,10 +18,12 @@
 
 using Biru.UI.Widgets;
 using Biru.Service;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Views {
     class BookDetails : Gtk.ScrolledWindow {
-        private Gtk.Grid grid;
+        private Cancellable cancl;
+        private Gtk.Box con; // container
 
         private Models.Book ? book;
         private Image cover;
@@ -29,29 +31,30 @@ namespace Biru.UI.Views {
         private BookInfo info;
 
         public signal void sig_loaded ();
-        public signal void sig_tag_clicked (Models.Tag tag);
+        public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
 
         public BookDetails () {
             Object ();
+            this.cancl = new Cancellable ();
             this.book = null;
-            this.grid = new Gtk.Grid ();
-            this.grid.column_homogeneous = false;
-            this.grid.row_homogeneous = false;
+
+            this.con = new Gtk.Box (Gtk.Orientation.VERTICAL, 18);
+            this.con.spacing = 18;
 
             this.cover = new Image ();
-            this.grid.attach (cover, 0, 0, 1, 1);
+            this.con.pack_start (cover);
 
             this.info = new BookInfo ();
-            this.grid.attach (info, 1, 0, 1, 1);
+            this.con.pack_start (info);
 
             this.tgrid = new TagGrid ();
-            this.grid.attach (tgrid, 1, 1, 1, 1);
+            this.con.pack_start (tgrid);
 
-            this.add (grid);
+            this.add (this.con);
             this.show_all ();
 
-            this.tgrid.sig_tag_clicked.connect ((tag) => {
-                this.sig_tag_clicked (tag);
+            this.tgrid.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
             });
         }
 
@@ -68,14 +71,26 @@ namespace Biru.UI.Views {
         }
 
         public void load_book (Models.Book b) {
-            this.cover.clear ();
             this.book = b;
-            this.cover.set_from_url_async.begin (b.pageno_url (0), 800, 1000, true, null, () => {
+            var page = b.pageno (0);
+            this.cover.set_from_url_async.begin (b.pageno_url (0), (int) page.w, (int) page.h, true, this.cancl, () => {
                 this.sig_loaded ();
             });
-
             this.info.load_book (b);
             this.tgrid.insert_tags (b.tags);
+        }
+
+        // stop loading image
+        public void cancel_loading () {
+            this.cancl.cancel ();
+            this.cancl.reset ();
+        }
+
+        // reset all child widget in bookdetails
+        public void reset () {
+            cancel_loading ();
+            this.cover.clear ();
+            this.tgrid.reset ();
         }
     }
 }

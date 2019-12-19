@@ -38,6 +38,7 @@
 
 .birubutton {
     border-radius: 16px;
+    background-color: rgba(0,0,0,0.2)
 }
 
 .bookcard:hover {
@@ -52,30 +53,36 @@
 entry {
     border-radius: 20px;
     padding: 8px;
-    background: rgba(0,0,0,0.2);
+    background: #335;
 }
 
 .tagbtn_parody {
     border-radius: 16px;
-    background-color: orange;
+    background-color: #8e24aa;
     box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_character {
     border-radius: 16px;
-    background-color: yellow;
+    background-color: #69f0ae;
     box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_tag {
     border-radius: 16px;
-    background-color: green;
+    background-color: #ef6c00;
     box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_artist {
     border-radius: 16px;
     background-color: brown;
+    box-shadow: 0 0 2px #111;
+}
+
+.tagbtn_language {
+    border-radius: 16px;
+    background-color: #039be5;
     box-shadow: 0 0 2px #111;
 }
 

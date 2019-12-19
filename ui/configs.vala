@@ -57,9 +57,13 @@ namespace Biru.UI.Configs {
         public const string HEADER_MENU_SETTINGS = "Settings";
         public const string HEADER_MENU_ABOUT = "About";
 
+        public const string TAG_MENU_FAVOR = "Add to favors";
+        public const string TAG_MENU_SEARCH = "Search this tag";
+
         public const string DETAILS_CAT_PARODY = "Parody:";
         public const string DETAILS_CAT_CHARACTER = "Character:";
         public const string DETAILS_CAT_TAG = "Tag:";
         public const string DETAILS_CAT_ARTIST = "Artist:";
+        public const string DETAILS_CAT_LANGUAGE = "Language:";
     }
 }

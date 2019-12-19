@@ -21,6 +21,7 @@ sources += files (
 
     'menus/bookcard.vala',
     'menus/headermenu.vala',
+    'menus/tagmenu.vala',
 
     'configs.vala',
     'controller.vala',
