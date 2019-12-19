@@ -211,7 +211,7 @@ namespace Biru.Service {
             this.running = false;
         }
 
-        public async void related (int64 book_id) throws Error {
+        public async void related_a (int64 book_id) throws Error {
             var url = URLBuilder.get_related_books_url (book_id);
             var mess = new Soup.Message ("GET", url);
 
@@ -225,6 +225,36 @@ namespace Biru.Service {
                 sig_error (e);
                 throw e;
             }
+        }
+
+        // synchronous function to call in another thread
+        public List<Book ? > __related (int64 book_id, Cancellable ? cancl) {
+            var url = URLBuilder.get_related_books_url (book_id);
+            var mess = new Soup.Message ("GET", url);
+            try {
+                InputStream istream = this.session.send (mess, cancl);
+                var ret = Parser.parse_search_result (istream);
+                return ret;
+            } catch (Error e) {
+                return new List<Book ? >();
+            }
+        }
+
+        // experimental: bring request to background thread to prevent ui block
+        public async void related (int64 book_id, Cancellable ? cancl) throws Error {
+            this.running = true;
+
+            var ret = new List<Book ? >();
+            SourceFunc callb = related.callback;
+
+            new Thread<bool>("request related", () => {
+                ret = __related (book_id, cancl);
+                Idle.add ((owned) callb);
+                return true;
+            });
+            yield;
+            sig_related_result (ret);
+            this.running = false;
         }
 
         public bool is_running () {
