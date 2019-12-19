@@ -35,6 +35,9 @@ namespace Biru.UI.Configs {
         public const int COVER_MAX_W = 600;
         public const int COVER_MAX_H = 1000;
 
+        // tag max len
+        public const int TAG_MAX_LEN = 12;
+
         // resources
         public const string RESOURCE_PREFIX = "/io/l4rzy/biru/";
         public const string RESOURCE_CSS = RESOURCE_PREFIX + "style.css";
@@ -53,5 +56,10 @@ namespace Biru.UI.Configs {
 
         public const string HEADER_MENU_SETTINGS = "Settings";
         public const string HEADER_MENU_ABOUT = "About";
+
+        public const string DETAILS_CAT_PARODY = "Parody";
+        public const string DETAILS_CAT_CHARACTER = "Character";
+        public const string DETAILS_CAT_TAG = "Tag";
+        public const string DETAILS_CAT_ARTIST = "Artist";
     }
 }

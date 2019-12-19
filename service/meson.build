@@ -1,6 +1,6 @@
 sources += files (
     'configs.vala',
-    'service.vala',
+    'api.vala',
     'models.vala',
     'serde.vala'
 )

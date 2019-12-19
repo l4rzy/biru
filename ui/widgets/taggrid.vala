@@ -17,22 +17,41 @@
  */
 
 using Biru.Service.Models;
+using Biru.UI.Configs;
 
 namespace Biru.UI.Widgets {
-    public class TagGrid : Gtk.FlowBox {
+    public class TagGrid : Gtk.Box {
         private unowned List<Tag ? > tags;
+        private TagCat cat_parody;
+        private TagCat cat_character;
+        private TagCat cat_tag;
+        private TagCat cat_artist;
 
         public signal void sig_tag_clicked (Tag tag);
 
         public TagGrid () {
-            Object ();
-            this.margin_end = 20;
-            this.margin_start = 20;
-            this.set_selection_mode (Gtk.SelectionMode.NONE);
-            this.activate_on_single_click = false;
-            this.homogeneous = false;
-            this.column_spacing = 20;
-            this.orientation = Gtk.Orientation.HORIZONTAL;
+            Object (orientation: Gtk.Orientation.HORIZONTAL);
+            this.cat_parody = new TagCat (S.DETAILS_CAT_PARODY);
+            this.cat_character = new TagCat (S.DETAILS_CAT_CHARACTER);
+            this.cat_tag = new TagCat (S.DETAILS_CAT_TAG);
+            this.cat_artist = new TagCat (S.DETAILS_CAT_ARTIST);
+
+            // signals
+            this.cat_parody.sig_tag_clicked.connect ((tag) => {
+                this.sig_tag_clicked (tag);
+            });
+
+            this.cat_parody.sig_tag_clicked.connect ((tag) => {
+                this.sig_tag_clicked (tag);
+            });
+
+            this.cat_parody.sig_tag_clicked.connect ((tag) => {
+                this.sig_tag_clicked (tag);
+            });
+
+            this.cat_parody.sig_tag_clicked.connect ((tag) => {
+                this.sig_tag_clicked (tag);
+            });
         }
 
         public void insert_tags (List<Tag ? > tags) {
@@ -41,11 +60,20 @@ namespace Biru.UI.Widgets {
             foreach (Tag t in this.tags) {
                 var tag = new TagButton (t);
 
-                tag.clicked.connect (() => {
-                    sig_tag_clicked (t);
-                });
-                this.add (tag);
-                tag.show_all ();
+                switch (tag.name) {
+                    case "parody":
+                        this.cat_parody.add_tag (tag);
+                        break;
+                    case "character":
+                        this.cat_character.add_tag (tag);
+                        break;
+                    case "tag":
+                        this.cat_tag.add_tag (tag);
+                        break;
+                    case "artist":
+                        this.cat_artist.add_tag (tag);
+                        break;
+                }
             }
         }
     }

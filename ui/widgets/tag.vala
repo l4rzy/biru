@@ -17,17 +17,53 @@
  */
 
 using Biru.Service;
+using Biru.Utils;
+using Biru.UI.Configs;
 
 namespace Biru.UI.Widgets {
     public class TagButton : Gtk.Button {
         private unowned Models.Tag tag;
 
+        public signal void sig_tag_clicked (Models.Tag tag);
+
         public TagButton (Models.Tag tag) {
-            this.get_style_context ().add_class ("tagbtn");
+            this.get_style_context ().add_class (@"tagbtn_$(tag.name)");
             this.tag = tag;
             this.hexpand = false;
 
-            this.set_label (@"$(tag.name)");
+            this.set_label (String.wrap (tag.name, Constants.TAG_MAX_LEN));
+        }
+    }
+
+    public class TagCat : Gtk.Box {
+        private Gtk.Label label;
+        private Gtk.FlowBox fbox;
+
+        public signal void sig_tag_clicked (Models.Tag tag);
+
+        public TagCat (string title) {
+            Object (orientation: Gtk.Orientation.VERTICAL);
+            this.label = new Gtk.Label (title);
+
+            this.fbox = new Gtk.FlowBox ();
+            this.fbox.margin_end = 20;
+            this.fbox.margin_start = 20;
+            this.fbox.set_selection_mode (Gtk.SelectionMode.NONE);
+            this.fbox.activate_on_single_click = false;
+            this.fbox.homogeneous = false;
+            this.fbox.column_spacing = 20;
+            this.fbox.orientation = Gtk.Orientation.VERTICAL;
+            this.fbox.max_children_per_line = 2;
+
+            this.pack_start (this.label);
+            this.pack_start (this.fbox);
+        }
+
+        public void add_tag (TagButton tagbtn) {
+            tagbtn.sig_tag_clicked.connect ((tag) => {
+                this.sig_tag_clicked (tag);
+            });
+            this.fbox.add (tagbtn);
         }
     }
 }

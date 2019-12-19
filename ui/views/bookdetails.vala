@@ -23,8 +23,6 @@ namespace Biru.UI.Views {
     class BookDetails : Gtk.ScrolledWindow {
         private Gtk.Grid grid;
 
-        private Gtk.Box hbox;
-        private Gtk.Box vbox;
         private Models.Book ? book;
         private Image cover;
         private TagGrid tgrid;
@@ -37,23 +35,14 @@ namespace Biru.UI.Views {
             Object ();
             this.book = null;
             this.grid = new Gtk.Grid ();
-// this.hbox = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 10);
-// this.hbox.homogeneous = false;
-// this.vbox = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-// this.vbox.homogeneous = false;
+
             this.cover = new Image ();
             this.grid.attach (cover, 0, 0, 1, 1);
-// this.cover.halign = Gtk.Align.START;
-// this.cover.valign = Gtk.Align.START;
+
             this.tgrid = new TagGrid ();
             this.grid.attach (tgrid, 1, 0, 1, 1);
             this.info = new BookInfo ();
 
-// this.hbox.pack_start (this.cover);
-// this.hbox.pack_end (this.vbox);
-// this.vbox.pack_start (this.info);
-// this.vbox.pack_start (this.grid);
-// this.add (hbox);
             this.add (grid);
             this.show_all ();
 

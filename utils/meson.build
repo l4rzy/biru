@@ -1,4 +1,5 @@
 sources += files (
     'configs.vala',
-    'utils.vala'
+    'internet.vala',
+    'string.vala'
 )

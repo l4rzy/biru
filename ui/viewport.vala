@@ -69,6 +69,7 @@ namespace Biru.UI {
             this.sig_switch_view (this.current);
         }
 
+        // TODO: fix nav bar in case of clicking home right after startup
         public void home (bool warning = false) {
             if (warning == true) {
                 this.set_to (this.last);
