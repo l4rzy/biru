@@ -19,12 +19,13 @@
 using Biru.Service;
 using Biru.Utils;
 using Biru.UI.Configs;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public class TagButton : Gtk.Button {
-        private unowned Models.Tag tag;
+        public unowned Models.Tag tag { get; set; }
 
-        public signal void sig_tag_clicked (Models.Tag tag);
+        public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
 
         public TagButton (Models.Tag tag) {
             this.get_style_context ().add_class (@"tagbtn_$(tag._type)");
@@ -33,6 +34,20 @@ namespace Biru.UI.Widgets {
             // message(String.wrap (tag.name, Constants.TAG_MAX_LEN));
             this.set_label (tag.name);
             this.show_all ();
+
+            this.button_press_event.connect ((event) => {
+                if (event.button == 3) {
+                    // right click
+                    var menu = new TagMenu (this);
+                    menu.sig_pop_clicked.connect ((tag, opt) => {
+                        this.sig_tag_clicked (tag, opt);
+                    });
+                    menu.popup ();
+                } else if (event.button == 1) {
+                    this.sig_tag_clicked (tag, TAG_OPTION_SEARCH);
+                }
+                return true;
+            });
         }
     }
 
@@ -40,7 +55,7 @@ namespace Biru.UI.Widgets {
         private Gtk.Label label;
         private Gtk.FlowBox fbox;
 
-        public signal void sig_tag_clicked (Models.Tag tag);
+        public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
 
         public TagCat (string title) {
             Object (orientation: Gtk.Orientation.VERTICAL);
@@ -65,10 +80,16 @@ namespace Biru.UI.Widgets {
 
         public void add_tag (TagButton tagbtn) {
             // message("adding a tag to tagcat");
-            tagbtn.sig_tag_clicked.connect ((tag) => {
-                this.sig_tag_clicked (tag);
+            tagbtn.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
             });
             this.fbox.add (tagbtn);
+        }
+
+        public void reset () {
+            this.fbox.@foreach ((w) => {
+                w.destroy ();
+            });
         }
     }
 }

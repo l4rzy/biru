@@ -18,6 +18,7 @@
 
 using Biru.Service.Models;
 using Biru.UI.Configs;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public class TagGrid : Gtk.Box {
@@ -26,8 +27,9 @@ namespace Biru.UI.Widgets {
         private TagCat cat_character;
         private TagCat cat_tag;
         private TagCat cat_artist;
+        private TagCat cat_language;
 
-        public signal void sig_tag_clicked (Tag tag);
+        public signal void sig_tag_clicked (Tag tag, TagOption opt);
 
         public TagGrid () {
             Object (orientation: Gtk.Orientation.VERTICAL);
@@ -35,28 +37,34 @@ namespace Biru.UI.Widgets {
             this.cat_character = new TagCat (S.DETAILS_CAT_CHARACTER);
             this.cat_tag = new TagCat (S.DETAILS_CAT_TAG);
             this.cat_artist = new TagCat (S.DETAILS_CAT_ARTIST);
+            this.cat_language = new TagCat (S.DETAILS_CAT_LANGUAGE);
 
             // signals
-            this.cat_parody.sig_tag_clicked.connect ((tag) => {
-                this.sig_tag_clicked (tag);
+            this.cat_parody.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
             });
 
-            this.cat_parody.sig_tag_clicked.connect ((tag) => {
-                this.sig_tag_clicked (tag);
+            this.cat_character.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
             });
 
-            this.cat_parody.sig_tag_clicked.connect ((tag) => {
-                this.sig_tag_clicked (tag);
+            this.cat_tag.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
             });
 
-            this.cat_parody.sig_tag_clicked.connect ((tag) => {
-                this.sig_tag_clicked (tag);
+            this.cat_artist.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
+            });
+
+            this.cat_language.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
             });
 
             this.pack_start (this.cat_parody);
             this.pack_start (this.cat_character);
             this.pack_start (this.cat_tag);
             this.pack_start (this.cat_artist);
+            this.pack_start (this.cat_language);
 
             this.show_all ();
         }
@@ -66,10 +74,8 @@ namespace Biru.UI.Widgets {
 
             foreach (Tag t in this.tags) {
                 var tag = new TagButton (t);
-
                 switch (t._type) {
                     case "parody":
-                        message ("parody %s", t.name);
                         this.cat_parody.add_tag (tag);
                         break;
                     case "character":
@@ -81,8 +87,19 @@ namespace Biru.UI.Widgets {
                     case "artist":
                         this.cat_artist.add_tag (tag);
                         break;
+                    case "language":
+                        this.cat_language.add_tag (tag);
+                        break;
                 }
             }
+        }
+
+        public void reset () {
+            this.cat_parody.reset ();
+            this.cat_character.reset ();
+            this.cat_tag.reset ();
+            this.cat_language.reset ();
+            this.cat_artist.reset ();
         }
     }
 }
