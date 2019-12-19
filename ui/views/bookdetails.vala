@@ -35,13 +35,17 @@ namespace Biru.UI.Views {
             Object ();
             this.book = null;
             this.grid = new Gtk.Grid ();
+            this.grid.column_homogeneous = false;
+            this.grid.row_homogeneous = false;
 
             this.cover = new Image ();
             this.grid.attach (cover, 0, 0, 1, 1);
 
-            this.tgrid = new TagGrid ();
-            this.grid.attach (tgrid, 1, 0, 1, 1);
             this.info = new BookInfo ();
+            this.grid.attach (info, 1, 0, 1, 1);
+
+            this.tgrid = new TagGrid ();
+            this.grid.attach (tgrid, 1, 1, 1, 1);
 
             this.add (grid);
             this.show_all ();
@@ -66,12 +70,12 @@ namespace Biru.UI.Views {
         public void load_book (Models.Book b) {
             this.cover.clear ();
             this.book = b;
-            this.cover.set_from_url_async.begin (b.cover_url (), 600, 800, true, null, () => {
+            this.cover.set_from_url_async.begin (b.pageno_url (0), 800, 1000, true, null, () => {
                 this.sig_loaded ();
             });
 
-            this.tgrid.insert_tags (b.tags);
             this.info.load_book (b);
+            this.tgrid.insert_tags (b.tags);
         }
     }
 }

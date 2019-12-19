@@ -29,15 +29,18 @@ namespace Biru.UI.Widgets {
                 orientation: Gtk.Orientation.VERTICAL,
                 spacing: 10
             );
+            this.expand = false;
 
             this.title_en = new Gtk.Label (null);
             this.title_en.set_line_wrap (true);
+            this.title_en.get_style_context ().add_class ("title_en");
             this.title_jp = new Gtk.Label (null);
             this.title_jp.set_line_wrap (true);
+            this.title_jp.get_style_context ().add_class ("title_jp");
             this.date = new Gtk.Label (null);
             this.pack_start (title_en);
             this.pack_start (title_jp);
-            this.pack_start (date);
+            this.pack_end (date);
         }
 
         public void set_title_en (string t) {

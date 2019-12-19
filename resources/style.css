@@ -58,21 +58,38 @@ entry {
 .tagbtn_parody {
     border-radius: 16px;
     background-color: orange;
+    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_character {
     border-radius: 16px;
     background-color: yellow;
+    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_tag {
     border-radius: 16px;
     background-color: green;
+    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_artist {
     border-radius: 16px;
     background-color: brown;
+    box-shadow: 0 0 2px #111;
+}
+
+.title_en {
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+.title_jp {
+    font-size: 1.2em;
+}
+
+.tagcat {
+    font-size: 1.1em;
 }
 
 .reader {

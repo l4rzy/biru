@@ -27,11 +27,12 @@ namespace Biru.UI.Widgets {
         public signal void sig_tag_clicked (Models.Tag tag);
 
         public TagButton (Models.Tag tag) {
-            this.get_style_context ().add_class (@"tagbtn_$(tag.name)");
+            this.get_style_context ().add_class (@"tagbtn_$(tag._type)");
             this.tag = tag;
-            this.hexpand = false;
-
-            this.set_label (String.wrap (tag.name, Constants.TAG_MAX_LEN));
+            // this.hexpand = false;
+            // message(String.wrap (tag.name, Constants.TAG_MAX_LEN));
+            this.set_label (tag.name);
+            this.show_all ();
         }
     }
 
@@ -44,6 +45,7 @@ namespace Biru.UI.Widgets {
         public TagCat (string title) {
             Object (orientation: Gtk.Orientation.VERTICAL);
             this.label = new Gtk.Label (title);
+            this.label.get_style_context ().add_class ("tagcat");
 
             this.fbox = new Gtk.FlowBox ();
             this.fbox.margin_end = 20;
@@ -52,14 +54,17 @@ namespace Biru.UI.Widgets {
             this.fbox.activate_on_single_click = false;
             this.fbox.homogeneous = false;
             this.fbox.column_spacing = 20;
-            this.fbox.orientation = Gtk.Orientation.VERTICAL;
-            this.fbox.max_children_per_line = 2;
+            this.fbox.orientation = Gtk.Orientation.HORIZONTAL;
+            this.fbox.max_children_per_line = 3;
 
             this.pack_start (this.label);
             this.pack_start (this.fbox);
+
+            this.show_all ();
         }
 
         public void add_tag (TagButton tagbtn) {
+            // message("adding a tag to tagcat");
             tagbtn.sig_tag_clicked.connect ((tag) => {
                 this.sig_tag_clicked (tag);
             });

@@ -170,5 +170,13 @@ namespace Biru.Service.Models {
 
             return (owned) urls;
         }
+
+        // use first page instead of cover since cover is pixelated on hidpi
+        public string pageno_url (int num) {
+            // TODO: out of bound checking
+            var kind = this.images.pages.nth_data (num).kind ();
+
+            return @"$(Constants.NH_IMG)/galleries/$(this.media_id)/$((num+1).to_string()).$kind";
+        }
     }
 }

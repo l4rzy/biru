@@ -30,7 +30,7 @@ namespace Biru.UI.Widgets {
         public signal void sig_tag_clicked (Tag tag);
 
         public TagGrid () {
-            Object (orientation: Gtk.Orientation.HORIZONTAL);
+            Object (orientation: Gtk.Orientation.VERTICAL);
             this.cat_parody = new TagCat (S.DETAILS_CAT_PARODY);
             this.cat_character = new TagCat (S.DETAILS_CAT_CHARACTER);
             this.cat_tag = new TagCat (S.DETAILS_CAT_TAG);
@@ -52,6 +52,13 @@ namespace Biru.UI.Widgets {
             this.cat_parody.sig_tag_clicked.connect ((tag) => {
                 this.sig_tag_clicked (tag);
             });
+
+            this.pack_start (this.cat_parody);
+            this.pack_start (this.cat_character);
+            this.pack_start (this.cat_tag);
+            this.pack_start (this.cat_artist);
+
+            this.show_all ();
         }
 
         public void insert_tags (List<Tag ? > tags) {
@@ -60,8 +67,9 @@ namespace Biru.UI.Widgets {
             foreach (Tag t in this.tags) {
                 var tag = new TagButton (t);
 
-                switch (tag.name) {
+                switch (t._type) {
                     case "parody":
+                        message ("parody %s", t.name);
                         this.cat_parody.add_tag (tag);
                         break;
                     case "character":
