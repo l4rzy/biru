@@ -27,22 +27,25 @@ namespace Biru.UI.Windows {
     }
 
     public class ReaderImage : Gtk.Overlay {
+        private unowned Cancellable ? cancl;
         private Image image;
 
-        public ReaderImage () {
+        public ReaderImage (Cancellable ? cancl) {
+            this.cancl = cancl;
             this.image = new Image ();
             this.add (image);
         }
 
         public void load (string url) {
             this.image.clear ();
-            this.image.set_from_url_async.begin (url, 800, 1000, true, null, () => {
+            this.image.set_from_url_async.begin (url, 800, 1000, true, this.cancl, () => {
                 stdout.printf ("done\n");
             });
         }
     }
 
     public class Reader : Gtk.Window {
+        private Cancellable cancl;
         private int view { get; set; default = 0; }
         private uint page { get; set; default = 0; }
         private unowned Book book;
@@ -53,13 +56,14 @@ namespace Biru.UI.Windows {
 
         public Reader (Book book) {
             Object ();
+            this.cancl = new Cancellable ();
             this.get_style_context ().add_class ("reader");
             // this.fullscreen();
             this.book = book;
             this.page_urls = book.page_urls ();
             this.anim = Gtk.StackTransitionType.CROSSFADE;
             for (var i = 0; i < 3; i++) {
-                image[i] = new ReaderImage ();
+                image[i] = new ReaderImage (this.cancl);
             }
 
             this.stack = new Gtk.Stack ();
@@ -70,6 +74,11 @@ namespace Biru.UI.Windows {
 
             this.add (stack);
             bind_keys ();
+
+            // signals
+            this.destroy.connect (() => {
+                this.cancl.cancel ();
+            });
         }
 
         void bind_keys () {
