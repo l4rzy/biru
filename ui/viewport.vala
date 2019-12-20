@@ -40,7 +40,7 @@ namespace Biru.UI {
 
         public void init () {
             this.header.navigation (false, false);
-            this.set_to (Constants.STACK_HOME);
+            this.set_to (Constants.STACK_HOME, Gtk.StackTransitionType.NONE);
             // this.stack.set_visible_child_full (this.current, Gtk.StackTransitionType.CROSSFADE);
         }
 
