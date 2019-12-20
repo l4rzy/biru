@@ -27,6 +27,7 @@ namespace Biru.UI.Widgets {
         private TagCat cat_character;
         private TagCat cat_tag;
         private TagCat cat_artist;
+        private TagCat cat_group;
         private TagCat cat_language;
 
         public signal void sig_tag_clicked (Tag tag, TagOption opt);
@@ -37,6 +38,7 @@ namespace Biru.UI.Widgets {
             this.cat_character = new TagCat (S.DETAILS_CAT_CHARACTER);
             this.cat_tag = new TagCat (S.DETAILS_CAT_TAG);
             this.cat_artist = new TagCat (S.DETAILS_CAT_ARTIST);
+            this.cat_group = new TagCat (S.DETAILS_CAT_GROUP);
             this.cat_language = new TagCat (S.DETAILS_CAT_LANGUAGE);
 
             // signals
@@ -56,6 +58,10 @@ namespace Biru.UI.Widgets {
                 this.sig_tag_clicked (tag, opt);
             });
 
+            this.cat_group.sig_tag_clicked.connect ((tag, opt) => {
+                this.sig_tag_clicked (tag, opt);
+            });
+
             this.cat_language.sig_tag_clicked.connect ((tag, opt) => {
                 this.sig_tag_clicked (tag, opt);
             });
@@ -64,6 +70,7 @@ namespace Biru.UI.Widgets {
             this.pack_start (this.cat_character);
             this.pack_start (this.cat_tag);
             this.pack_start (this.cat_artist);
+            this.pack_start (this.cat_group);
             this.pack_start (this.cat_language);
 
             this.show_all ();
@@ -87,6 +94,9 @@ namespace Biru.UI.Widgets {
                     case "artist":
                         this.cat_artist.add_tag (tag);
                         break;
+                    case "group":
+                        this.cat_group.add_tag (tag);
+                        break;
                     case "language":
                         this.cat_language.add_tag (tag);
                         break;
@@ -98,8 +108,10 @@ namespace Biru.UI.Widgets {
             this.cat_parody.reset ();
             this.cat_character.reset ();
             this.cat_tag.reset ();
-            this.cat_language.reset ();
+
             this.cat_artist.reset ();
+            this.cat_group.reset ();
+            this.cat_language.reset ();
         }
     }
 }

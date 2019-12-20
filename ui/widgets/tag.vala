@@ -58,8 +58,13 @@ namespace Biru.UI.Widgets {
         public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
 
         public TagCat (string title) {
-            Object (orientation: Gtk.Orientation.VERTICAL);
+            Object (
+                orientation: Gtk.Orientation.VERTICAL,
+                spacing: 10
+            );
             this.label = new Gtk.Label (title);
+            this.label.halign = Gtk.Align.START;
+            this.label.valign = Gtk.Align.START;
             this.label.get_style_context ().add_class ("tagcat");
 
             this.fbox = new Gtk.FlowBox ();
@@ -70,7 +75,7 @@ namespace Biru.UI.Widgets {
             this.fbox.homogeneous = false;
             this.fbox.column_spacing = 20;
             this.fbox.orientation = Gtk.Orientation.HORIZONTAL;
-            this.fbox.max_children_per_line = 3;
+            this.fbox.max_children_per_line = 8;
 
             this.pack_start (this.label);
             this.pack_start (this.fbox);
