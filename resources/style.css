@@ -38,7 +38,6 @@
 
 .birubutton {
     border-radius: 16px;
-    background-color: rgba(0,0,0,0.2)
 }
 
 .bookcard:hover {
@@ -53,7 +52,7 @@
 entry {
     border-radius: 20px;
     padding: 8px;
-    background: #335;
+    background: rgba(0,0,0,0.2);
 }
 
 .tagbtn_parody {
@@ -64,7 +63,7 @@ entry {
 
 .tagbtn_character {
     border-radius: 16px;
-    background-color: #69f0ae;
+    background-color: #3f51b5;
     box-shadow: 0 0 2px #111;
 }
 
