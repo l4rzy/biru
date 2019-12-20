@@ -16,30 +16,10 @@
  *
  */
 
-// TODO: implement priority queue for async tasks
-// TODO: implement its own InputStream to drop GVFS dependency
-
-using GLib;
-
-namespace Biru.Internal {
-    public class NetStream : InputStream {
-        public NetStream () {
-            Object ();
-        }
-
-        public override bool close (Cancellable ? cancellable = null) throws IOError {
-            return true;
-        }
-
-        public override ssize_t read (uint8[] buffer, Cancellable ? cancellable = null) throws IOError {
-            return 0;
-        }
-
-        public override async ssize_t read_async (uint8[] ? buffer, int io_priority = Priority.DEFAULT, Cancellable ? cancellable = null) throws IOError {
-            return 0;
-        }
-    }
-
-    public class AsyncQueue {
+namespace Biru.Core {
+    public class Constants {
+        public const int VER_MAJOR = 0;
+        public const int VER_MINOR = 0;
+        public const int VER_PATCH = 1;
     }
 }

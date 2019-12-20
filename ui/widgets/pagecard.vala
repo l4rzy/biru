@@ -33,12 +33,20 @@ namespace Biru.UI.Widgets {
             );
 
             this.overlay = new Gtk.Overlay ();
+            this.overlay.width_request = 150;
+            this.overlay.height_request = 280;
             this.cimage = new Image ();
 
             this.overlay.add (cimage);
+            this.add (overlay);
 
             var page = book.get_pageno_info (index);
-            this.cimage.set_from_url_async.begin (page.thumb_url, page.w, page.h, true, cancl);
+
+            message ("%d %d", page.w, page.h);
+            this.cimage.set_from_url_async.begin (page.thumb_url, 150, 280, true, cancl, () => {
+                message ("done %s", page.thumb_url);
+            });
+
             this.show_all ();
         }
     }

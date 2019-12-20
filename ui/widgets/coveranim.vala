@@ -16,26 +16,23 @@
  *
  */
 
-using Biru.Service.Models;
+using Biru.Service;
 using Biru.UI.Configs;
 
 namespace Biru.UI.Widgets {
     public class CoverAnim : Gtk.Button {
         private Gtk.Overlay overlay;
-        private Image image;
+        private Image cimage;
 
-        private Gtk.Box imagecon;
-        private int w { get; set; default = Constants. }
-        private int h;
+        private int w { get; set; default = Constants.COVER_MAX_W; }
+        private int h { get; set; default = Constants.COVER_MAX_H; }
 
         public CoverAnim (Models.Book book) {
-
-
             this.overlay = new Gtk.Overlay ();
             this.overlay.can_focus = false;
             this.overlay.halign = Gtk.Align.CENTER;
             this.overlay.width_request = this.w;
-            this.overlay.height_request = this.h + 42; // TODO: handle this better
+            this.overlay.height_request = this.h;
         }
     }
 }

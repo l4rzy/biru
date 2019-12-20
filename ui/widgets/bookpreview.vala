@@ -28,8 +28,8 @@ namespace Biru.UI.Widgets {
             this.cancl = cancl;
 
             this.cancl = cancl;
-            this.margin_end = 10;
-            this.margin_start = 10;
+            this.margin_end = 40;
+            this.margin_start = 40;
             this.set_selection_mode (Gtk.SelectionMode.NONE);
             this.activate_on_single_click = false;
             this.homogeneous = false;
@@ -38,9 +38,19 @@ namespace Biru.UI.Widgets {
         }
 
         public void load_book (Models.Book book) {
-            var thumb_urls = book.get_thumb_urls ();
-            thumb_urls.foreach ((url) => {
-                message (url);
+            int num_pages = (int) book.num_pages;
+
+            for (var i = 0; i < num_pages; i++) {
+                var pagecard = new PageCard (book, i, this.cancl);
+                this.add (pagecard);
+            }
+        }
+
+        public void clean () {
+            this.cancl.cancel ();
+            this.cancl.reset ();
+            this.@foreach ((w) => {
+                w.destroy ();
             });
         }
     }

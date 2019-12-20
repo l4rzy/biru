@@ -16,9 +16,9 @@
  *
  */
 
-namespace Biru.Core.{
-    public class PrefetchCircle {
-        public PrefetchCircle (int num) {
+namespace Biru.Core {
+    public class PrefetchRing {
+        public PrefetchRing (int num, Cancellable cancl) {
         }
     }
 }

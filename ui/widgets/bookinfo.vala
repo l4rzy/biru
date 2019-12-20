@@ -55,7 +55,7 @@ namespace Biru.UI.Widgets {
             this.set_title_en (book.title.pretty);
             if (book.title.japanese != null)
                 this.set_title_jp (book.title.japanese);
-            this.date.set_label (book.date ().to_string ());
+            this.date.set_label ("Upload date: " + book.get_date ().to_string ());
         }
 
         public void reset () {

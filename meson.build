@@ -19,6 +19,7 @@ sources = files(
     'main.vala'
 )
 
+subdir('core')
 subdir('service')
 subdir('ui')
 subdir('utils')

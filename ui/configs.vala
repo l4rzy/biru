@@ -64,6 +64,7 @@ namespace Biru.UI.Configs {
         public const string DETAILS_CAT_CHARACTER = "Character:";
         public const string DETAILS_CAT_TAG = "Tag:";
         public const string DETAILS_CAT_ARTIST = "Artist:";
+        public const string DETAILS_CAT_GROUP = "Group:";
         public const string DETAILS_CAT_LANGUAGE = "Language:";
     }
 }

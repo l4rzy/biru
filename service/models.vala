@@ -130,21 +130,21 @@ namespace Biru.Service.Models {
             }
         }
 
-        public string web_url () {
+        public string get_web_url () {
             return URLBuilder.get_book_web_url (this.id);
         }
 
         // for details page
-        public string cover_url () {
+        public string get_cover_url () {
             return @"$(Constants.NH_THUMB)/galleries/$(media_id)/cover.$(images.cover.kind())";
         }
 
         // for search & home pages
-        public string thumb_url () {
+        public string get_thumb_url () {
             return @"$(Constants.NH_THUMB)/galleries/$(media_id)/thumb.$(images.thumbnail.kind())";
         }
 
-        public DateTime date () {
+        public DateTime get_date () {
             return new DateTime.from_unix_utc (this.upload_date);
         }
 
@@ -183,7 +183,7 @@ namespace Biru.Service.Models {
                 pnum += 1;
             });
 
-            return new List<string ? > ();
+            return (owned) urls;
         }
 
         public List<string ? > get_page_urls () {

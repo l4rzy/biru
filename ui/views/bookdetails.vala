@@ -29,6 +29,7 @@ namespace Biru.UI.Views {
         private Image cover;
         private TagGrid tgrid;
         private BookInfo info;
+        private BookPreview preview;
 
         public signal void sig_loaded ();
         public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
@@ -49,13 +50,22 @@ namespace Biru.UI.Views {
             this.con.pack_start (info);
 
             this.tgrid = new TagGrid ();
+            this.tgrid.margin_start = 40;
+            this.tgrid.margin_end = 40;
             this.con.pack_start (tgrid);
+
+            this.preview = new BookPreview (this.cancl);
+            this.con.pack_start (preview);
 
             this.add (this.con);
             this.show_all ();
 
             this.tgrid.sig_tag_clicked.connect ((tag, opt) => {
                 this.sig_tag_clicked (tag, opt);
+            });
+
+            this.con.size_allocate.connect (() => {
+                message ("resized to");
             });
         }
 
@@ -73,12 +83,13 @@ namespace Biru.UI.Views {
 
         public void load_book (Models.Book b) {
             this.book = b;
-            var page = b.get_pageno_info (0);
-            this.cover.set_from_url_async.begin (page.url, page.w, page.h, true, this.cancl, () => {
+            // var page = b.get_pageno_info (0);
+            this.cover.set_from_url_async.begin (book.get_cover_url (), 800, 1000, true, this.cancl, () => {
                 this.sig_loaded ();
             });
             this.info.load_book (b);
             this.tgrid.insert_tags (b.tags);
+            this.preview.load_book (b);
         }
 
         // stop loading image
@@ -92,6 +103,7 @@ namespace Biru.UI.Views {
             cancel_loading ();
             this.cover.clear ();
             this.tgrid.reset ();
+            this.preview.clean ();
         }
     }
 }

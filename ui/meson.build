@@ -12,6 +12,7 @@ sources += files (
     'widgets/bookinfo.vala',
     'widgets/pagecard.vala',
     'widgets/bookpreview.vala',
+    'widgets/coveranim.vala',
     
     'views/homepage.vala',
     'views/bookdetails.vala',
@@ -20,6 +21,7 @@ sources += files (
     
     'windows/mainwin.vala',
     'windows/reader.vala',
+    'windows/about.vala',
 
     'menus/bookcard.vala',
     'menus/headermenu.vala',
