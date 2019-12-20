@@ -16,6 +16,7 @@
  *
  */
 
+using Biru.UI.Windows;
 using Biru.UI.Configs;
 
 namespace Biru.UI.Menus {
@@ -51,6 +52,8 @@ namespace Biru.UI.Menus {
             // signals
             btn_about.clicked.connect (() => {
                 message ("Biru is an online manga reading utility");
+                var about = new AboutWindow ();
+                about.present ();
             });
         }
     }
