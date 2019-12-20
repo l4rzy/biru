@@ -81,6 +81,7 @@ namespace Biru.UI {
             this.headerbar.sig_search_activated.connect ((query) => {
                 // cancel all previous image loadings
                 this.home.cancel_loading ();
+                this.details.cancel_loading ();
                 this.home.api_page = 1;
                 this.api.search.begin (query, home.api_page, SORT_POPULAR, null);
                 this.view.home ();
@@ -90,6 +91,7 @@ namespace Biru.UI {
             this.headerbar.sig_btn_home.connect (() => {
                 // cancel all image loadings first
                 this.home.cancel_loading ();
+                this.details.cancel_loading ();
                 this.home.reset ();
                 this.view.home ();
             });

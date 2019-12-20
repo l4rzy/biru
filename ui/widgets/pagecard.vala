@@ -31,10 +31,18 @@ namespace Biru.UI.Widgets {
             Object (
                 can_focus: false
             );
+            this.get_style_context ().add_class ("pagecard");
+            this.margin_start = 4;
+            this.margin_end = 4;
+            this.margin_top = 4;
+            this.margin_bottom = 4;
 
             this.overlay = new Gtk.Overlay ();
-            this.overlay.width_request = 150;
+            this.overlay.width_request = 180;
             this.overlay.height_request = 280;
+            this.overlay.can_focus = false;
+            this.overlay.halign = Gtk.Align.CENTER;
+
             this.cimage = new Image ();
 
             this.overlay.add (cimage);
@@ -42,8 +50,7 @@ namespace Biru.UI.Widgets {
 
             var page = book.get_pageno_info (index);
 
-            message ("%d %d", page.w, page.h);
-            this.cimage.set_from_url_async.begin (page.thumb_url, 150, 280, true, cancl, () => {
+            this.cimage.set_from_url_async.begin (page.thumb_url, 180, 280, true, cancl, () => {
                 message ("done %s", page.thumb_url);
             });
 

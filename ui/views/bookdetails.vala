@@ -63,10 +63,6 @@ namespace Biru.UI.Views {
             this.tgrid.sig_tag_clicked.connect ((tag, opt) => {
                 this.sig_tag_clicked (tag, opt);
             });
-
-            this.con.size_allocate.connect (() => {
-                message ("resized to");
-            });
         }
 
         public string get_book_name () {

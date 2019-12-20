@@ -33,12 +33,17 @@ namespace Biru.UI.Widgets {
             this.set_selection_mode (Gtk.SelectionMode.NONE);
             this.activate_on_single_click = false;
             this.homogeneous = false;
-            this.column_spacing = 10;
+            this.column_spacing = 20;
             this.orientation = Gtk.Orientation.HORIZONTAL;
         }
 
         public void load_book (Models.Book book) {
             int num_pages = (int) book.num_pages;
+            if (num_pages > 100) {
+                // TODO: dynamic loading to handle this
+                message ("num_pages is %d, exceeded current limit, loading only 100 first pages", num_pages);
+                num_pages = 100;
+            }
 
             for (var i = 0; i < num_pages; i++) {
                 var pagecard = new PageCard (book, i, this.cancl);

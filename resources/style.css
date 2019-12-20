@@ -31,17 +31,27 @@
     animation-duration: 3s;
 }
 
+.bookcard:hover {
+    box-shadow: 0 0 12px #111;
+}
+
 .bookcardpop {
     border-color: #113;
     background-color: #335;
 }
 
-.birubutton {
-    border-radius: 16px;
+.pagecard {
+    padding: 4px;
+    background-color: #335;
+    border-radius: 4px;
 }
 
-.bookcard:hover {
-    box-shadow: 0 0 12px #111;
+.pagecard:hover {
+    box-shadow: 0 0 8px #111;
+}
+
+.birubutton {
+    border-radius: 16px;
 }
 
 .labeltop {
@@ -69,13 +79,19 @@ entry {
 
 .tagbtn_tag {
     border-radius: 16px;
-    background-color: #ef6c00;
+    background-color: #e65100;
     box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_artist {
     border-radius: 16px;
     background-color: brown;
+    box-shadow: 0 0 2px #111;
+}
+
+.tagbtn_group {
+    border-radius: 16px;
+    background-color: #33691e;
     box-shadow: 0 0 2px #111;
 }
 
