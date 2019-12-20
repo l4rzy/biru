@@ -28,6 +28,7 @@ namespace Biru.UI.Widgets {
         public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
 
         public TagButton (Models.Tag tag) {
+            this.get_style_context ().add_class ("tagbtn");
             this.get_style_context ().add_class (@"tagbtn_$(tag._type)");
             this.tag = tag;
             // this.hexpand = false;

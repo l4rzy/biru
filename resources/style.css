@@ -65,40 +65,37 @@ entry {
     background: rgba(0,0,0,0.2);
 }
 
+.tagbtn {
+    padding: 6px;
+    border-radius: 22px;
+}
+
+.tagbtn:hover {
+    box-shadow: 0 0 4px #111;
+}
+
 .tagbtn_parody {
-    border-radius: 16px;
     background-color: #8e24aa;
-    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_character {
-    border-radius: 16px;
     background-color: #3f51b5;
-    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_tag {
-    border-radius: 16px;
     background-color: #e65100;
-    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_artist {
-    border-radius: 16px;
     background-color: brown;
-    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_group {
-    border-radius: 16px;
     background-color: #33691e;
-    box-shadow: 0 0 2px #111;
 }
 
 .tagbtn_language {
-    border-radius: 16px;
     background-color: #039be5;
-    box-shadow: 0 0 2px #111;
 }
 
 .title_en {
