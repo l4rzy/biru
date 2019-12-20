@@ -40,6 +40,13 @@ namespace Biru.Service.Models {
         }
     }
 
+    public class PageInfo {
+        public int w { get; set; }
+        public int h { get; set; }
+        public string url { get; set; }
+        public string thumb_url { get; set; }
+    }
+
     public class Tag : Object {
         public int64 id { get; set; }
         public string _type { get; set; } // type is a keyword, so it will not be deserialized properly
@@ -155,11 +162,31 @@ namespace Biru.Service.Models {
             return JAPANESE;
         }
 
-        public List<string ? > page_thumb_urls () {
+        // program always deals with indice, not real page numbers
+        public PageInfo get_pageno_info (int index) {
+            var page = this.images.pages.nth_data (index);
+            var pinfo = new PageInfo ();
+            pinfo.w = (int) page.w;
+            pinfo.h = (int) page.h;
+
+            pinfo.url = @"$(Constants.NH_IMG)/galleries/$(this.media_id)/$((index+1).to_string()).$(page.kind())";
+            pinfo.thumb_url = @"$(Constants.NH_THUMB)/galleries/$(this.media_id)/$((index+1).to_string())t.$(page.kind())";
+            return pinfo;
+        }
+
+        public List<string ? > get_thumb_urls () {
+            var urls = new List<string ? > ();
+
+            var pnum = 1;
+            this.images.pages.foreach ((page) => {
+                urls.append (@"$(Constants.NH_THUMB)/galleries/$(this.media_id)/$(pnum.to_string())t.$(page.kind())");
+                pnum += 1;
+            });
+
             return new List<string ? > ();
         }
 
-        public List<string ? > page_urls () {
+        public List<string ? > get_page_urls () {
             var urls = new List<string ? >();
 
             var pnum = 1;
@@ -169,18 +196,6 @@ namespace Biru.Service.Models {
             });
 
             return (owned) urls;
-        }
-
-        public Page pageno (int num) {
-            return this.images.pages.nth_data (num);
-        }
-
-        // use first page instead of cover since cover is pixelated on hidpi
-        public string pageno_url (int num) {
-            // TODO: out of bound checking
-            var kind = this.images.pages.nth_data (num).kind ();
-
-            return @"$(Constants.NH_IMG)/galleries/$(this.media_id)/$((num+1).to_string()).$kind";
         }
     }
 }

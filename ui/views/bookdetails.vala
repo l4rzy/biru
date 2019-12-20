@@ -42,6 +42,7 @@ namespace Biru.UI.Views {
             this.con.spacing = 18;
 
             this.cover = new Image ();
+            this.cover.margin_top = 12;
             this.con.pack_start (cover);
 
             this.info = new BookInfo ();
@@ -72,8 +73,8 @@ namespace Biru.UI.Views {
 
         public void load_book (Models.Book b) {
             this.book = b;
-            var page = b.pageno (0);
-            this.cover.set_from_url_async.begin (b.pageno_url (0), (int) page.w, (int) page.h, true, this.cancl, () => {
+            var page = b.get_pageno_info (0);
+            this.cover.set_from_url_async.begin (page.url, page.w, page.h, true, this.cancl, () => {
                 this.sig_loaded ();
             });
             this.info.load_book (b);

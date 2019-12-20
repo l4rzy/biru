@@ -60,8 +60,8 @@ namespace Biru.UI.Windows {
             this.get_style_context ().add_class ("reader");
             // this.fullscreen();
             this.book = book;
-            this.page_urls = book.page_urls ();
-            this.anim = Gtk.StackTransitionType.CROSSFADE;
+            this.page_urls = book.get_page_urls ();
+            this.anim = Gtk.StackTransitionType.OVER_LEFT;
             for (var i = 0; i < 3; i++) {
                 image[i] = new ReaderImage (this.cancl);
             }
@@ -77,6 +77,7 @@ namespace Biru.UI.Windows {
 
             // signals
             this.destroy.connect (() => {
+                message ("quitting, cancelling all async tasks");
                 this.cancl.cancel ();
             });
         }

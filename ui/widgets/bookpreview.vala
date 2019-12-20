@@ -15,11 +15,33 @@
  * MA 02110-1301, USA.
  *
  */
+using Biru.Service;
 
 namespace Biru.UI.Widgets {
     public class BookPreview : Gtk.FlowBox {
-        public BookPreview () {
+        private unowned Cancellable ? cancl;
+
+        public signal void sig_page_clicked (Models.Book book, int pnum);
+
+        public BookPreview (Cancellable ? cancl) {
             Object ();
+            this.cancl = cancl;
+
+            this.cancl = cancl;
+            this.margin_end = 10;
+            this.margin_start = 10;
+            this.set_selection_mode (Gtk.SelectionMode.NONE);
+            this.activate_on_single_click = false;
+            this.homogeneous = false;
+            this.column_spacing = 10;
+            this.orientation = Gtk.Orientation.HORIZONTAL;
+        }
+
+        public void load_book (Models.Book book) {
+            var thumb_urls = book.get_thumb_urls ();
+            thumb_urls.foreach ((url) => {
+                message (url);
+            });
         }
     }
 }

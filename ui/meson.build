@@ -10,6 +10,8 @@ sources += files (
     'widgets/tag.vala',
     'widgets/taggrid.vala',
     'widgets/bookinfo.vala',
+    'widgets/pagecard.vala',
+    'widgets/bookpreview.vala',
     
     'views/homepage.vala',
     'views/bookdetails.vala',
