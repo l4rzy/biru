@@ -1,4 +1,5 @@
 [![License](https://img.shields.io/github/license/l4rzy/biru?color=green)](https://raw.githubusercontent.com/l4rzy/biru/master/LICENSE)
+[![Issues](http://img.shields.io/github/issues/l4rzy/biru.svg?style=flat)](https://github.com/l4rzy/biru/issues)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/l4rzy/biru/CI)
 
 # Biru
