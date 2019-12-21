@@ -114,7 +114,6 @@ namespace Biru.UI.Widgets {
                     // right click
                     var menu = new BookCardMenu (this);
                     menu.sig_pop_clicked.connect ((opt) => {
-                        message ("book %s download", book.title.pretty);
                         this.sig_book_clicked (this.book, opt);
                     });
                     menu.popup ();
