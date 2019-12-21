@@ -59,10 +59,12 @@ namespace Biru.UI.Menus {
 
             // signals
             btn_fav.clicked.connect (() => {
+                this.popdown ();
                 sig_pop_clicked (tagbtn.tag, TAG_OPTION_FAV);
             });
 
             btn_search.clicked.connect (() => {
+                this.popdown ();
                 sig_pop_clicked (tagbtn.tag, TAG_OPTION_SEARCH);
             });
         }

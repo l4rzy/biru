@@ -52,6 +52,7 @@ namespace Biru.UI.Menus {
             // signals
             btn_about.clicked.connect (() => {
                 message ("Biru is an online manga reading utility");
+                this.popdown ();
                 var about = new AboutWindow ();
                 about.present ();
             });

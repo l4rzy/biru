@@ -63,18 +63,22 @@ namespace Biru.UI.Menus {
 
             // signals
             btn_read.clicked.connect (() => {
+                this.popdown ();
                 sig_pop_clicked (BOOKCARD_READ);
             });
 
             btn_details.clicked.connect (() => {
+                this.popdown ();
                 sig_pop_clicked (BOOKCARD_DETAILS);
             });
 
             btn_fav.clicked.connect (() => {
+                this.popdown ();
                 sig_pop_clicked (BOOKCARD_FAVOR);
             });
 
             btn_download.clicked.connect (() => {
+                this.popdown ();
                 sig_pop_clicked (BOOKCARD_DOWNLOAD);
             });
         }
