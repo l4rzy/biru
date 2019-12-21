@@ -16,6 +16,7 @@
  *
  */
 
+using Biru.UI.Configs;
 using Biru.UI.Widgets;
 using Biru.Service;
 using Biru.UI.Menus;
@@ -26,7 +27,7 @@ namespace Biru.UI.Views {
         private Gtk.Box con; // container
 
         private Models.Book ? book;
-        private Image cover;
+        private CoverAnim cover;
         private TagGrid tgrid;
         private BookInfo info;
         private BookPreview preview;
@@ -42,7 +43,7 @@ namespace Biru.UI.Views {
             this.con = new Gtk.Box (Gtk.Orientation.VERTICAL, 18);
             this.con.spacing = 18;
 
-            this.cover = new Image ();
+            this.cover = new CoverAnim (this.cancl);
             this.cover.margin_top = 12;
             this.con.pack_start (cover);
 
@@ -63,6 +64,10 @@ namespace Biru.UI.Views {
             this.tgrid.sig_tag_clicked.connect ((tag, opt) => {
                 this.sig_tag_clicked (tag, opt);
             });
+
+            this.cover.sig_cover_loaded.connect (() => {
+                this.sig_loaded ();
+            });
         }
 
         public string get_book_name () {
@@ -80,9 +85,8 @@ namespace Biru.UI.Views {
         public void load_book (Models.Book b) {
             this.book = b;
             // var page = b.get_pageno_info (0);
-            this.cover.set_from_url_async.begin (book.get_cover_url (), 800, 1000, true, this.cancl, () => {
-                this.sig_loaded ();
-            });
+
+            this.cover.load_book (b);
             this.info.load_book (b);
             this.tgrid.insert_tags (b.tags);
             this.preview.load_book (b);
@@ -96,8 +100,8 @@ namespace Biru.UI.Views {
 
         // reset all child widget in bookdetails
         public void reset () {
-            cancel_loading ();
-            this.cover.clear ();
+            this.cancel_loading ();
+            this.cover.reset ();
             this.tgrid.reset ();
             this.preview.clean ();
         }

@@ -133,7 +133,6 @@ namespace Biru.UI.Views {
             this.api_page = 1;
             this.get_vadjustment ().set_value (0);
             this.grid.clean ();
-            // this.set_placement(Gtk.CornerType.TOP_RIGHT);
         }
     }
 }
