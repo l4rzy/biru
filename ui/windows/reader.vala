@@ -16,7 +16,7 @@
  *
  */
 
-using Biru.UI.Widgets;
+using Biru.UI;
 using Biru.Service.Models;
 
 namespace Biru.UI.Windows {
@@ -26,44 +26,34 @@ namespace Biru.UI.Windows {
         PAGE_NEXT
     }
 
-    public class ReaderImage : Gtk.Overlay {
-        private unowned Cancellable ? cancl;
-        private Image image;
-
-        public ReaderImage (Cancellable ? cancl) {
-            this.cancl = cancl;
-            this.image = new Image ();
-            this.add (image);
-        }
-
-        public void load (string url) {
-            this.image.clear ();
-            this.image.set_from_url_async.begin (url, 800, 1000, true, this.cancl, () => {
-                stdout.printf ("done\n");
-            });
-        }
-    }
-
-    public class Reader : Gtk.Window {
+    public class ReaderWin : Gtk.Window {
         private Cancellable cancl;
         private int view { get; set; default = 0; }
         private uint page { get; set; default = 0; }
         private unowned Book book;
+
+        private Reader.HeaderBar headerbar;
         private Gtk.Stack stack;
-        private ReaderImage image[3];
+        private Reader.Image image[3];
         private Gtk.StackTransitionType anim;
         private List<string ? > page_urls;
 
-        public Reader (Book book) {
-            Object ();
+        public ReaderWin (Book book) {
+            Object (
+                modal: true
+            );
             this.cancl = new Cancellable ();
             this.get_style_context ().add_class ("reader");
             // this.fullscreen();
+
+            this.headerbar = new Reader.HeaderBar (book);
+            this.set_titlebar (this.headerbar);
+
             this.book = book;
             this.page_urls = book.get_page_urls ();
             this.anim = Gtk.StackTransitionType.OVER_LEFT;
             for (var i = 0; i < 3; i++) {
-                image[i] = new ReaderImage (this.cancl);
+                image[i] = new Reader.Image (this.cancl);
             }
 
             this.stack = new Gtk.Stack ();
@@ -73,7 +63,7 @@ namespace Biru.UI.Windows {
             }
 
             this.add (stack);
-            bind_keys ();
+            this.bind_keys ();
 
             // signals
             this.destroy.connect (() => {
@@ -85,6 +75,7 @@ namespace Biru.UI.Windows {
         void bind_keys () {
             this.key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
+                message ("keycode: %u", keycode);
                 switch (keycode) {
                     case 9:
                         this.close ();
