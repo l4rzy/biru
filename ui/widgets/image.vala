@@ -21,7 +21,6 @@ using Biru.Service;
 // originally copied and modified from Granite.AsyncImage
 // to drop out granite dependency
 namespace Biru.UI.Widgets {
-
     public class Image : Gtk.Image {
         private int current_scale_factor = 1;
         private unowned Soup.Session session;
@@ -85,7 +84,13 @@ namespace Biru.UI.Widgets {
             }
         }
 
-        public void cancel () {
+        // scales the size down, keeping aspect ratio, width first
+        public static void scale (int rw, int rh, int mw, out int w, out int h) {
+            // scale pixbuf to max size
+            double ratio = mw / (double) rw;
+
+            w = (int) (ratio * rw);
+            h = (int) (ratio * rh);
         }
     }
 }
