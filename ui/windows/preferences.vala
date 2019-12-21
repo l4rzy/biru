@@ -16,12 +16,14 @@
  *
  */
 
-namespace Biru.Core {
-    public class PrefetchRing {
-        private int replicas { get; set; }
+namespace Biru.UI.Windows {
+    public class Preferences : Gtk.Window {
+        private Gtk.HeaderBar header;
+        private Gtk.Stack stack;
+        private Gtk.StackSwitcher viewport;
 
-        public PrefetchRing (int replicas, Cancellable cancl) {
-            this.replicas = replicas;
+        public Preferences () {
+            Object ();
         }
     }
 }

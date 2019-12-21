@@ -16,12 +16,13 @@
  *
  */
 
-namespace Biru.Core {
-    public class PrefetchRing {
-        private int replicas { get; set; }
+namespace Biru.UI.Reader {
+    public class ViewPort : Gtk.Stack {
+        private LoadingCircle loading;
+        private ReaderImage[] images;
 
-        public PrefetchRing (int replicas, Cancellable cancl) {
-            this.replicas = replicas;
+        public ViewPort () {
+            Object ();
         }
     }
 }

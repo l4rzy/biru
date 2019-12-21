@@ -32,8 +32,8 @@ namespace Biru.UI.Configs {
         public const string STACK_DETAILS = "STACK_DETAILS";
 
         // book cover in details page
-        public const int COVER_MAX_W = 600;
-        public const int COVER_MAX_H = 1000;
+        public const int COVER_MAX_W = 800;
+        public const int COVER_MAX_H = 1200;
 
         // tag max len
         public const int TAG_MAX_LEN = 12;
@@ -66,5 +66,7 @@ namespace Biru.UI.Configs {
         public const string DETAILS_CAT_ARTIST = "Artist:";
         public const string DETAILS_CAT_GROUP = "Group:";
         public const string DETAILS_CAT_LANGUAGE = "Language:";
+
+        public const string READER_TITLE_PREFIX = "You are reading";
     }
 }

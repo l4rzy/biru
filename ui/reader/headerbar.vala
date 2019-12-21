@@ -16,12 +16,17 @@
  *
  */
 
-namespace Biru.Core {
-    public class PrefetchRing {
-        private int replicas { get; set; }
+using Biru.UI.Widgets;
+using Biru.Service;
+using Biru.UI.Configs;
 
-        public PrefetchRing (int replicas, Cancellable cancl) {
-            this.replicas = replicas;
+namespace Biru.UI.Reader {
+    public class HeaderBar : Gtk.HeaderBar {
+        public HeaderBar (Models.Book book) {
+            this.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+            this.set_title (S.READER_TITLE_PREFIX);
+            this.set_subtitle (book.title.pretty);
+            this.show_close_button = true;
         }
     }
 }

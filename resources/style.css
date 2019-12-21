@@ -65,6 +65,14 @@ entry {
     background: rgba(0,0,0,0.2);
 }
 
+.cover {
+    border-color: #113;
+}
+
+.coverbtn {
+    background: rgba(0,0,0,0.7);
+}
+
 .tagbtn {
     padding: 6px;
     border-radius: 22px;

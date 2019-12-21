@@ -52,8 +52,6 @@ namespace Biru.UI.Widgets {
         }
 
         public void clean () {
-            this.cancl.cancel ();
-            this.cancl.reset ();
             this.@foreach ((w) => {
                 w.destroy ();
             });

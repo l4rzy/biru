@@ -24,8 +24,8 @@ using Biru.UI.Configs;
 /*
  * the main UI flow controller of App
  */
-namespace Biru.UI {
-    public class AppController {
+namespace Biru.UI.Controllers {
+    public class AppCtl {
         private unowned Gtk.Application app;
         private Windows.MainWin win { get; private set; default = null; }
 
@@ -43,7 +43,7 @@ namespace Biru.UI {
 
         private API api;
 
-        public AppController (Gtk.Application app) {
+        public AppCtl (Gtk.Application app) {
             // service setup, this will also initialize the service api
             this.api = API.get ();
             this.app = app;
@@ -64,7 +64,7 @@ namespace Biru.UI {
             this.stack.add_named (this.details, Constants.STACK_DETAILS);
             this.stack.add_named (this.warning, Constants.STACK_WARNING);
 
-            // stack hist to control stack views
+            // viewport to control stack views
             this.view = new ViewPort (this.stack, this.headerbar);
 
             this.win.add (this.stack);
@@ -107,10 +107,13 @@ namespace Biru.UI {
             });
 
             this.headerbar.sig_rightbar.connect ((btn) => {
-                if (btn == 1) {
-                    var reader = new Windows.Reader (this.details.get_book ());
-                    reader.show_all ();
-                    reader.init ();
+                switch (btn) {
+                    case Widgets.RightBarBtn.RIGHTBAR_READ:
+                        AppCtl.spawn_reader (this.details.get_book ());
+                        break;
+                    default:
+                        message ("not implemented yet");
+                        break;
                 }
             });
 
@@ -135,9 +138,7 @@ namespace Biru.UI {
                         this.headerbar.start_loading ();
                         break;
                     case Widgets.BookCardOption.BOOKCARD_READ:
-                        var reader = new Windows.Reader (book);
-                        reader.show_all ();
-                        reader.init ();
+                        AppCtl.spawn_reader (book);
                         break;
                     default:
                         message ("not implemented yet");
@@ -182,6 +183,13 @@ namespace Biru.UI {
 
         public void quit () {
             this.win.destroy ();
+        }
+
+        public static bool spawn_reader (Models.Book book) {
+            var reader = new Windows.ReaderWin (book);
+            reader.show_all ();
+            reader.init ();
+            return true;
         }
     }
 }

@@ -20,11 +20,16 @@ using Biru.Core;
 namespace Biru.UI.Windows {
     public class AboutWindow : Gtk.AboutDialog {
         public AboutWindow () {
-            Object ();
-            this.set_destroy_with_parent (true);
+            Object (
+                modal: true,
+                destroy_with_parent: true
+            );
             // this.set_transient_for (window);
-            this.set_modal (true);
+            var header = new Gtk.HeaderBar ();
+            header.show_close_button = true;
+            header.set_title ("About");
 
+            this.set_titlebar (header);
             this.authors = { "l4rzy" };
             this.documenters = null;
             this.translator_credits = null;

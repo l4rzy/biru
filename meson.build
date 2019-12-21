@@ -1,5 +1,5 @@
 project('biru', ['vala', 'c'],
-    version : '0.0.1',
+    version: '0.0.1',
     license: 'GPL-3.0'
 )
 

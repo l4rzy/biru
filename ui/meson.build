@@ -27,8 +27,13 @@ sources += files (
     'menus/headermenu.vala',
     'menus/tagmenu.vala',
 
+    'reader/headerbar.vala',
+    'reader/loadingcircle.vala',
+    'reader/image.vala',
+
+    'controllers/appctl.vala',
+
     'configs.vala',
-    'controller.vala',
     'viewport.vala',
     'application.vala'
 )

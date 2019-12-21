@@ -15,13 +15,24 @@
  * MA 02110-1301, USA.
  *
  */
+using Biru.UI;
 
-namespace Biru.Core {
-    public class PrefetchRing {
-        private int replicas { get; set; }
+namespace Biru.UI.Reader {
+    public class Image : Gtk.Overlay {
+        private unowned Cancellable ? cancl;
+        private Widgets.Image image;
 
-        public PrefetchRing (int replicas, Cancellable cancl) {
-            this.replicas = replicas;
+        public Image (Cancellable ? cancl) {
+            this.cancl = cancl;
+            this.image = new Widgets.Image ();
+            this.add (image);
+        }
+
+        public void load (string url) {
+            this.image.clear ();
+            this.image.set_from_url_async.begin (url, 800, 1000, true, this.cancl, () => {
+                stdout.printf ("done loading %s\n", url);
+            });
         }
     }
 }
