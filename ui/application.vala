@@ -16,6 +16,7 @@
  *
  */
 
+using Biru;
 using Biru.UI.Configs;
 
 /*
@@ -23,13 +24,18 @@ using Biru.UI.Configs;
  */
 namespace Biru.UI {
     class App : Gtk.Application {
-        private AppController ctl;
+        private Controllers.AppCtl ctl;
 
         public App () {
             Object (application_id: Constants.APP_ID,
                     flags : ApplicationFlags.FLAGS_NONE);
 
             // setup
+            const OptionEntry[] options = {
+                { "version", 'V', 0, OptionArg.NONE, null, "Show Biru's and libraries' versions", null },
+                { null }
+            };
+            this.add_main_option_entries (options);
             var quit_action = new SimpleAction ("quit", null);
 
             this.add_action (quit_action);
@@ -43,9 +49,27 @@ namespace Biru.UI {
             });
         }
 
+        public override int handle_local_options (VariantDict options) {
+            if (options.contains ("version")) {
+                print ("%s version %d.%d.%d\n", Constants.APP_NAME, Core.Constants.VER_MAJOR,
+                       Core.Constants.VER_MINOR, Core.Constants.VER_PATCH);
+                print ("Kernel version: %s\n", Posix.utsname ().release);
+                print ("GLib version: %u.%u.%u (%u.%u.%u)\n",
+                       GLib.Version.major, GLib.Version.minor, GLib.Version.micro,
+                       GLib.Version.MAJOR, GLib.Version.MINOR, GLib.Version.MICRO);
+                print ("GTK version: %u.%u.%u (%i.%i.%i)\n",
+                       Gtk.get_major_version (), Gtk.get_minor_version (), Gtk.get_micro_version (),
+                       Gtk.MAJOR_VERSION, Gtk.MINOR_VERSION, Gtk.MICRO_VERSION);
+                print ("Cairo version: %s\n", Cairo.version_string ());
+                print ("Pango version: %s\n", Pango.version_string ());
+                return 0;
+            }
+            return -1;
+        }
+
         protected override void activate () {
             if (this.ctl == null) {
-                this.ctl = new AppController (this);
+                this.ctl = new Controllers.AppCtl (this);
             }
             this.ctl.activate ();
         }
