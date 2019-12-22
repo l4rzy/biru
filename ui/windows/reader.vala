@@ -34,7 +34,7 @@ namespace Biru.UI.Windows {
         private unowned Book book;
 
         private Reader.HeaderBar headerbar;
-        private Gtk.Overlay overlay;
+        // private Gtk.Overlay overlay;
         private Reader.ViewPort viewport;
 
         public ReaderWin (Book book, int index) {

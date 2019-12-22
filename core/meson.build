@@ -1,4 +1,3 @@
 sources += files (
-    'internal.vala',
-    'prefetch.vala'
+    'internal.vala'
 )
