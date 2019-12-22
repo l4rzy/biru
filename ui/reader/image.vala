@@ -30,6 +30,10 @@ namespace Biru.UI.Reader {
             this.cancl = cancl;
             this.image = new Widgets.Image ();
             this.add (image);
+
+            this.cancl.cancelled.connect (() => {
+                this.loaded = false;
+            });
         }
 
         public void load (string url, uint rpos, uint upos) {
@@ -39,6 +43,7 @@ namespace Biru.UI.Reader {
             this.image.set_from_url_async.begin (url, Reader.Constants.READER_DEFAULT_W,
                                                  Reader.Constants.READER_DEFAULT_H, true, this.cancl, () => {
                 this.loaded = true;
+                message ("done %s", url);
                 this.sig_loading_done (rpos);
             });
         }

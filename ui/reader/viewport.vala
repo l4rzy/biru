@@ -32,6 +32,7 @@ namespace Biru.UI.Reader {
 
         private LoadingCircle loading;
         private List<Reader.Image ? > ring;
+        private List<Cancellable ? > ring_cancl;
 
         private signal void sig_loading_done (uint rpos);
         public signal void sig_viewing_page (int index);
@@ -39,9 +40,10 @@ namespace Biru.UI.Reader {
         public ViewPort (int num_prev, int num_next, Cancellable ? cancl) {
             Object ();
 
-            // this.set_events (Gdk.EventMask.SCROLL_MASK | Gdk.EventMask.KEY_PRESS_MASK);
-            this.set_events (Gdk.EventMask.ALL_EVENTS_MASK);
             this.cancl = cancl;
+            this.set_events (Gdk.EventMask.SCROLL_MASK);
+            this.set_events (Gdk.EventMask.KEY_PRESS_MASK);
+
             this.nbase = num_prev + num_next;
             this.cprev = num_prev;
 
@@ -52,7 +54,8 @@ namespace Biru.UI.Reader {
 
             this.add_named (this.loading, "loading");
             for (var i = 0; i < this.nbase; i++) {
-                var img = new Reader.Image (this.cancl);
+                var c = new Cancellable ();
+                var img = new Reader.Image (c);
                 this.add_named (img, i.to_string ());
                 img.sig_loading_done.connect ((rpos) => {
                     if (rpos == this.ringptr) {
@@ -63,11 +66,24 @@ namespace Biru.UI.Reader {
                     }
                 });
                 this.ring.append ((owned) img);
+                this.ring_cancl.append ((owned) c);
             }
+
+            this.cancl.cancelled.connect (() => {
+                this.ring_cancl.foreach ((cancl) => {
+                    message ("cancelled~");
+                    cancl.cancel ();
+                });
+            });
         }
 
         // associate upos to rpos
         private void prefetch (uint rpos, uint upos) {
+            // first cancel the previous loading if any
+            this.ring_cancl.nth_data (rpos).cancel ();
+            this.ring_cancl.nth_data (rpos).reset ();
+
+            // then assosiate new index to ring and load it
             var url = this.urls.nth_data (upos);
             this.ring.nth_data (rpos).load (url, rpos, upos);
             message ("ring pointer %u is associated with url pointer %u", rpos, upos);
