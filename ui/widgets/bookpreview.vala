@@ -21,7 +21,7 @@ namespace Biru.UI.Widgets {
     public class BookPreview : Gtk.FlowBox {
         private unowned Cancellable ? cancl;
 
-        public signal void sig_page_clicked (Models.Book book, int pnum);
+        public signal void sig_page_clicked (Models.Book book, int index, PageCardOpt opt);
 
         public BookPreview (Cancellable ? cancl) {
             Object ();
@@ -47,6 +47,9 @@ namespace Biru.UI.Widgets {
 
             for (var i = 0; i < num_pages; i++) {
                 var pagecard = new PageCard (book, i, this.cancl);
+                pagecard.sig_page_clicked.connect ((book, index, opt) => {
+                    this.sig_page_clicked (book, index, opt);
+                });
                 this.add (pagecard);
             }
         }

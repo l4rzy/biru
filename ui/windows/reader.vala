@@ -39,7 +39,7 @@ namespace Biru.UI.Windows {
         private Gtk.StackTransitionType anim;
         private List<string ? > page_urls;
 
-        public ReaderWin (Book book) {
+        public ReaderWin (Book book, int index) {
             Object (
                 modal: true
             );

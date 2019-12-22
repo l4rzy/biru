@@ -19,13 +19,17 @@
 using Biru.Service;
 
 namespace Biru.UI.Widgets {
+    public enum PageCardOpt {
+        PAGECARD_READ
+    }
+
     public class PageCard : Gtk.Button {
         // private unowned Models.Book book;
         private Gtk.Overlay overlay;
         private Image cimage;
 
         // signals
-        public signal void sig_page_clicked (Models.Book b, BookCardOption opt);
+        public signal void sig_page_clicked (Models.Book b, int index, PageCardOpt opt);
 
         public PageCard (Models.Book book, int index, Cancellable ? cancl) {
             Object (
@@ -55,6 +59,10 @@ namespace Biru.UI.Widgets {
             });
 
             this.show_all ();
+
+            this.clicked.connect (() => {
+                this.sig_page_clicked (book, index, PAGECARD_READ);
+            });
         }
     }
 }

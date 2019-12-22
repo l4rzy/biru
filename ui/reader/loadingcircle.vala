@@ -46,7 +46,7 @@ namespace Biru.UI.Reader {
             this.spinner.active = false;
         }
 
-        public void update(int index) {
+        public void update (int index) {
             this.page.set_label (@"$((index+1).to_string())");
         }
     }

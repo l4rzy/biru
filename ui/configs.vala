@@ -67,6 +67,6 @@ namespace Biru.UI.Configs {
         public const string DETAILS_CAT_GROUP = "Group:";
         public const string DETAILS_CAT_LANGUAGE = "Language:";
 
-        public const string READER_TITLE_PREFIX = "You are reading";
+        public const string READER_TITLE_PREFIX = "Biru reader";
     }
 }

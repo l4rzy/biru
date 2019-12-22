@@ -34,6 +34,7 @@ namespace Biru.UI.Views {
 
         public signal void sig_loaded ();
         public signal void sig_tag_clicked (Models.Tag tag, TagOption opt);
+        public signal void sig_page_clicked (Models.Book book, int index, PageCardOpt opt);
 
         public BookDetails () {
             Object ();
@@ -67,6 +68,10 @@ namespace Biru.UI.Views {
 
             this.cover.sig_cover_loaded.connect (() => {
                 this.sig_loaded ();
+            });
+
+            this.preview.sig_page_clicked.connect ((book, index, opt) => {
+                this.sig_page_clicked (book, index, opt);
             });
         }
 

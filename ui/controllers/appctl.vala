@@ -77,6 +77,19 @@ namespace Biru.UI.Controllers {
                 this.block_header (false);
             });
 
+            this.view.sig_switch_view.connect ((v) => {
+                if (v == Constants.STACK_HOME) {
+                    this.headerbar.set_title (Constants.APP_NAME);
+                    this.headerbar.set_subtitle (Constants.APP_LONGNAME);
+                    return;
+                }
+                if (v == Constants.STACK_DETAILS) {
+                    this.headerbar.set_title (this.details.get_book_name ());
+                    if (this.details.get_book_jp_name () != null)
+                        this.headerbar.set_subtitle (this.details.get_book_jp_name ());
+                }
+            });
+
             // signals on headerbar
             this.headerbar.sig_search_activated.connect ((query) => {
                 // cancel all previous image loadings
@@ -154,17 +167,8 @@ namespace Biru.UI.Controllers {
                 message ("tag %s - opt: %d", tag.name, opt);
             });
 
-            this.view.sig_switch_view.connect ((v) => {
-                if (v == Constants.STACK_HOME) {
-                    this.headerbar.set_title (Constants.APP_NAME);
-                    this.headerbar.set_subtitle (Constants.APP_LONGNAME);
-                    return;
-                }
-                if (v == Constants.STACK_DETAILS) {
-                    this.headerbar.set_title (this.details.get_book_name ());
-                    if (this.details.get_book_jp_name () != null)
-                        this.headerbar.set_subtitle (this.details.get_book_jp_name ());
-                }
+            this.details.sig_page_clicked.connect ((book, index, opt) => {
+                message ("page %d of %s", index + 1, book.get_web_url ());
             });
 
             // application setup
@@ -185,8 +189,8 @@ namespace Biru.UI.Controllers {
             this.win.destroy ();
         }
 
-        public static bool spawn_reader (Models.Book book) {
-            var reader = new Windows.ReaderWin (book);
+        public static bool spawn_reader (Models.Book book, int index = 0) {
+            var reader = new Windows.ReaderWin (book, index);
             reader.show_all ();
             reader.init ();
             return true;
