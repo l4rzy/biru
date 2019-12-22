@@ -46,6 +46,7 @@ namespace Biru.UI.Reader {
             this.cprev = num_prev;
 
             this.anim = Gtk.StackTransitionType.OVER_LEFT;
+            this.transition_duration = 120;
             this.ring = new List<Reader.Image ? >();
             this.loading = new LoadingCircle ();
 
