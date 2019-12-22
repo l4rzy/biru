@@ -4,7 +4,7 @@ project('biru', ['vala', 'c'],
 )
 
 c_args = [
-    '-O0',
+    '-Ofast',
     '-g'
 ]
 

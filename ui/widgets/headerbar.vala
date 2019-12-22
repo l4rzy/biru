@@ -16,6 +16,7 @@
  *
  */
 
+using Biru.Core;
 using Biru.UI.Configs;
 using Biru.Service;
 
@@ -35,8 +36,8 @@ namespace Biru.UI.Widgets {
 
         public HeaderBar () {
             // get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-            this.set_title (Constants.APP_NAME);
-            this.set_subtitle (Constants.APP_LONGNAME);
+            this.set_title (APP_NAME);
+            this.set_subtitle (APP_LONGNAME);
             this.show_close_button = true;
 
             this.navi = new Navigation ();

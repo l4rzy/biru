@@ -36,7 +36,7 @@ namespace Biru.UI.Windows {
 
             this.program_name = "Biru";
             this.comments = "An online manga reading utility";
-            this.version = @"$(Constants.VER_MAJOR).$(Constants.VER_MINOR).$(Constants.VER_PATCH)";
+            this.version = @"$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)";
 
             this.license = "GPLv3";
             this.wrap_license = true;
@@ -49,6 +49,8 @@ namespace Biru.UI.Windows {
                     this.hide_on_delete ();
                 }
             });
+
+            this.show_all ();
         }
     }
 }

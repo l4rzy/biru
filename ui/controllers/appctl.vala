@@ -16,6 +16,7 @@
  *
  */
 
+using Biru.Core;
 using Biru.UI;
 using Biru.Utils;
 using Biru.Service;
@@ -79,8 +80,8 @@ namespace Biru.UI.Controllers {
 
             this.view.sig_switch_view.connect ((v) => {
                 if (v == Constants.STACK_HOME) {
-                    this.headerbar.set_title (Constants.APP_NAME);
-                    this.headerbar.set_subtitle (Constants.APP_LONGNAME);
+                    this.headerbar.set_title (APP_NAME);
+                    this.headerbar.set_subtitle (APP_LONGNAME);
                     return;
                 }
                 if (v == Constants.STACK_DETAILS) {
@@ -168,7 +169,8 @@ namespace Biru.UI.Controllers {
             });
 
             this.details.sig_page_clicked.connect ((book, index, opt) => {
-                message ("page %d of %s", index + 1, book.get_web_url ());
+                message ("page %d of %s", index, book.get_web_url ());
+                AppCtl.spawn_reader (book, index);
             });
 
             // application setup

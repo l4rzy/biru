@@ -16,7 +16,7 @@
  *
  */
 
-using Biru;
+using Biru.Core;
 using Biru.UI.Configs;
 
 /*
@@ -27,7 +27,7 @@ namespace Biru.UI {
         private Controllers.AppCtl ctl;
 
         public App () {
-            Object (application_id: Constants.APP_ID,
+            Object (application_id: APP_ID,
                     flags : ApplicationFlags.FLAGS_NONE);
 
             // setup
@@ -51,8 +51,8 @@ namespace Biru.UI {
 
         public override int handle_local_options (VariantDict options) {
             if (options.contains ("version")) {
-                print ("%s version %d.%d.%d\n", Constants.APP_NAME, Core.Constants.VER_MAJOR,
-                       Core.Constants.VER_MINOR, Core.Constants.VER_PATCH);
+                print ("%s version %d.%d.%d\n", APP_NAME, VER_MAJOR,
+                       VER_MINOR, VER_PATCH);
                 print ("Kernel version: %s\n", Posix.utsname ().release);
                 print ("GLib version: %u.%u.%u (%u.%u.%u)\n",
                        GLib.Version.major, GLib.Version.minor, GLib.Version.micro,

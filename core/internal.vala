@@ -17,9 +17,11 @@
  */
 
 namespace Biru.Core {
-    public class Constants {
-        public const int VER_MAJOR = 0;
-        public const int VER_MINOR = 0;
-        public const int VER_PATCH = 1;
-    }
+    public const int VER_MAJOR = 0;
+    public const int VER_MINOR = 0;
+    public const int VER_PATCH = 1;
+
+    public const string APP_ID = "io.l4rzy.biru";
+    public const string APP_NAME = "Biru";
+    public const string APP_LONGNAME = "An online manga reading utility";
 }
