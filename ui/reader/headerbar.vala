@@ -21,12 +21,72 @@ using Biru.Service;
 using Biru.UI.Configs;
 
 namespace Biru.UI.Reader {
+    public enum NaviButton {
+        NAVI_FIRST,
+        NAVI_PREV,
+        NAVI_NEXT,
+        NAVI_LAST
+    }
+
     public class HeaderBar : Gtk.HeaderBar {
-        public HeaderBar (Models.Book book) {
+        private int num_pages { get; set; }
+        private Gtk.Button next;
+        private Gtk.Button prev;
+        private Gtk.Button first;
+        private Gtk.Button last;
+
+        public signal void sig_navi (NaviButton btn);
+
+        public HeaderBar (Models.Book book, int index) {
             this.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-            this.set_title (S.READER_TITLE_PREFIX);
+            this.num_pages = (int) book.num_pages;
+            this.set_title (@"$(S.READER_TITLE_PREFIX) [$((index+1).to_string())/$(this.num_pages.to_string())]");
             this.set_subtitle (book.title.pretty);
             this.show_close_button = true;
+
+            this.next = new Gtk.Button.from_icon_name ("go-next-symbolic");
+            this.prev = new Gtk.Button.from_icon_name ("go-previous-symbolic");
+            this.first = new Gtk.Button.from_icon_name ("go-first-symbolic");
+            this.last = new Gtk.Button.from_icon_name ("go-last-symbolic");
+
+            this.pack_start (this.first);
+            this.pack_start (this.prev);
+            this.pack_start (this.next);
+            this.pack_start (this.last);
+
+            this.next.clicked.connect (() => {
+                sig_navi (NAVI_NEXT);
+            });
+
+            this.prev.clicked.connect (() => {
+                sig_navi (NAVI_PREV);
+            });
+
+            this.first.clicked.connect (() => {
+                sig_navi (NAVI_FIRST);
+            });
+
+            this.last.clicked.connect (() => {
+                sig_navi (NAVI_LAST);
+            });
+        }
+
+        public void update_reading_status (int index) {
+            if (index == 0) {
+                this.navi (false, false, true, true);
+            } else if (index == this.num_pages - 1) {
+                this.navi (true, true, false, false);
+            } else {
+                this.navi (true, true, true, true);
+            }
+            this.set_title (@"$(S.READER_TITLE_PREFIX) [$((index+1).to_string())/$(this.num_pages.to_string())]");
+        }
+
+        private void navi (bool first, bool prev, bool next, bool last) {
+            this.first.sensitive = first;
+            this.prev.sensitive = prev;
+            this.next.sensitive = next;
+            this.last.sensitive = last;
         }
     }
 }

@@ -16,6 +16,7 @@
  *
  */
 
+using Biru.Core;
 using Biru.UI;
 using Biru.Service.Models;
 
@@ -46,7 +47,7 @@ namespace Biru.UI.Windows {
             this.get_style_context ().add_class ("reader");
             // this.fullscreen();
 
-            this.headerbar = new Reader.HeaderBar (book);
+            this.headerbar = new Reader.HeaderBar (book, 0);
             this.set_titlebar (this.headerbar);
 
             this.book = book;
@@ -69,6 +70,23 @@ namespace Biru.UI.Windows {
             this.destroy.connect (() => {
                 message ("quitting, cancelling all async tasks");
                 this.cancl.cancel ();
+            });
+
+            this.headerbar.sig_navi.connect ((btn) => {
+                switch (btn) {
+                    case Reader.NaviButton.NAVI_FIRST:
+                        message ("go to first page");
+                        break;
+                    case Reader.NaviButton.NAVI_LAST:
+                        message ("go to last page");
+                        break;
+                    case Reader.NaviButton.NAVI_NEXT:
+                        message ("go to next page");
+                        break;
+                    case Reader.NaviButton.NAVI_PREV:
+                        message ("go to prev page");
+                        break;
+                }
             });
         }
 

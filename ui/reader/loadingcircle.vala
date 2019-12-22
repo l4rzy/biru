@@ -20,7 +20,7 @@ namespace Biru.UI.Reader {
     public class LoadingCircle : Gtk.Box {
         private Gtk.Overlay overlay;
         private Gtk.Spinner spinner;
-        private Gtk.ProgressBar progress;
+        private Gtk.Label page;
 
         public LoadingCircle () {
             Object (
