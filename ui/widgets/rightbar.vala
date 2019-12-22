@@ -42,13 +42,18 @@ namespace Biru.UI.Widgets {
 
         public RightBar () {
             this.options = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic");
+            this.options.can_focus = false;
             this.protect = new Gtk.Button.from_icon_name ("system-lock-screen-symbolic");
+            this.protect.can_focus = false;
             this.separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
             this.separator.set_vexpand (false);
             this.separator.set_hexpand (false);
             this.fav = new Gtk.Button.from_icon_name ("emblem-favorite-symbolic");
+            this.fav.can_focus = false;
             this.read = new Gtk.Button.from_icon_name ("view-paged-symbolic");
+            this.read.can_focus = false;
             this.download = new Gtk.Button.from_icon_name ("folder-download-symbolic");
+            this.download.can_focus = false;
 
             this.pack_start (this.fav);
             this.pack_start (this.download);

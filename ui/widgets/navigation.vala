@@ -28,8 +28,11 @@ namespace Biru.UI.Widgets {
         public Navigation () {
             Object ();
             this.back = new Gtk.Button.from_icon_name ("go-previous-symbolic");
+            this.back.can_focus = false;
             this.forw = new Gtk.Button.from_icon_name ("go-next-symbolic");
+            this.forw.can_focus = false;
             this.home = new Gtk.Button.from_icon_name ("go-home-symbolic");
+            this.home.can_focus = false;
 
             // disable back & forw by default
             this.back.sensitive = false;
