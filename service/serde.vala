@@ -60,6 +60,7 @@ namespace Biru.Service.Serde {
                 parser.load_from_stream (istream, null);
 
                 var node = parser.get_root ().get_object ();
+                // TODO: Handle this
                 // per_page is always 25
                 // num_pages is currently ignored
                 var result = node.get_array_member ("result");

@@ -43,12 +43,12 @@ namespace Biru.UI.Widgets {
             this.rightbar = new RightBar ();
             this.rightbar.stack_view (this.view);
             this.loading = new Loading ();
-            search_entry = new Gtk.Entry ();
-            search_entry.margin = 2;
-            search_entry.expand = true;
-            search_entry.placeholder_text = S.HEADER_SEARCH_PLACEHOLDER;
-            search_entry.primary_icon_name = "folder-saved-search-symbolic";
-            // search_entry.sensitive = true;
+            this.search_entry = new Gtk.Entry ();
+            this.search_entry.margin = 2;
+            this.search_entry.expand = true;
+            this.search_entry.placeholder_text = S.HEADER_SEARCH_PLACEHOLDER;
+            this.search_entry.primary_icon_name = "folder-saved-search-symbolic";
+            this.search_entry.get_style_context ().add_class ("sentry");
 
             // shamelessly copied from github.com/calo001/fondo
             search_entry.button_press_event.connect ((event) => {
