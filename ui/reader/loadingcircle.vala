@@ -30,10 +30,10 @@ namespace Biru.UI.Reader {
 
             this.overlay = new Gtk.Overlay ();
             this.spinner = new Gtk.Spinner ();
-            this.progress = new Gtk.ProgressBar ();
+            this.page = new Gtk.Label ("");
 
             this.overlay.add (this.spinner);
-            this.overlay.add (this.progress);
+            this.overlay.add (this.page);
 
             this.show_all ();
         }
@@ -44,6 +44,10 @@ namespace Biru.UI.Reader {
 
         public void stop () {
             this.spinner.active = false;
+        }
+
+        public void update(int index) {
+            this.page.set_label (@"$((index+1).to_string())");
         }
     }
 }
