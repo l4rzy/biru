@@ -30,6 +30,8 @@ sources += files (
     'reader/headerbar.vala',
     'reader/loadingcircle.vala',
     'reader/image.vala',
+    'reader/viewport.vala',
+    'reader/configs.vala',
 
     'controllers/appctl.vala',
 

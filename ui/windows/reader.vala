@@ -34,10 +34,8 @@ namespace Biru.UI.Windows {
         private unowned Book book;
 
         private Reader.HeaderBar headerbar;
-        private Gtk.Stack stack;
-        private Reader.Image image[3];
-        private Gtk.StackTransitionType anim;
-        private List<string ? > page_urls;
+        private Gtk.Overlay overlay;
+        private Reader.ViewPort viewport;
 
         public ReaderWin (Book book, int index) {
             Object (
@@ -51,19 +49,12 @@ namespace Biru.UI.Windows {
             this.set_titlebar (this.headerbar);
 
             this.book = book;
-            this.page_urls = book.get_page_urls ();
-            this.anim = Gtk.StackTransitionType.OVER_LEFT;
-            for (var i = 0; i < 3; i++) {
-                image[i] = new Reader.Image (this.cancl);
-            }
 
-            this.stack = new Gtk.Stack ();
-            this.stack.set_transition_duration (100);
-            for (var i = 0; i < 3; i++) {
-                this.stack.add_named (image[i], i.to_string ());
-            }
+            this.viewport = new Reader.ViewPort (Reader.Constants.NUM_PREV_PREFETCH,
+                                                 Reader.Constants.NUM_NEXT_PREFETCH, this.cancl);
+            this.viewport.load_book (this.book, index);
 
-            this.add (stack);
+            this.add (this.viewport);
             this.bind_keys ();
 
             // signals
@@ -82,16 +73,22 @@ namespace Biru.UI.Windows {
                         break;
                     case Reader.NaviButton.NAVI_NEXT:
                         message ("go to next page");
+                        this.viewport.next ();
                         break;
                     case Reader.NaviButton.NAVI_PREV:
                         message ("go to prev page");
+                        this.viewport.prev ();
                         break;
                 }
+            });
+
+            this.viewport.sig_viewing_page.connect ((index) => {
+                this.headerbar.update (index, (int) this.book.num_pages - 1);
             });
         }
 
         void bind_keys () {
-            this.key_press_event.connect ((e) => {
+            this.viewport.key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
                 message ("keycode: %u", keycode);
                 switch (keycode) {
@@ -99,55 +96,30 @@ namespace Biru.UI.Windows {
                         this.close ();
                         break;
                     case 114:
-                        this.next ();
+                        this.viewport.next ();
                         break;
                     case 113:
-                        this.prev ();
+                        this.viewport.prev ();
+                        break;
+                }
+                return true;
+            });
+
+            this.viewport.scroll_event.connect ((e) => {
+                switch (e.direction) {
+                    case Gdk.ScrollDirection.UP:
+                        message ("scrolling up");
+                        break;
+                    case Gdk.ScrollDirection.DOWN:
+                        message ("scrolling down");
                         break;
                 }
                 return true;
             });
         }
 
-        public void switch_view (int v) {
-            this.stack.set_visible_child_full (v.to_string (), anim);
-            this.view = v;
-        }
-
-        public void next () {
-            if (this.view == 2) {
-                this.switch_view (0);
-                message ("preloading view 1 & 2");
-                load (1, page + 1);
-                // load(2, page+2);
-            } else if (this.view == 1) {
-                this.switch_view (2);
-                message ("preloading view 0 & 1");
-                load (0, page + 1);
-                // load (1, page+2);
-            } else if (this.view == 0) {
-                this.switch_view (1);
-                message ("preloading view 2 & 0");
-                load (2, page + 1);
-                // load (0, page+2);
-            }
-            message ("next");
-            page += 1;
-        }
-
-        public void prev () {
-            message ("prev");
-        }
-
-        public void load (int view, uint page) {
-            this.image[view].load (this.page_urls.nth_data (page));
-        }
-
         public void init () {
-            load (0, page);
-            load (1, page + 1);
-            load (2, page + 2);
-            this.stack.set_visible_child_full ("0", anim);
+            this.viewport.init ();
         }
     }
 }

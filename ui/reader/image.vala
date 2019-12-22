@@ -20,7 +20,11 @@ using Biru.UI;
 namespace Biru.UI.Reader {
     public class Image : Gtk.Overlay {
         private unowned Cancellable ? cancl;
+        private bool loaded { get; set; default = false; }
+        private uint page { get; set; }
         private Widgets.Image image;
+
+        public signal void sig_loading_done (uint rpos);
 
         public Image (Cancellable ? cancl) {
             this.cancl = cancl;
@@ -28,11 +32,23 @@ namespace Biru.UI.Reader {
             this.add (image);
         }
 
-        public void load (string url) {
+        public void load (string url, uint rpos, uint upos) {
+            this.loaded = false;
             this.image.clear ();
-            this.image.set_from_url_async.begin (url, 800, 1000, true, this.cancl, () => {
-                stdout.printf ("done loading %s\n", url);
+            this.page = upos;
+            this.image.set_from_url_async.begin (url, Reader.Constants.READER_DEFAULT_W,
+                                                 Reader.Constants.READER_DEFAULT_H, true, this.cancl, () => {
+                this.loaded = true;
+                this.sig_loading_done (rpos);
             });
+        }
+
+        public bool is_loaded () {
+            return this.loaded;
+        }
+
+        public int get_index () {
+            return (int) this.page;
         }
     }
 }

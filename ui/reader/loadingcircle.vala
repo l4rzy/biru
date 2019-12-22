@@ -33,8 +33,9 @@ namespace Biru.UI.Reader {
             this.page = new Gtk.Label ("");
 
             this.overlay.add (this.spinner);
-            this.overlay.add (this.page);
+            this.overlay.add_overlay (this.page);
 
+            this.pack_start (this.overlay);
             this.show_all ();
         }
 
