@@ -33,7 +33,7 @@ namespace Biru.UI.Widgets {
             this.tag = tag;
             // this.hexpand = false;
             // message(String.wrap (tag.name, Constants.TAG_MAX_LEN));
-            this.set_label (tag.name);
+            this.set_label (@"$(tag.name) ($(tag.count.to_string()))");
             this.show_all ();
 
             this.button_press_event.connect ((event) => {
