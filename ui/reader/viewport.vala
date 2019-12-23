@@ -171,7 +171,6 @@ namespace Biru.UI.Reader {
             var urlptr = this.index () - this.cprev - 1;
             this.prefetch (this.sub (this.cprev + 1), urlptr);
 
-
             // view the previous ptr
             this.ringptr = this.sub (1);
             this.view (this.ringptr, this.anim_prev);

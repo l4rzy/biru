@@ -29,7 +29,7 @@ namespace Biru.UI.Views {
     public class Home : Gtk.ScrolledWindow {
         // common fields
         private Cancellable cancl;
-        private bool continous { get; set; default = false; }
+        private bool continuous { get; set; default = false; }
         private API api;
         public int api_page { get; set; default = 1; }
         private HomeType home_type { get; set; default = HOME_HOME; }
@@ -62,19 +62,29 @@ namespace Biru.UI.Views {
             this.api.sig_search_result.connect ((lst) => {
                 this.label.search_result (this.api.last_query);
                 this.home_type = HOME_SEARCH;
-                if (!this.continous) {
+                if (!this.continuous) {
                     this.clean ();
                 }
-                this.continous = false;
+                this.continuous = false;
+                this.insert_books (lst);
+            });
+
+            this.api.sig_searchtag_result.connect ((lst) => {
+                this.label.search_result (this.api.last_query);
+                this.home_type = HOME_SEARCH;
+                if (!this.continuous) {
+                    this.clean ();
+                }
+                this.continuous = false;
                 this.insert_books (lst);
             });
 
             this.api.sig_homepage_result.connect ((lst) => {
                 this.home_type = HOME_HOME;
-                if (!this.continous) {
+                if (!this.continuous) {
                     this.clean ();
                 }
-                this.continous = false;
+                this.continuous = false;
                 this.insert_books (lst);
             });
 
@@ -83,14 +93,10 @@ namespace Biru.UI.Views {
                     message ("scrolling reached bottom");
                     if (!this.api.is_running ()) {
                         sig_scroll_bottom ();
-                        this.continous = true;
+                        this.continuous = true;
                         this.api_page++;
-                        if (this.home_type == HOME_HOME) {
-                            this.api.homepage.begin (this.api_page, home_sort, this.cancl);
-                        } else {
-                            var query = this.api.last_query;
-                            this.api.search.begin (query, this.api_page, home_sort, this.cancl);
-                        }
+
+                        this.api.repeat_last (true);
                         this.sig_loading (true);
                     } else {
                         message ("please wait a bit more, api is running");

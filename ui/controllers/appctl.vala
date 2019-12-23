@@ -164,10 +164,25 @@ namespace Biru.UI.Controllers {
                 this.headerbar.stop_loading ();
             });
 
+            // clicking tags on bookdetails
             this.details.sig_tag_clicked.connect ((tag, opt) => {
-                message ("tag %s - opt: %d", tag.name, opt);
+                switch (opt) {
+                    case Menus.TagOption.TAG_OPTION_SEARCH:
+                        // cancel all previous image loadings
+                        this.home.cancel_loading ();
+                        this.details.cancel_loading ();
+                        this.home.api_page = 1;
+                        this.api.searchtag.begin (tag, home.api_page, SORT_POPULAR, null);
+                        this.view.home ();
+                        this.headerbar.start_loading ();
+                        break;
+                    default:
+                        message ("not implemented yet");
+                        break;
+                }
             });
 
+            // clicking preview pages on bookdetails
             this.details.sig_page_clicked.connect ((book, index, opt) => {
                 message ("page %d of %s", index, book.get_web_url ());
                 AppCtl.spawn_reader (book, index);
