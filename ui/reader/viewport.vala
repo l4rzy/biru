@@ -53,8 +53,8 @@ namespace Biru.UI.Reader {
             this.cprev = num_prev;
             this.cnext = num_next;
 
-            this.anim_next = Gtk.StackTransitionType.OVER_LEFT;
-            this.anim_prev = Gtk.StackTransitionType.OVER_RIGHT;
+            this.anim_next = Gtk.StackTransitionType.UNDER_LEFT;
+            this.anim_prev = Gtk.StackTransitionType.UNDER_RIGHT;
             this.anim_load = Gtk.StackTransitionType.CROSSFADE;
             this.transition_duration = 120;
 
