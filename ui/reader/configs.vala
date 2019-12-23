@@ -18,7 +18,7 @@
 
 namespace Biru.UI.Reader {
     public class Constants {
-        public const int NUM_NEXT_PREFETCH = 4;
+        public const int NUM_NEXT_PREFETCH = 3;
         public const int NUM_PREV_PREFETCH = 2;
 
         public const int READER_DEFAULT_W = 800;

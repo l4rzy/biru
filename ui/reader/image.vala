@@ -21,7 +21,7 @@ namespace Biru.UI.Reader {
     public class Image : Gtk.Overlay {
         private unowned Cancellable ? cancl;
         private bool loaded { get; set; default = false; }
-        private uint page { get; set; }
+        private uint _index { get; set; }
         private Widgets.Image image;
 
         public signal void sig_loading_done (uint rpos);
@@ -39,7 +39,7 @@ namespace Biru.UI.Reader {
         public void load (string url, uint rpos, uint upos) {
             this.loaded = false;
             this.image.clear ();
-            this.page = upos;
+            this._index = upos;
             this.image.set_from_url_async.begin (url, Reader.Constants.READER_DEFAULT_W,
                                                  Reader.Constants.READER_DEFAULT_H, true, this.cancl, () => {
                 this.loaded = true;
@@ -52,8 +52,8 @@ namespace Biru.UI.Reader {
             return this.loaded;
         }
 
-        public int get_index () {
-            return (int) this.page;
+        public uint get_index () {
+            return this._index;
         }
     }
 }

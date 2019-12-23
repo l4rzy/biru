@@ -31,6 +31,7 @@ namespace Biru.UI.Reader {
             this.overlay = new Gtk.Overlay ();
             this.spinner = new Gtk.Spinner ();
             this.page = new Gtk.Label ("");
+            this.page.get_style_context ().add_class ("pagenumber");
 
             this.overlay.add (this.spinner);
             this.overlay.add_overlay (this.page);
