@@ -61,6 +61,11 @@ Run with
 ./biru
 ```
 
+## Screenshots
+<img src="https://i.imgur.com/vz9olRd.png" alt="details" width=500> <img src="https://i.imgur.com/qmTkNrY.png" alt="reader" width=300>
+
+More at [Screenshots](https://imgur.com/a/QHQkIkO)
+
 ## Contributing
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md)
