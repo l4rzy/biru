@@ -27,6 +27,12 @@ namespace Biru.Service {
         UNKNOWN
     }
 
+    public enum APIType {
+        API_HOME,
+        API_SEARCH,
+        API_SEARCHTAG
+    }
+
     public enum SortType {
         SORT_POPULAR,
         SORT_DATE;
@@ -58,6 +64,10 @@ namespace Biru.Service {
             return @"$(Constants.NH_HOME)/api/gallery/$(book_id.to_string())";
         }
 
+        public static string get_tag_url (int64 tag_id, int page_num, SortType sort) {
+            return @"$(Constants.NH_HOME)/api/galleries/tagged?tag_id=$(tag_id.to_string())&page=$(page_num.to_string())&sort=$(sort.to_string())";
+        }
+
         public static string __get_t_url (string media_id) {
             return @"$(Constants.NH_THUMB)/galleries/$(media_id)";
         }
@@ -87,13 +97,19 @@ namespace Biru.Service {
     public class API {
         private bool running { get; set; default = false; }
         private Soup.Session session;
+
+        // save api last call params to repeat it if neccessary
+        private unowned Cancellable ? last_cancl { get; set; }
+        public unowned Tag ? last_tag { get; set; }
         public string last_query { get; set; default = ""; }
+        private APIType last_api_type { get; set; }
         public int last_page_num { get; set; default = 1; }
         public SortType last_sort { get; set; default = SORT_DATE; }
 
         // api functions are called asynchronously from the UI, so it returns
         // by emitting signals
         public signal void sig_search_result (List<Book ? > lst);
+        public signal void sig_searchtag_result (List<Book ? > lst);
         public signal void sig_homepage_result (List<Book ? > lst);
         public signal void sig_related_result (List<Book ? > lst);
         public signal void sig_error (Error err);
@@ -108,6 +124,23 @@ namespace Biru.Service {
             this.session.max_conns = 16;
             // this.session.use_thread_context = false;
             this.session.user_agent = Constants.NH_UA;
+        }
+
+        public void repeat_last (bool inc_page_num = true) {
+            if (inc_page_num) {
+                this.last_page_num++;
+            }
+            switch (this.last_api_type) {
+                case API_HOME:
+                    this.homepage.begin (this.last_page_num, this.last_sort, this.last_cancl);
+                    break;
+                case API_SEARCH:
+                    this.search.begin (this.last_query, this.last_page_num, this.last_sort, this.last_cancl);
+                    break;
+                case API_SEARCHTAG:
+                    this.searchtag.begin (this.last_tag, this.last_page_num, this.last_sort, this.last_cancl);
+                    break;
+            }
         }
 
         public async void search_a (string query, int page_num, SortType sort, Cancellable ? cancl) throws Error {
@@ -146,6 +179,7 @@ namespace Biru.Service {
         // experimental: bring request to background thread to prevent ui block
         public async void search (string query, int page_num, SortType sort, Cancellable ? cancl) throws Error {
             this.running = true;
+            this.last_api_type = API_SEARCH;
             this.last_query = query;
             this.last_page_num = page_num;
             this.last_sort = sort;
@@ -160,6 +194,42 @@ namespace Biru.Service {
             });
             yield;
             sig_search_result (ret);
+            this.running = false;
+        }
+
+        // synchronous search function
+        public List<Book ? > __searchtag (int64 tag_id, int page_num, SortType sort, Cancellable ? cancl) {
+            var url = URLBuilder.get_tag_url (tag_id, page_num, sort);
+            var mess = new Soup.Message ("GET", url);
+
+            try {
+                InputStream istream = this.session.send (mess, cancl);
+                var ret = Parser.parse_search_result (istream);
+                return ret;
+            } catch (Error e) {
+                return new List<Book ? >();
+            }
+        }
+
+        // experimental: bring request to background thread to prevent ui block
+        public async void searchtag (Tag tag, int page_num, SortType sort, Cancellable ? cancl) throws Error {
+            this.running = true;
+            this.last_api_type = API_SEARCHTAG;
+            this.last_tag = tag;
+            this.last_query = @"$(tag._type): $(tag.name)";
+            this.last_page_num = page_num;
+            this.last_sort = sort;
+
+            SourceFunc callb = searchtag.callback;
+            var ret = new List<Book ? >();
+
+            new Thread<bool>("request searchtag", () => {
+                ret = __searchtag (tag.id, page_num, sort, cancl);
+                Idle.add ((owned) callb);
+                return true;
+            });
+            yield;
+            sig_searchtag_result (ret);
             this.running = false;
         }
 
@@ -196,6 +266,7 @@ namespace Biru.Service {
         // experimental: bring request to background thread to prevent ui block
         public async void homepage (int page_num, SortType sort, Cancellable ? cancl) throws Error {
             this.running = true;
+            this.last_api_type = API_HOME;
             this.last_page_num = page_num;
 
             var ret = new List<Book ? >();
