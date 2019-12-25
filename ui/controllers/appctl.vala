@@ -71,12 +71,6 @@ namespace Biru.UI.Controllers {
             this.win.add (this.stack);
 
             // global signals setup
-            this.api.sig_error.connect ((err) => {
-                this.view.warning ();
-                message ("api request error");
-                this.headerbar.stop_loading ();
-                this.block_header (false);
-            });
 
             this.view.sig_switch_view.connect ((v) => {
                 if (v == Constants.STACK_HOME) {
@@ -125,6 +119,8 @@ namespace Biru.UI.Controllers {
                     case Widgets.RightBarBtn.RIGHTBAR_READ:
                         AppCtl.spawn_reader (this.details.get_book ());
                         break;
+                    case Widgets.RightBarBtn.RIGHTBAR_OPTIONS:
+                        break; // options button acts on its own for now
                     default:
                         message ("not implemented yet");
                         break;

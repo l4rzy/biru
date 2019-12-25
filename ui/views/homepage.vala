@@ -59,33 +59,45 @@ namespace Biru.UI.Views {
             this.add (this.content);
 
             // connect signals
-            this.api.sig_search_result.connect ((lst) => {
+            this.api.sig_search_result.connect ((resp) => {
+                if (resp.error != null) {
+                    message (@"API error: $(resp.error.message)");
+                }
+
                 this.label.search_result (this.api.last_query);
                 this.home_type = HOME_SEARCH;
                 if (!this.continuous) {
                     this.clean ();
                 }
                 this.continuous = false;
-                this.insert_books (lst);
+                this.insert_books (resp.books);
             });
 
-            this.api.sig_searchtag_result.connect ((lst) => {
+            this.api.sig_searchtag_result.connect ((resp) => {
+                if (resp.error != null) {
+                    message (@"API error: $(resp.error.message)");
+                }
                 this.label.search_result (this.api.last_query);
                 this.home_type = HOME_SEARCH;
                 if (!this.continuous) {
                     this.clean ();
                 }
                 this.continuous = false;
-                this.insert_books (lst);
+                this.insert_books (resp.books);
             });
 
-            this.api.sig_homepage_result.connect ((lst) => {
+            this.api.sig_homepage_result.connect ((resp) => {
+                if (resp.error != null) {
+                    // TODO: error processing and show warning view with a reload button
+                    message (@"API error: $(resp.error.message)");
+                }
+                message ("received %lld pages", resp.page_count);
                 this.home_type = HOME_HOME;
                 if (!this.continuous) {
                     this.clean ();
                 }
                 this.continuous = false;
-                this.insert_books (lst);
+                this.insert_books (resp.books);
             });
 
             this.edge_reached.connect ((pos) => {
