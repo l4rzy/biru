@@ -43,6 +43,13 @@ namespace Biru.Service.Serde {
                 var page_count = node.get_int_member ("num_pages");
                 var result = node.get_array_member ("result");
 
+                // len == 0 means API reaches the last page,
+                // do nothing else but return
+                if (result.get_length () == 0) {
+                    ret.error = new APIError.LAST ("last page reached");
+                    return ret;
+                }
+
                 foreach (var jbook in result.get_elements ()) {
                     var b = Parser.parse_book (jbook);
                     list.append (b);

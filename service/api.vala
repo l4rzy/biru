@@ -22,8 +22,9 @@ using Biru.Service.Models;
 
 namespace Biru.Service {
     public errordomain APIError {
-        HTTP_ERROR,
-        JSON_ERROR
+        HTTP_ERROR, // error in HTTP request
+        JSON_ERROR, // error in JSON parsing
+        LAST // not really an error, this means the last page
     }
 
     public enum APIType {
