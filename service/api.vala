@@ -21,10 +21,9 @@ using Biru.Service.Serde;
 using Biru.Service.Models;
 
 namespace Biru.Service {
-
-    errordomain ErrorAPI {
-        UNAVAIL,
-        UNKNOWN
+    public errordomain APIError {
+        HTTP_ERROR,
+        JSON_ERROR
     }
 
     public enum APIType {
@@ -43,6 +42,17 @@ namespace Biru.Service {
             } else {
                 return "popular";
             }
+        }
+    }
+
+    public class APIResp {
+        public List<Book ? > books;
+        public int64 page_count { get; set; default = 0; }
+        public APIError ? error;
+
+        public APIResp () {
+            this.books = null;
+            this.error = null;
         }
     }
 
@@ -108,11 +118,10 @@ namespace Biru.Service {
 
         // api functions are called asynchronously from the UI, so it returns
         // by emitting signals
-        public signal void sig_search_result (List<Book ? > lst);
-        public signal void sig_searchtag_result (List<Book ? > lst);
-        public signal void sig_homepage_result (List<Book ? > lst);
-        public signal void sig_related_result (List<Book ? > lst);
-        public signal void sig_error (Error err);
+        public signal void sig_search_result (APIResp resp);
+        public signal void sig_searchtag_result (APIResp resp);
+        public signal void sig_homepage_result (APIResp resp);
+        public signal void sig_related_result (APIResp resp);
 
         // this makes API sharable amongst objects via API.get()
         private static API ? instance;
@@ -143,36 +152,23 @@ namespace Biru.Service {
             }
         }
 
-        public async void search_a (string query, int page_num, SortType sort, Cancellable ? cancl) throws Error {
-            this.last_query = query;
-            this.last_page_num = page_num;
-            this.last_sort = sort;
-
-            var url = URLBuilder.get_search_url (query, page_num, sort);
-            var mess = new Soup.Message ("GET", url);
-            try {
-                InputStream istream = yield session.send_async (mess, cancl);
-
-                var ret = yield Parser.parse_search_result_async (istream);
-
-                sig_search_result (ret);
-            } catch (Error e) {
-                sig_error (e);
-                throw e;
-            }
-        }
-
         // synchronous search function
-        public List<Book ? > __search (string query, int page_num, SortType sort, Cancellable ? cancl) {
+        public APIResp __search (string query, int page_num, SortType sort, Cancellable ? cancl) {
             var url = URLBuilder.get_search_url (query, page_num, sort);
             var mess = new Soup.Message ("GET", url);
 
             try {
                 InputStream istream = this.session.send (mess, cancl);
-                var ret = Parser.parse_search_result (istream);
-                return ret;
+                if (mess.status_code != 200) {
+                    var ret = new APIResp ();
+                    ret.error = new APIError.HTTP_ERROR ("code: $(mess.status_code.to_string())");
+                    return ret;
+                }
+                return Parser.parse_search_result (istream);
             } catch (Error e) {
-                return new List<Book ? >();
+                var ret = new APIResp ();
+                ret.error = new APIError.HTTP_ERROR (e.message);
+                return ret;
             }
         }
 
@@ -185,29 +181,37 @@ namespace Biru.Service {
             this.last_sort = sort;
 
             SourceFunc callb = search.callback;
-            var ret = new List<Book ? >();
+            var resp = new APIResp ();
 
             new Thread<bool>("request search", () => {
-                ret = __search (query, page_num, sort, cancl);
+                resp = __search (query, page_num, sort, cancl);
                 Idle.add ((owned) callb);
                 return true;
             });
             yield;
-            sig_search_result (ret);
+            // error checking before signalling
+            sig_search_result (resp);
             this.running = false;
         }
 
         // synchronous search function
-        public List<Book ? > __searchtag (int64 tag_id, int page_num, SortType sort, Cancellable ? cancl) {
+        public APIResp __searchtag (int64 tag_id, int page_num, SortType sort, Cancellable ? cancl) {
             var url = URLBuilder.get_tag_url (tag_id, page_num, sort);
             var mess = new Soup.Message ("GET", url);
 
             try {
                 InputStream istream = this.session.send (mess, cancl);
+                if (mess.status_code != 200) {
+                    var ret = new APIResp ();
+                    ret.error = new APIError.HTTP_ERROR ("code: $(mess.status_code.to_string())");
+                    return ret;
+                }
                 var ret = Parser.parse_search_result (istream);
                 return ret;
             } catch (Error e) {
-                return new List<Book ? >();
+                var ret = new APIResp ();
+                ret.error = new APIError.HTTP_ERROR (e.message);
+                return ret;
             }
         }
 
@@ -221,7 +225,7 @@ namespace Biru.Service {
             this.last_sort = sort;
 
             SourceFunc callb = searchtag.callback;
-            var ret = new List<Book ? >();
+            var ret = new APIResp ();
 
             new Thread<bool>("request searchtag", () => {
                 ret = __searchtag (tag.id, page_num, sort, cancl);
@@ -233,33 +237,23 @@ namespace Biru.Service {
             this.running = false;
         }
 
-        public async void homepage_a (int page_num, SortType sort, Cancellable ? cancl) throws Error {
-            this.last_page_num = page_num;
-
-            var url = URLBuilder.get_homepage_url (page_num, sort);
-            var mess = new Soup.Message ("GET", url);
-            try {
-                InputStream istream = yield this.session.send_async (mess, cancl);
-
-                var ret = yield Parser.parse_search_result_async (istream);
-
-                sig_homepage_result (ret);
-            } catch (Error e) {
-                sig_error (e);
-                throw e;
-            }
-        }
-
         // synchronous function to call in another thread
-        public List<Book ? > __homepage (int page_num, SortType sort, Cancellable ? cancl) {
+        public APIResp __homepage (int page_num, SortType sort, Cancellable ? cancl) {
             var url = URLBuilder.get_homepage_url (page_num, sort);
             var mess = new Soup.Message ("GET", url);
             try {
                 InputStream istream = this.session.send (mess, cancl);
+                if (mess.status_code != 200) {
+                    var ret = new APIResp ();
+                    ret.error = new APIError.HTTP_ERROR ("code: $(mess.status_code.to_string())");
+                    return ret;
+                }
                 var ret = Parser.parse_search_result (istream);
                 return ret;
             } catch (Error e) {
-                return new List<Book ? >();
+                var ret = new APIResp ();
+                ret.error = new APIError.HTTP_ERROR (e.message);
+                return ret;
             }
         }
 
@@ -269,7 +263,7 @@ namespace Biru.Service {
             this.last_api_type = API_HOME;
             this.last_page_num = page_num;
 
-            var ret = new List<Book ? >();
+            var ret = new APIResp ();
             SourceFunc callb = homepage.callback;
 
             new Thread<bool>("request home", () => {
@@ -282,32 +276,23 @@ namespace Biru.Service {
             this.running = false;
         }
 
-        public async void related_a (int64 book_id) throws Error {
-            var url = URLBuilder.get_related_books_url (book_id);
-            var mess = new Soup.Message ("GET", url);
-
-            try {
-                InputStream istream = yield this.session.send_async (mess, null);
-
-                var ret = yield Parser.parse_search_result_async (istream);
-
-                sig_related_result (ret);
-            } catch (Error e) {
-                sig_error (e);
-                throw e;
-            }
-        }
-
         // synchronous function to call in another thread
-        public List<Book ? > __related (int64 book_id, Cancellable ? cancl) {
+        public APIResp __related (int64 book_id, Cancellable ? cancl) {
             var url = URLBuilder.get_related_books_url (book_id);
             var mess = new Soup.Message ("GET", url);
             try {
                 InputStream istream = this.session.send (mess, cancl);
+                if (mess.status_code != 200) {
+                    var ret = new APIResp ();
+                    ret.error = new APIError.HTTP_ERROR ("code: $(mess.status_code.to_string())");
+                    return ret;
+                }
                 var ret = Parser.parse_search_result (istream);
                 return ret;
             } catch (Error e) {
-                return new List<Book ? >();
+                var ret = new APIResp ();
+                ret.error = new APIError.HTTP_ERROR (e.message);
+                return ret;
             }
         }
 
@@ -315,7 +300,7 @@ namespace Biru.Service {
         public async void related (int64 book_id, Cancellable ? cancl) throws Error {
             this.running = true;
 
-            var ret = new List<Book ? >();
+            var ret = new APIResp ();
             SourceFunc callb = related.callback;
 
             new Thread<bool>("request related", () => {

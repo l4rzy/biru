@@ -16,6 +16,7 @@
  *
  */
 
+using Biru.Service;
 using Biru.Service.Models;
 
 namespace Biru.Service.Serde {
@@ -29,51 +30,31 @@ namespace Biru.Service.Serde {
             return b;
         }
 
-        // async parser
-        public static async List<Book ? > parse_search_result_async (InputStream istream) throws Error {
-            var list = new List<Book ? >();
-            var parser = new Json.Parser ();
-            try {
-                yield parser.load_from_stream_async (istream, null);
-
-                var node = parser.get_root ().get_object ();
-                // per_page is always 25
-                // num_pages is currently ignored
-                var result = node.get_array_member ("result");
-
-                foreach (var jbook in result.get_elements ()) {
-                    var b = Parser.parse_book (jbook);
-                    list.append (b);
-                }
-            } catch (Error e) {
-                throw e;
-            }
-
-            return list;
-        }
-
         // parser
-        public static List<Book ? > parse_search_result (InputStream istream) throws Error {
+        public static APIResp parse_search_result (InputStream istream) {
+            var ret = new APIResp ();
             var list = new List<Book ? >();
             var parser = new Json.Parser ();
             try {
                 parser.load_from_stream (istream, null);
 
                 var node = parser.get_root ().get_object ();
-                // TODO: Handle this
                 // per_page is always 25
-                // num_pages is currently ignored
+                var page_count = node.get_int_member ("num_pages");
                 var result = node.get_array_member ("result");
 
                 foreach (var jbook in result.get_elements ()) {
                     var b = Parser.parse_book (jbook);
                     list.append (b);
                 }
+
+                ret.books = (owned) list;
+                ret.page_count = page_count;
             } catch (Error e) {
-                throw e;
+                ret.error = new APIError.JSON_ERROR (e.message);
             }
 
-            return list;
+            return ret;
         }
     }
 }
