@@ -41,6 +41,7 @@ namespace Biru.UI.Windows {
             Object (
                 modal: true
             );
+            this.set_events (Gdk.EventMask.SCROLL_MASK);
             this.cancl = new Cancellable ();
             this.get_style_context ().add_class ("reader");
             // this.fullscreen();
@@ -67,8 +68,10 @@ namespace Biru.UI.Windows {
                 switch (btn) {
                     case Reader.NaviButton.NAVI_FIRST:
                         message ("go to first page");
+                        this.viewport.to_first ();
                         break;
                     case Reader.NaviButton.NAVI_LAST:
+                        this.viewport.to_last ();
                         message ("go to last page");
                         break;
                     case Reader.NaviButton.NAVI_NEXT:
@@ -88,7 +91,7 @@ namespace Biru.UI.Windows {
         }
 
         void bind_keys () {
-            this.viewport.key_press_event.connect ((e) => {
+            this.key_press_event.connect ((e) => {
                 uint keycode = e.hardware_keycode;
                 message ("keycode: %u", keycode);
                 switch (keycode) {
@@ -105,7 +108,7 @@ namespace Biru.UI.Windows {
                 return true;
             });
 
-            this.viewport.scroll_event.connect ((e) => {
+            this.scroll_event.connect ((e) => {
                 switch (e.direction) {
                     case Gdk.ScrollDirection.UP:
                         message ("scrolling up");

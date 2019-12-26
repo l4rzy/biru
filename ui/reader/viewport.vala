@@ -46,7 +46,6 @@ namespace Biru.UI.Reader {
             Object ();
 
             this.cancl = cancl;
-            this.set_events (Gdk.EventMask.SCROLL_MASK);
             this.set_events (Gdk.EventMask.KEY_PRESS_MASK);
 
             this.nbase = num_prev + num_next + 1; // one current node
@@ -80,8 +79,8 @@ namespace Biru.UI.Reader {
 
             this.cancl.cancelled.connect (() => {
                 this.ring_cancl.foreach ((cancl) => {
-                    message ("cancelled~");
                     cancl.cancel ();
+                    message ("cancelled~");
                 });
             });
         }
@@ -94,8 +93,9 @@ namespace Biru.UI.Reader {
         // associate upos to rpos
         private void prefetch (uint rpos, uint upos) {
             // first cancel the previous loading if any
-            this.ring_cancl.nth_data (rpos).cancel ();
-            this.ring_cancl.nth_data (rpos).reset ();
+            var cancl = this.ring_cancl.nth_data (rpos);
+            cancl.cancel ();
+            cancl.reset ();
 
             // then assosiate new index to ring and load it
             // this work with negative index, too, as long as
@@ -110,11 +110,7 @@ namespace Biru.UI.Reader {
             message ("ring pointer %u is associated with url pointer %u", rpos, upos);
         }
 
-        public void load_book (Models.Book book, int index) {
-            this.ringptr = 0; // current page is 0
-            this.urls = book.get_page_urls ();
-            this.num_pages = (uint) book.num_pages;
-
+        public void load_at_index (int index) {
             // current page and next cached pages
             for (var i = 0; i <= this.cnext; i++) {
                 this.prefetch (this.plus (i), (uint) index + i);
@@ -124,6 +120,14 @@ namespace Biru.UI.Reader {
             for (var i = 1; i <= this.cprev; i++) {
                 this.prefetch (this.sub (i), (uint) index - i);
             }
+        }
+
+        public void load_book (Models.Book book, int index) {
+            this.ringptr = 0; // current ringindex is 0
+            this.urls = book.get_page_urls ();
+            this.num_pages = (uint) book.num_pages;
+
+            this.load_at_index (index);
         }
 
         private void viewloading () {
@@ -176,7 +180,14 @@ namespace Biru.UI.Reader {
             this.view (this.ringptr, this.anim_prev);
         }
 
-        public void to_index (int index) {
+        public void to_first () {
+            this.load_at_index (0);
+            this.view (this.ringptr, this.anim_prev);
+        }
+
+        public void to_last () {
+            this.load_at_index ((int) this.num_pages - 1);
+            this.view (this.ringptr, this.anim_next);
         }
 
         public void init () {
