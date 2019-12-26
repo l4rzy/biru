@@ -28,7 +28,7 @@ namespace Biru.UI.Views {
 
     public class Home : Gtk.ScrolledWindow {
         // common fields
-        private Cancellable cancl;
+        private Cancellable ? cancl;
         private bool continuous { get; set; default = false; }
         private API api;
         public int api_page { get; set; default = 1; }
@@ -60,44 +60,47 @@ namespace Biru.UI.Views {
 
             // connect signals
             this.api.sig_search_result.connect ((resp) => {
-                if (resp.error != null) {
-                    message (@"API error: $(resp.error.message)");
-                }
-
                 this.label.search_result (this.api.last_query, resp.page_count);
                 this.home_type = HOME_SEARCH;
                 if (!this.continuous) {
                     this.clean ();
                 }
                 this.continuous = false;
+
+                if (resp.error != null) {
+                    message (@"API error: $(resp.error.message)");
+                    this.sig_loading (false);
+                    return;
+                }
                 this.insert_books (resp.books);
             });
 
             this.api.sig_searchtag_result.connect ((resp) => {
-                if (resp.error != null) {
-                    message (@"API error: $(resp.error.message)");
-                }
-
                 this.label.search_result (this.api.last_query, resp.page_count);
                 this.home_type = HOME_SEARCH;
                 if (!this.continuous) {
                     this.clean ();
                 }
                 this.continuous = false;
+                if (resp.error != null) {
+                    message (@"API error: $(resp.error.message)");
+                    this.sig_loading (false);
+                    return;
+                }
                 this.insert_books (resp.books);
             });
 
             this.api.sig_homepage_result.connect ((resp) => {
-                if (resp.error != null) {
-                    // TODO: error processing and show warning view with a reload button
-                    message (@"API error: $(resp.error.message)");
-                }
-                message ("received %lld pages", resp.page_count);
                 this.home_type = HOME_HOME;
                 if (!this.continuous) {
                     this.clean ();
                 }
                 this.continuous = false;
+                if (resp.error != null) {
+                    message (@"API error: $(resp.error.message)");
+                    this.sig_loading (false);
+                    return;
+                }
                 this.insert_books (resp.books);
             });
 
