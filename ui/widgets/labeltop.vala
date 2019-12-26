@@ -34,8 +34,12 @@ namespace Biru.UI.Widgets {
             this.get_style_context ().add_class ("labeltop");
         }
 
-        public void search_result (string query) {
-            this.label = @"Results for \"$(query)\"";
+        public void search_result (string query, int64 page_count = -1) {
+            if (page_count == -1) {
+                this.label = @"Results for \"$(query)\"";
+                return;
+            }
+            this.label = @"Results for \"$(query)\" | $(page_count.to_string()) page(s)";
         }
 
         public void home () {
