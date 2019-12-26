@@ -24,7 +24,8 @@ namespace Biru.Service {
     public errordomain APIError {
         HTTP_ERROR, // error in HTTP request
         JSON_ERROR, // error in JSON parsing
-        LAST // not really an error, this means the last page
+        EMPTY, // the result is empty
+        LAST_PAGE // last page reached
     }
 
     public enum APIType {
@@ -191,6 +192,9 @@ namespace Biru.Service {
             });
             yield;
             // error checking before signalling
+            if (resp.page_count < page_num && resp.page_count > 0) {
+                resp.error = new APIError.LAST_PAGE ("last page reached");
+            }
             sig_search_result (resp);
             this.running = false;
         }
@@ -226,15 +230,19 @@ namespace Biru.Service {
             this.last_sort = sort;
 
             SourceFunc callb = searchtag.callback;
-            var ret = new APIResp ();
+            var resp = new APIResp ();
 
             new Thread<bool>("request searchtag", () => {
-                ret = __searchtag (tag.id, page_num, sort, cancl);
+                resp = __searchtag (tag.id, page_num, sort, cancl);
                 Idle.add ((owned) callb);
                 return true;
             });
             yield;
-            sig_searchtag_result (ret);
+            // error checking before signalling
+            if (resp.page_count < page_num && resp.page_count > 0) {
+                resp.error = new APIError.LAST_PAGE ("last page reached");
+            }
+            sig_searchtag_result (resp);
             this.running = false;
         }
 

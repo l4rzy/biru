@@ -45,8 +45,8 @@ namespace Biru.Service.Serde {
 
                 // len == 0 means API reaches the last page,
                 // do nothing else but return
-                if (result.get_length () == 0) {
-                    ret.error = new APIError.LAST ("last page reached");
+                if (page_count == 0 || result.get_length () == 0) {
+                    ret.error = new APIError.EMPTY ("no results");
                     return ret;
                 }
 

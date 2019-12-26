@@ -64,7 +64,7 @@ namespace Biru.UI.Views {
                     message (@"API error: $(resp.error.message)");
                 }
 
-                this.label.search_result (this.api.last_query);
+                this.label.search_result (this.api.last_query, resp.page_count);
                 this.home_type = HOME_SEARCH;
                 if (!this.continuous) {
                     this.clean ();
@@ -77,7 +77,8 @@ namespace Biru.UI.Views {
                 if (resp.error != null) {
                     message (@"API error: $(resp.error.message)");
                 }
-                this.label.search_result (this.api.last_query);
+
+                this.label.search_result (this.api.last_query, resp.page_count);
                 this.home_type = HOME_SEARCH;
                 if (!this.continuous) {
                     this.clean ();
