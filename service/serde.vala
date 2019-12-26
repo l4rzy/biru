@@ -33,22 +33,23 @@ namespace Biru.Service.Serde {
         // parser
         public static APIResp parse_search_result (InputStream istream) {
             var ret = new APIResp ();
-            var list = new List<Book ? >();
             var parser = new Json.Parser ();
+
             try {
                 parser.load_from_stream (istream, null);
-
                 var node = parser.get_root ().get_object ();
+
                 // per_page is always 25
                 var page_count = node.get_int_member ("num_pages");
-                var result = node.get_array_member ("result");
+                ret.page_count = page_count;
 
-                // len == 0 means API reaches the last page,
-                // do nothing else but return
-                if (page_count == 0 || result.get_length () == 0) {
+                if (page_count == 0) {
                     ret.error = new APIError.EMPTY ("no results");
                     return ret;
                 }
+
+                var list = new List<Book ? >();
+                var result = node.get_array_member ("result");
 
                 foreach (var jbook in result.get_elements ()) {
                     var b = Parser.parse_book (jbook);
@@ -56,7 +57,6 @@ namespace Biru.Service.Serde {
                 }
 
                 ret.books = (owned) list;
-                ret.page_count = page_count;
             } catch (Error e) {
                 ret.error = new APIError.JSON_ERROR (e.message);
             }

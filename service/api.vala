@@ -192,7 +192,7 @@ namespace Biru.Service {
             });
             yield;
             // error checking before signalling
-            if (resp.page_count < page_num && resp.page_count > 0) {
+            if (page_num > resp.page_count) {
                 resp.error = new APIError.LAST_PAGE ("last page reached");
             }
             sig_search_result (resp);
@@ -202,6 +202,7 @@ namespace Biru.Service {
         // synchronous search function
         public APIResp __searchtag (int64 tag_id, int page_num, SortType sort, Cancellable ? cancl) {
             var url = URLBuilder.get_tag_url (tag_id, page_num, sort);
+            message (url);
             var mess = new Soup.Message ("GET", url);
 
             try {
@@ -239,7 +240,7 @@ namespace Biru.Service {
             });
             yield;
             // error checking before signalling
-            if (resp.page_count < page_num && resp.page_count > 0) {
+            if (page_num > resp.page_count) {
                 resp.error = new APIError.LAST_PAGE ("last page reached");
             }
             sig_searchtag_result (resp);
