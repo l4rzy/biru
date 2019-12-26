@@ -1,6 +1,6 @@
 ## Getting Started
 
-These instructions will get you a brief view of how to set up development environment to contribute to this project
+These instructions will get you a brief view of how to set up development environment to contribute to this project. 
 
 ### Disclaimer
 
@@ -14,4 +14,4 @@ This project is in a very early stage, so things are expected to change a lot, i
 
 ###  Plan, tasks and assignments
 
-WIP
+We manage tasks and plans on our [Github Project](https://github.com/l4rzy/biru/projects). Checkout to see anything that you want and/or able to help, then fire an issue, waiting for assignments to make sure nobody else is working on your task, and you are ready to go. This project is pretty much beginner-friendly, so don't hesitate to contribute, I would be appreciating.
