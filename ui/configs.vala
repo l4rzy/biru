@@ -48,6 +48,7 @@ namespace Biru.UI.Configs {
         public const string BOOKCARD_MENU_READ = "Read";
         public const string BOOKCARD_MENU_DETAILS = "Details";
         public const string BOOKCARD_MENU_FAVOR = "Add to favors";
+        public const string BOOKCARD_MENU_COPYLINK = "Copy web url";
         public const string BOOKCARD_MENU_DOWNLOAD = "Download";
 
         public const string HEADER_MENU_SETTINGS = "Settings";
@@ -55,6 +56,7 @@ namespace Biru.UI.Configs {
 
         public const string TAG_MENU_FAVOR = "Add to favors";
         public const string TAG_MENU_SEARCH = "Search this tag";
+        public const string TAG_MENU_COPYLINK = "Copy web url";
 
         public const string DETAILS_CAT_PARODY = "Parody:";
         public const string DETAILS_CAT_CHARACTER = "Character:";

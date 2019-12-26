@@ -25,7 +25,8 @@ namespace Biru.UI.Widgets {
         BOOKCARD_READ,
         BOOKCARD_DETAILS,
         BOOKCARD_FAVOR,
-        BOOKCARD_DOWNLOAD
+        BOOKCARD_DOWNLOAD,
+        BOOKCARD_COPYLINK
     }
 
     public class BookCard : Gtk.Button {

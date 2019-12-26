@@ -61,6 +61,10 @@ namespace Biru.Service.Models {
 
             return ret;
         }
+
+        public string get_web_url () {
+            return @"$(Constants.NH_HOME)$(this.url)";
+        }
     }
 
     public class Title : Object {

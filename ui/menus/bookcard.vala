@@ -45,6 +45,10 @@ namespace Biru.UI.Menus {
             btn_details.get_style_context ().add_class ("birubutton");
             btn_details.can_focus = false;
 
+            var btn_copy = new Gtk.Button.with_label (S.BOOKCARD_MENU_COPYLINK);
+            btn_copy.get_style_context ().add_class ("birubutton");
+            btn_copy.can_focus = false;
+
             var btn_fav = new Gtk.Button.with_label (S.BOOKCARD_MENU_FAVOR);
             btn_fav.get_style_context ().add_class ("birubutton");
             btn_fav.can_focus = false;
@@ -56,7 +60,8 @@ namespace Biru.UI.Menus {
             grid.attach (btn_read, 0, 1, 1, 1);
             grid.attach (btn_details, 0, 2, 1, 1);
             grid.attach (btn_fav, 0, 3, 1, 1);
-            grid.attach (btn_download, 0, 4, 1, 1);
+            grid.attach (btn_copy, 0, 4, 1, 1);
+            grid.attach (btn_download, 0, 5, 1, 1);
 
             grid.show_all ();
             this.add (this.grid);
@@ -75,6 +80,11 @@ namespace Biru.UI.Menus {
             btn_fav.clicked.connect (() => {
                 this.popdown ();
                 sig_pop_clicked (BOOKCARD_FAVOR);
+            });
+
+            btn_copy.clicked.connect (() => {
+                this.popdown ();
+                sig_pop_clicked (BOOKCARD_COPYLINK);
             });
 
             btn_download.clicked.connect (() => {

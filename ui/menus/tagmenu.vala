@@ -23,7 +23,8 @@ using Biru.UI.Widgets;
 namespace Biru.UI.Menus {
     public enum TagOption {
         TAG_OPTION_FAV,
-        TAG_OPTION_SEARCH
+        TAG_OPTION_SEARCH,
+        TAG_OPTION_COPYLINK
     }
 
     public class TagMenu : Gtk.Popover {
@@ -51,8 +52,13 @@ namespace Biru.UI.Menus {
             btn_search.get_style_context ().add_class ("birubutton");
             btn_search.can_focus = false;
 
+            var btn_copy = new Gtk.Button.with_label (S.TAG_MENU_COPYLINK);
+            btn_copy.get_style_context ().add_class ("birubutton");
+            btn_copy.can_focus = false;
+
             grid.attach (btn_fav, 0, 1, 1, 1);
             grid.attach (btn_search, 0, 2, 1, 1);
+            grid.attach (btn_copy, 0, 3, 1, 1);
 
             grid.show_all ();
             this.add (this.grid);
@@ -66,6 +72,11 @@ namespace Biru.UI.Menus {
             btn_search.clicked.connect (() => {
                 this.popdown ();
                 sig_pop_clicked (tagbtn.tag, TAG_OPTION_SEARCH);
+            });
+
+            btn_copy.clicked.connect (() => {
+                this.popdown ();
+                sig_pop_clicked (tagbtn.tag, TAG_OPTION_COPYLINK);
             });
         }
     }

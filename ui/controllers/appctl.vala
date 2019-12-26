@@ -150,6 +150,10 @@ namespace Biru.UI.Controllers {
                     case Widgets.BookCardOption.BOOKCARD_READ:
                         AppCtl.spawn_reader (book);
                         break;
+                    case Widgets.BookCardOption.BOOKCARD_COPYLINK:
+                        var url = book.get_web_url ();
+                        Clipboard.set_text (url);
+                        break;
                     default:
                         message ("not implemented yet");
                         break;
@@ -171,6 +175,10 @@ namespace Biru.UI.Controllers {
                         this.api.searchtag.begin (tag, home.api_page, SORT_POPULAR, null);
                         this.view.home ();
                         this.headerbar.start_loading ();
+                        break;
+                    case Menus.TagOption.TAG_OPTION_COPYLINK:
+                        var url = tag.get_web_url ();
+                        Clipboard.set_text (url);
                         break;
                     default:
                         message ("not implemented yet");
