@@ -17,14 +17,11 @@
  */
 
 using Biru.Service;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
-    public enum PageCardOpt {
-        PAGECARD_READ
-    }
-
     public class PageCard : Gtk.Button {
-        // private unowned Models.Book book;
+        private unowned Models.Book book;
         private Gtk.Overlay overlay;
         private Image cimage;
 
@@ -35,6 +32,8 @@ namespace Biru.UI.Widgets {
             Object (
                 can_focus: false
             );
+
+            this.book = book;
             this.get_style_context ().add_class ("pagecard");
             this.margin_start = 4;
             this.margin_end = 4;
@@ -60,8 +59,18 @@ namespace Biru.UI.Widgets {
 
             this.show_all ();
 
-            this.clicked.connect (() => {
-                this.sig_page_clicked (book, index, PAGECARD_READ);
+            this.button_press_event.connect ((event) => {
+                if (event.button == 3) {
+                    // right click
+                    var menu = new PageCardMenu (this);
+                    menu.sig_pop_clicked.connect ((opt) => {
+                        this.sig_page_clicked (this.book, index, opt);
+                    });
+                    menu.popup ();
+                } else if (event.button == 1) {
+                    this.sig_page_clicked (this.book, index, PAGECARD_READ);
+                }
+                return true;
             });
         }
     }

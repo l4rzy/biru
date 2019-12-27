@@ -189,7 +189,18 @@ namespace Biru.UI.Controllers {
             // clicking preview pages on bookdetails
             this.details.sig_page_clicked.connect ((book, index, opt) => {
                 message ("page %d of %s", index, book.get_web_url ());
-                AppCtl.spawn_reader (book, index);
+                switch (opt) {
+                    case Menus.PageCardOpt.PAGECARD_READ:
+                        AppCtl.spawn_reader (book, index);
+                        break;
+                    case Menus.PageCardOpt.PAGECARD_COPYLINK:
+                        var info = book.get_pageno_info (index);
+                        Clipboard.set_text (info.url);
+                        break;
+                    default:
+                        message ("not implemented yet");
+                        break;
+                }
             });
 
             // application setup

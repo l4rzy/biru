@@ -16,6 +16,7 @@
  *
  */
 using Biru.Service;
+using Biru.UI.Menus;
 
 namespace Biru.UI.Widgets {
     public class BookPreview : Gtk.FlowBox {

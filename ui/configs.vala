@@ -51,6 +51,11 @@ namespace Biru.UI.Configs {
         public const string BOOKCARD_MENU_COPYLINK = "Copy web url";
         public const string BOOKCARD_MENU_DOWNLOAD = "Download";
 
+        public const string PAGECARD_MENU_READ = "Read from this";
+        public const string PAGECARD_MENU_DOWNLOAD = "Download";
+        public const string PAGECARD_MENU_COPYLINK = "Copy web url";
+        public const string PAGECARD_MENU_INFO = "Show info";
+
         public const string HEADER_MENU_SETTINGS = "Settings";
         public const string HEADER_MENU_ABOUT = "About";
 
