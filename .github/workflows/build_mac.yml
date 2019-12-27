@@ -1,0 +1,20 @@
+name: CI2
+
+on: [pull_request, push]
+
+jobs:
+  Build:
+    name: Build on macOS
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Depedencies
+        env:
+          dependency_packages: gtk+3 json-glib libsoup vala meson
+        run: brew install ${dependency_packages}
+
+      - name: Build
+        run: meson build && ninja -C build
