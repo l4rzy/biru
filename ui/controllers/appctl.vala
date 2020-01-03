@@ -40,7 +40,7 @@ namespace Biru.UI.Controllers {
         private ViewPort view;
         private Views.Home home;
         private Views.BookDetails details;
-        private Views.Warning warning;
+        // private Views.Warning warning;
 
         private API api;
 
@@ -57,13 +57,13 @@ namespace Biru.UI.Controllers {
             // views setup
             this.home = new Views.Home ();
             this.details = new Views.BookDetails ();
-            this.warning = new Views.Warning ();
+            // this.warning = new Views.Warning ();
 
             // views container is a stack
             this.stack = new Gtk.Stack ();
             this.stack.add_named (this.home, Constants.STACK_HOME);
             this.stack.add_named (this.details, Constants.STACK_DETAILS);
-            this.stack.add_named (this.warning, Constants.STACK_WARNING);
+            // this.stack.add_named (this.warning, Constants.STACK_WARNING);
 
             // viewport to control stack views
             this.view = new ViewPort (this.stack, this.headerbar);
