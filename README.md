@@ -1,6 +1,7 @@
 [![License](https://img.shields.io/github/license/l4rzy/biru?color=green)](https://raw.githubusercontent.com/l4rzy/biru/master/LICENSE)
 [![Issues](http://img.shields.io/github/issues/l4rzy/biru.svg?style=flat)](https://github.com/l4rzy/biru/issues)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/l4rzy/biru/CI)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/l4rzy/biru/ci_ubuntu)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/l4rzy/biru/ci_macos)
 
 # Biru
 
@@ -73,6 +74,17 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md)
 ## Authors
 
 * **l4rzy** - *Initial work* -
+
+## Acknowledges
+
+* [fondo](https://github.com/calo001/fondo) - ui inspiration and some code tricks
+* [vala-gkt-examples](https://github.com/gerito1/vala-gtk-examples) - exellent sample code
+* [official vala tutorial](https://wiki.gnome.org/Projects/Vala) - good sample code for async
+* [hackup](https://github.com/mdh34/hackup) - nice sample code
+
+## Special thanks
+
+* [Vu Nhan](https://github.com/vunhan) - for the CI on macOS ;)
 
 ## License
 
