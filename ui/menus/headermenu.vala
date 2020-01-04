@@ -18,7 +18,6 @@
 
 using Biru.UI.Windows;
 using Biru.UI.Configs;
-
 namespace Biru.UI.Menus {
     public class HeaderMenu : Gtk.Popover {
         private Gtk.Grid grid;
@@ -56,6 +55,11 @@ namespace Biru.UI.Menus {
                 var about = new AboutWindow ();
                 about.present ();
             });
+
+	    btn_settings.clicked.connect(()=> {
+		var setting_window = new SettingWindow();
+	   	setting_window.present(); 
+	    });
         }
     }
 }
