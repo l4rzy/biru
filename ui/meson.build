@@ -22,6 +22,7 @@ sources += files (
     'windows/mainwin.vala',
     'windows/reader.vala',
     'windows/about.vala',
+	'windows/setting.vala',
 
     'menus/bookcard.vala',
     'menus/headermenu.vala',
