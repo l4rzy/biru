@@ -71,5 +71,8 @@ namespace Biru.UI.Configs {
         public const string DETAILS_CAT_LANGUAGE = "Language:";
 
         public const string READER_TITLE_PREFIX = "Biru reader";
+
+	public const string SETTING_APPLY = "Apply";
+	public const string SETTING_CANCEL = "Cancel";
     }
 }
