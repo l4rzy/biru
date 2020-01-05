@@ -13,6 +13,7 @@ sources += files (
     'widgets/pagecard.vala',
     'widgets/bookpreview.vala',
     'widgets/coveranim.vala',
+	'widgets/commonsetting.vala',
     
     'views/homepage.vala',
     'views/bookdetails.vala',
