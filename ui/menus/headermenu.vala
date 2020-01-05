@@ -57,7 +57,7 @@ namespace Biru.UI.Menus {
             });
 
             btn_settings.clicked.connect (() => {
-                var setting_window = new SettingWindow ();
+                var setting_window = new SettingsWindow ();
                 setting_window.present ();
             });
         }
