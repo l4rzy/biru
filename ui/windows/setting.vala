@@ -2,7 +2,6 @@ using Gtk;
 using Biru.UI.Configs;
 namespace Biru.UI.Windows {
 
-
     public class SettingWindow : Window {
 
         private Button btn_apply;
@@ -17,9 +16,9 @@ namespace Biru.UI.Windows {
 
         private void init_ui () {
 
-
             var stack = new Stack ();
             stack.add_titled (new Biru.UI.Widgets.CommonSettingBox (), "CommonSettingBox", "Common");
+	    stack.add_titled ( new Biru.UI.Widgets.HomePageSettingBox(), "HomePageSettingBox", "Home page");
 
             btn_cancel = new Button.with_label (S.SETTING_CANCEL);
 
@@ -29,13 +28,10 @@ namespace Biru.UI.Windows {
             stack_switcher.stack = stack;
             stack_switcher.halign = Gtk.Align.CENTER;
 
-
             var header_bar = new HeaderBar ();
             header_bar.pack_start (btn_cancel);
             header_bar.add (stack_switcher);
             header_bar.pack_end (btn_apply);
-
-
 
             set_titlebar (header_bar);
             add (stack);
@@ -45,22 +41,10 @@ namespace Biru.UI.Windows {
 
         private void btn_apply_clicked () {
             close ();
-            apply_changes ();
         }
 
         private void btn_cancel_clicked () {
             close ();
-        }
-
-        private void apply_changes () {
-        }
-
-        public Button get_btn_apply () {
-            return btn_apply;
-        }
-
-        public Button get_btn_cancel () {
-            return btn_cancel;
         }
     }
 }
