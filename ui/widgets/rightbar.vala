@@ -62,7 +62,6 @@ namespace Biru.UI.Widgets {
             this.pack_end (this.protect);
             this.pack_end (this.options);
 
-
             this.menu = new HeaderMenu (this.options);
 
             this.options.clicked.connect (() => {
