@@ -56,10 +56,10 @@ namespace Biru.UI.Menus {
                 about.present ();
             });
 
-	    btn_settings.clicked.connect(()=> {
-		var setting_window = new SettingWindow();
-	   	setting_window.present(); 
-	    });
+            btn_settings.clicked.connect (() => {
+                var setting_window = new SettingWindow ();
+                setting_window.present ();
+            });
         }
     }
 }
