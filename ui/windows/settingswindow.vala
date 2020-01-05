@@ -2,12 +2,12 @@ using Gtk;
 using Biru.UI.Configs;
 namespace Biru.UI.Windows {
 
-    public class SettingWindow : Window {
+    public class SettingsWindow : Window {
 
         private Button btn_apply;
         private Button btn_cancel;
 
-        public SettingWindow () {
+        public SettingsWindow () {
             init_ui ();
 
             btn_apply.clicked.connect (btn_apply_clicked);
@@ -17,8 +17,8 @@ namespace Biru.UI.Windows {
         private void init_ui () {
 
             var stack = new Stack ();
-            stack.add_titled (new Biru.UI.Widgets.CommonSettingBox (), "CommonSettingBox", "Common");
-	    stack.add_titled ( new Biru.UI.Widgets.HomePageSettingBox(), "HomePageSettingBox", "Home page");
+            stack.add_titled (new Biru.UI.Widgets.CommonSettingsBox (), "CommonSettingBox", "Common");
+	    stack.add_titled ( new Biru.UI.Widgets.HomePageSettingsBox(), "HomePageSettingBox", "Home page");
 
             btn_cancel = new Button.with_label (S.SETTING_CANCEL);
 

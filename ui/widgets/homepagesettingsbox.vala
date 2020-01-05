@@ -1,9 +1,9 @@
 using Biru.UI.Configs;
 namespace Biru.UI.Widgets {
-public class HomePageSettingBox : Gtk.Box {
+public class HomePageSettingsBox : Gtk.Box {
 	public Gtk.ComboBox combo_box_home_sort { get; private set; default = null;}
 	public Gtk.ComboBox combo_box_search_sort { get; private set; default = null; }
-	public HomePageSettingBox() {
+	public HomePageSettingsBox() {
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0);
 		init_ui();
 	}

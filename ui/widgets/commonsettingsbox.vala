@@ -1,8 +1,8 @@
 namespace Biru.UI.Widgets {
-    public class CommonSettingBox : Gtk.Box {
+    public class CommonSettingsBox : Gtk.Box {
         private Gtk.SpinButton spin_btn_network_threads { get; private set; } 
         private Gtk.Switch switch_save_dimention { get; private set; }
-        public CommonSettingBox () {
+        public CommonSettingsBox () {
             Object (orientation: Gtk.Orientation.VERTICAL, spacing: 0);
             init_ui ();
         }
