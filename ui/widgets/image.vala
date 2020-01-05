@@ -48,7 +48,7 @@ namespace Biru.UI.Widgets {
                     height * this.current_scale_factor,
                     preserve_aspect_ratio,
                     cancellable
-                );
+                             );
                 this.surface = Gdk.cairo_surface_create_from_pixbuf (pixbuf, this.current_scale_factor, null);
                 set_size_request (-1, -1);
             } catch (Error e) {
@@ -75,7 +75,7 @@ namespace Biru.UI.Widgets {
                     height * this.current_scale_factor,
                     preserve_aspect_ratio,
                     cancellable
-                );
+                             );
                 this.surface = Gdk.cairo_surface_create_from_pixbuf (pixbuf, this.current_scale_factor, null);
                 set_size_request (-1, -1);
             } catch (Error e) {
