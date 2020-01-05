@@ -42,8 +42,8 @@ namespace Biru.UI.Configs {
         public const string RESOURCE_CN_FLG = RESOURCE_PREFIX + "china32.png";
         public const string RESOURCE_NH_LOGO = RESOURCE_PREFIX + "logo.svg";
 
-	//seting window margin
-	public const int SETTING_BOX_MARGIN = 20;
+        // seting window margin
+        public const int SETTING_BOX_MARGIN = 20;
     }
 
     public class S {
@@ -79,10 +79,13 @@ namespace Biru.UI.Configs {
         public const string SETTING_CANCEL = "Cancel";
 
         public const string SETTING_COMMON_BOX_NETWORK_THREADS = "Network threads";
-        public const string SETTING_COMMON_BOX_SAVE_DIMENSIONS = "Save dimension";
-	
-	public const string SETTING_HOME_PAGE_HOME_SORT = "Home sort type";
-	public const string SETTING_HOME_PAGE_SEARCH_SORT = "Search sort type";
+        public const string SETTING_COMMON_BOX_SAVE_DIMENSION = "Save dimension";
 
+        public const string SETTING_HOME_PAGE_HOME_SORT = "Home sort type";
+        public const string SETTING_HOME_PAGE_SEARCH_SORT = "Search sort type";
+
+        public const string SETTING_READER_NEXT_CACHE = "Next cache";
+        public const string SETTING_READER_PREV_CACHE = "Previous cache";
+        public const string SETTING_READER_SAVE_DIMENSION = "Save dimension";
     }
 }

@@ -21,7 +21,7 @@ using Biru.UI.Configs;
 namespace Biru.UI.Menus {
     public class HeaderMenu : Gtk.Popover {
         private Gtk.Grid grid;
-
+        private Controllers.SettingsWindowCtl settings_window_ctl;
         public signal void sig_pop_clicked ();
 
         public HeaderMenu (Gtk.Widget widget) {
@@ -56,9 +56,9 @@ namespace Biru.UI.Menus {
                 about.present ();
             });
 
+            settings_window_ctl = new Controllers.SettingsWindowCtl ();
             btn_settings.clicked.connect (() => {
-                var setting_window = new SettingsWindow ();
-                setting_window.present ();
+                settings_window_ctl.show_window ();
             });
         }
     }

@@ -15,6 +15,7 @@ sources += files (
     'widgets/coveranim.vala',
     'widgets/commonsettingsbox.vala',
     'widgets/homepagesettingsbox.vala',
+    'widgets/readersettingsbox.vala', 
     
     'views/homepage.vala',
     'views/bookdetails.vala',
@@ -38,6 +39,7 @@ sources += files (
     'reader/configs.vala',
 
     'controllers/appctl.vala',
+    'controllers/settingswindowctl.vala',
 
     'configs.vala',
     'viewport.vala',

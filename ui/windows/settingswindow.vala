@@ -4,21 +4,25 @@ namespace Biru.UI.Windows {
 
     public class SettingsWindow : Window {
 
-        private Button btn_apply;
-        private Button btn_cancel;
+        public Button btn_apply { get; private set; }
+        public Button btn_cancel { get; private set; }
+
+        public Widgets.CommonSettingsBox common_settings_box { get; private set; }
+        public Widgets.HomePageSettingsBox home_page_settings_box { get; private set; }
+        public Widgets.ReaderSettingsBox reader_settings_box { get; private set; }
+
+        public signal void sig_value_change ();
 
         public SettingsWindow () {
             init_ui ();
-
-            btn_apply.clicked.connect (btn_apply_clicked);
-            btn_cancel.clicked.connect (btn_cancel_clicked);
         }
 
         private void init_ui () {
 
             var stack = new Stack ();
-            stack.add_titled (new Biru.UI.Widgets.CommonSettingsBox (), "CommonSettingBox", "Common");
-	    stack.add_titled ( new Biru.UI.Widgets.HomePageSettingsBox(), "HomePageSettingBox", "Home page");
+            stack.add_titled (common_settings_box = new Widgets.CommonSettingsBox (), "CommonSettingBox", "Common");
+            stack.add_titled (home_page_settings_box = new Widgets.HomePageSettingsBox (), "HomePageSettingBox", "Home page");
+            stack.add_titled (reader_settings_box = new Widgets.ReaderSettingsBox (), "ReaderSettingsBox", "Reader");
 
             btn_cancel = new Button.with_label (S.SETTING_CANCEL);
 
@@ -35,16 +39,8 @@ namespace Biru.UI.Windows {
 
             set_titlebar (header_bar);
             add (stack);
-            set_default_size (480, 680);
+            set_default_size (640, 480);
             show_all ();
-        }
-
-        private void btn_apply_clicked () {
-            close ();
-        }
-
-        private void btn_cancel_clicked () {
-            close ();
         }
     }
 }
