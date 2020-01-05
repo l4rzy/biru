@@ -91,5 +91,3 @@ namespace Biru.UI.Menus {
         }
     }
 }
-
-
