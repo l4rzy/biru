@@ -30,7 +30,7 @@ sudo pacman -S --needed gtk3 libsoup vala meson
 
 ```sh
 # on Ubuntu
-sudo apt-get install libvala-dev valac meson libgtk-3-dev libsoup-gnome2.4-dev
+sudo apt-get install libvala-dev valac meson libgtk-3-dev libsoup-gnome2.4-dev libjson-glib-dev
 
 ```
 
