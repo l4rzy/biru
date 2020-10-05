@@ -1,2 +1,0 @@
-/home/potatomato/Code/reorr/biru/build/meson-private/cmake_json-glib-1.0/CMakeFiles/rebuild_cache.dir
-/home/potatomato/Code/reorr/biru/build/meson-private/cmake_json-glib-1.0/CMakeFiles/edit_cache.dir
